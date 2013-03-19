@@ -28,13 +28,17 @@ class UI(QDialog):
         # DATE Editor
         #
         #######################################################################
-        self.StartDateLabel = QLabel("Start Date")
-        self.EndDateLabel = QLabel("End Date")
-
+        self.StartDateLabel = QLabel()
+        self.EndDateLabel = QLabel()
+        
         self.StartDate = QDateEdit()
         self.StartDate.setCalendarPopup(True)
         self.EndDate = QDateEdit(QDate.currentDate())
         self.EndDate.setCalendarPopup(True)
+        
+        self.StartDateLabel.setText("Start %s" % self.StartDate.date().toString("yyyy-MM-dd"))  
+        self.EndDateLabel.setText("End %s" % self.EndDate.date().toString("yyyy-MM-dd"))
+
 
         top_layout = QVBoxLayout()
         date_layout = QHBoxLayout()
@@ -48,6 +52,9 @@ class UI(QDialog):
 
         date_layout.addLayout(left_layout)
         date_layout.addLayout(right_layout)
+
+        self.connect(self.StartDate, SIGNAL("dateChanged(QDate)"), self.updateStartDate)
+        self.connect(self.EndDate, SIGNAL("dateChanged(QDate)"), self.updateEndDate)
 
         #######################################################################
         #
@@ -76,7 +83,6 @@ class UI(QDialog):
         # Time, Timer, Time Editor
         #
         #######################################################################
-        print("%s" % QTime.currentTime().toString("hh:mm:ss"))
         self.TimeLabel = QLabel("Time:")
         self.TimeValue = QLabel("%s" % QTime.currentTime().toString("hh:mm:ss"))
         self.Timer = QTimer()
@@ -95,12 +101,83 @@ class UI(QDialog):
 
         #######################################################################
         #
-        # Top Level Display
+        # Buttons
         #
         #######################################################################
+        self.Button1Count = 0
+        self.Button2Count = 0
+
+        self.Button1 = QPushButton("Test Button 1: Count %d" % self.Button1Count)
+        self.Button2 = QPushButton("Test Button 2: Count %d" % self.Button2Count)
+
+        button_layout = QHBoxLayout()
+        button_left_layout = QVBoxLayout()
+        button_right_layout = QVBoxLayout()
+        button_left_layout.addWidget(self.Button1)
+        button_right_layout.addWidget(self.Button2)
+        button_layout.addLayout(button_left_layout)
+        button_layout.addLayout(button_right_layout)
+        
+        self.connect(self.Button1, SIGNAL("clicked()"), self.updateButton1)
+        self.connect(self.Button2, SIGNAL("clicked()"), self.updateButton2)
+
+        #######################################################################
+        #
+        # Buttons
+        #
+        #######################################################################
+        self.SliderValue = QSlider()
+        self.SliderLabel = QLabel("Slider %d" % self.SliderValue.value())
+
+        slider_layout = QHBoxLayout()
+        slider_left_layout = QVBoxLayout()
+        slider_right_layout = QVBoxLayout()
+        slider_left_layout.addWidget(self.SliderLabel)
+        slider_right_layout.addWidget(self.SliderValue)
+        slider_layout.addLayout(slider_left_layout)
+        slider_layout.addLayout(slider_right_layout)
+        
+        self.connect(self.SliderValue, SIGNAL("valueChanged(int)"), self.updateSlider)
+
+        #######################################################################
+        #
+        # LCD
+        #
+        #######################################################################
+        self.LCDLabel = QLabel("LCD")
+        self.LCDNumber = QLCDNumber()
+        self.LCDNumber.setHexMode()
+        self.LCDNumber.setNumDigits(4)
+        self.LCDNumber.display(0000)
+
+        p = QPalette()
+        p.setColor(self.LCDNumber.backgroundRole(), Qt.red)
+        self.LCDNumber.setAutoFillBackground(True)
+        self.LCDNumber.setPalette(p)
+
+#        np = QPalette()
+#        np.setColor(np.windowText(),Qt.red)
+#        self.LCDLabel.setPalette(np);	
+
+        lcd_layout = QHBoxLayout()
+        lcd_left_layout = QVBoxLayout()
+        lcd_right_layout = QVBoxLayout()
+        lcd_left_layout.addWidget(self.LCDLabel)
+        lcd_right_layout.addWidget(self.LCDNumber)
+        lcd_layout.addLayout(lcd_left_layout)
+        lcd_layout.addLayout(lcd_right_layout)
+        
+        #######################################################################
+        #
+        # Top Level Display
+        #
+        #######################################################################       
         top_layout.addLayout(date_layout)
         top_layout.addLayout(dial_layout)
         top_layout.addLayout(time_layout)
+        top_layout.addLayout(button_layout)
+        top_layout.addLayout(slider_layout)
+        top_layout.addLayout(lcd_layout)
         self.setLayout(top_layout)
 
         self.setWindowTitle("GUI TESTING")
@@ -109,8 +186,32 @@ class UI(QDialog):
 
     def updateTime(self):
         self.TimeValue.setText("%s" % QTime.currentTime().toString("hh:mm:ss"))
+        self.LCDNumber.display(self.LCDNumber.intValue() + 1)
         return
 
     def updateDial(self):
         self.DialLabel.setText("Dial %d" % self.Dial.value())
         return
+    
+    def updateButton1(self):
+        self.Button1Count = self.Button1Count + 1
+        self.Button1.setText("Test Button 1: Count %d" % self.Button1Count)
+        return
+
+    def updateButton2(self):
+        self.Button2Count = self.Button2Count + 1
+        self.Button2.setText("Test Button 2: Count %d" % self.Button2Count)
+        return
+    
+    def updateSlider(self):
+        self.SliderLabel.setText("Slider %d" % self.SliderValue.value())
+        return
+    
+    def updateStartDate(self):
+        self.StartDateLabel.setText("Start %s" % self.StartDate.date().toString("yyyy-MM-dd"))
+        return
+    def updateEndDate(self):
+        self.EndDateLabel.setText("End %s" % self.EndDate.date().toString("yyyy-MM-dd"))
+        return
+
+    

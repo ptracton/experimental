@@ -18,6 +18,7 @@ class config_inherit( configparser.SafeConfigParser ):
         '''
         super().__init__()
 
+
 if __name__ == '__main__':
 
     inherit = config_inherit()

@@ -12,7 +12,6 @@ class InterestUI(QDialog):
     classdocs
     '''
 
-
     def __init__(self, parent = None):
         '''
         Constructor            
@@ -76,12 +75,12 @@ class InterestUI(QDialog):
                      SIGNAL("valueChanged(double)"), self.updateUI)
 
         self.setWindowTitle("Interest")
+        return
 
     def updateUI(self):
         years = int((self.YearsComboBox.currentText()).strip(" Years"))
         principle = self.PrincipleDoubleSpinBox.value()
         rate = self.RateDoubleSpinBox.value()
-        amount = 0
         amount = principle * ((1 + (rate / 100.0)) ** years)
         self.AmountValueLabel.setText("$ %0.2f" % amount)
         print("UPDATING UI: years = %s principle = %s rate = %s, amount = %f" % (years, principle, rate, amount))

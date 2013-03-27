@@ -7,6 +7,22 @@ Created on Mar 18, 2013
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 
+class PopUp (QDialog):
+    def __init__(self, parent = None):
+        super(PopUp, self).__init__(parent)
+
+        widthLabel = QLabel("&Width:")
+        self.widthSpinBox = QSpinBox()
+        widthLabel.setBuddy(self.widthSpinBox)
+        self.widthSpinBox.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.widthSpinBox.setRange(0, 24)
+
+        top_layout = QHBoxLayout()
+        top_layout.addWidget(self.widthSpinBox)
+        self.setLayout(top_layout)
+
+        self.setWindowTitle("Pop Up")
+        return
 
 class UI(QDialog):
     '''
@@ -30,13 +46,13 @@ class UI(QDialog):
         #######################################################################
         self.StartDateLabel = QLabel()
         self.EndDateLabel = QLabel()
-        
+
         self.StartDate = QDateEdit()
         self.StartDate.setCalendarPopup(True)
         self.EndDate = QDateEdit(QDate.currentDate())
         self.EndDate.setCalendarPopup(True)
-        
-        self.StartDateLabel.setText("Start %s" % self.StartDate.date().toString("yyyy-MM-dd"))  
+
+        self.StartDateLabel.setText("Start %s" % self.StartDate.date().toString("yyyy-MM-dd"))
         self.EndDateLabel.setText("End %s" % self.EndDate.date().toString("yyyy-MM-dd"))
 
 
@@ -117,13 +133,13 @@ class UI(QDialog):
         button_right_layout.addWidget(self.Button2)
         button_layout.addLayout(button_left_layout)
         button_layout.addLayout(button_right_layout)
-        
+
         self.connect(self.Button1, SIGNAL("clicked()"), self.updateButton1)
         self.connect(self.Button2, SIGNAL("clicked()"), self.updateButton2)
 
         #######################################################################
         #
-        # Buttons
+        # Slider
         #
         #######################################################################
         self.SliderValue = QSlider()
@@ -136,7 +152,7 @@ class UI(QDialog):
         slider_right_layout.addWidget(self.SliderValue)
         slider_layout.addLayout(slider_left_layout)
         slider_layout.addLayout(slider_right_layout)
-        
+
         self.connect(self.SliderValue, SIGNAL("valueChanged(int)"), self.updateSlider)
 
         #######################################################################
@@ -157,7 +173,7 @@ class UI(QDialog):
 
 #        np = QPalette()
 #        np.setColor(np.windowText(),Qt.red)
-#        self.LCDLabel.setPalette(np);	
+#        self.LCDLabel.setPalette(np);
 
         lcd_layout = QHBoxLayout()
         lcd_left_layout = QVBoxLayout()
@@ -166,18 +182,65 @@ class UI(QDialog):
         lcd_right_layout.addWidget(self.LCDNumber)
         lcd_layout.addLayout(lcd_left_layout)
         lcd_layout.addLayout(lcd_right_layout)
-        
+
+        #######################################################################
+        #
+        # Radio Buttons
+        #
+        #######################################################################
+        # groupBox = QGroupBox("Exclusive Radio Buttons")
+
+        self.radio1 = QRadioButton("&Radio button 1")
+        self.radio2 = QRadioButton("R&adio button 2")
+        self.radio3 = QRadioButton("Ra&dio button 3")
+        self.RadioLabel = QLabel("Button Clicked")
+
+        self.radio1.setChecked(True)
+
+        vbox = QVBoxLayout()
+        vbox.addWidget(self.radio1)
+        vbox.addWidget(self.radio2)
+        vbox.addWidget(self.radio3)
+        vbox.addWidget(self.RadioLabel)
+        vbox.addStretch(1)
+        # groupBox.setLayout(vbox)
+
+        self.connect(self.radio1, SIGNAL("clicked(bool)"), self.updateRadio1)
+        self.connect(self.radio2, SIGNAL("clicked(bool)"), self.updateRadio2)
+        self.connect(self.radio3, SIGNAL("clicked(bool)"), self.updateRadio3)
+
+        #######################################################################
+        #
+        # Combo Box
+        #
+        #######################################################################
+        self.ComboBoxLabel = QLabel("Combo Box Label")
+        self.ComboBox = QComboBox()
+
+        items = ["First", "Second", "Third"]
+        self.ComboBox.addItems(items)
+        combobox_layout = QHBoxLayout()
+        combobox_left_layout = QVBoxLayout()
+        combobox_right_layout = QVBoxLayout()
+        combobox_left_layout.addWidget(self.ComboBoxLabel)
+        combobox_right_layout.addWidget(self.ComboBox)
+        combobox_layout.addLayout(combobox_left_layout)
+        combobox_layout.addLayout(combobox_right_layout)
+        self.connect(self.ComboBox, SIGNAL("currentIndexChanged (int)"), self.updateComBoBox)
+
         #######################################################################
         #
         # Top Level Display
         #
-        #######################################################################       
+        #######################################################################
         top_layout.addLayout(date_layout)
         top_layout.addLayout(dial_layout)
         top_layout.addLayout(time_layout)
         top_layout.addLayout(button_layout)
         top_layout.addLayout(slider_layout)
         top_layout.addLayout(lcd_layout)
+        top_layout.addLayout(vbox)
+        top_layout.addLayout(combobox_layout)
         self.setLayout(top_layout)
 
         self.setWindowTitle("GUI TESTING")
@@ -192,21 +255,26 @@ class UI(QDialog):
     def updateDial(self):
         self.DialLabel.setText("Dial %d" % self.Dial.value())
         return
-    
+
     def updateButton1(self):
         self.Button1Count = self.Button1Count + 1
         self.Button1.setText("Test Button 1: Count %d" % self.Button1Count)
+        pop = PopUp()
+        if pop.exec_():
+            print("Done")
+            print("%s" % (pop.widthSpinBox.currentText()))
+
         return
 
     def updateButton2(self):
         self.Button2Count = self.Button2Count + 1
         self.Button2.setText("Test Button 2: Count %d" % self.Button2Count)
         return
-    
+
     def updateSlider(self):
         self.SliderLabel.setText("Slider %d" % self.SliderValue.value())
         return
-    
+
     def updateStartDate(self):
         self.StartDateLabel.setText("Start %s" % self.StartDate.date().toString("yyyy-MM-dd"))
         return
@@ -214,4 +282,20 @@ class UI(QDialog):
         self.EndDateLabel.setText("End %s" % self.EndDate.date().toString("yyyy-MM-dd"))
         return
 
-    
+    def updateRadio1(self):
+        self.RadioLabel.setText("Radio 1 Clicked")
+        return
+    def updateRadio2(self):
+        self.RadioLabel.setText("Radio 2 Clicked")
+        return
+    def updateRadio3(self):
+        self.RadioLabel.setText("Radio 3 Clicked")
+        return
+
+    def updateComBoBox(self):
+        self.ComboBoxLabel.setText(self.ComboBox.currentText())
+        return
+
+if __name__ == '__main__':
+    print("Wrong Window!")
+

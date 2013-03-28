@@ -7,22 +7,72 @@ Created on Mar 18, 2013
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 
+class SmartPopUp(QDialog):
+    def __init__(self, name = "", count = 0, parent = None):
+        super(SmartPopUp, self).__init__(parent)
+        self.setAttribute(Qt.WA_DeleteOnClose)
+
+        self.count = count
+        self.name = name
+
+        buttonBox = QDialogButtonBox(QDialogButtonBox.Apply |
+                             QDialogButtonBox.Cancel)
+
+        self.connect(buttonBox.button(QDialogButtonBox.Apply),
+                     SIGNAL("clicked()"), SLOT("accept()"))
+        self.connect(buttonBox, SIGNAL("rejected()"),
+                     self, SLOT("reject()"))
+
+        self.Label = QLabel("Smart Pop up %s: %d" % (self.name, self.count))
+
+        top_layout = QVBoxLayout()
+        self.setLayout(top_layout)
+        top_layout.addWidget(self.Label)
+        top_layout.addWidget(buttonBox)
+        self.setWindowTitle("Smarter Pop Up")
+
+        return
+
 class PopUp (QDialog):
     def __init__(self, parent = None):
         super(PopUp, self).__init__(parent)
+        self.setAttribute(Qt.WA_DeleteOnClose)
 
         widthLabel = QLabel("&Width:")
-        self.widthSpinBox = QSpinBox()
-        widthLabel.setBuddy(self.widthSpinBox)
-        self.widthSpinBox.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-        self.widthSpinBox.setRange(0, 24)
+        self.widthComboBox = QComboBox()
+        widthLabel.setBuddy(self.widthComboBox)
+        lst = [str(x) for x in range(24)]
+        self.widthComboBox.addItems(lst)
 
-        top_layout = QHBoxLayout()
-        top_layout.addWidget(self.widthSpinBox)
+
+        #######################################################################
+        #
+        # Buttons
+        #
+        #######################################################################
+        buttonBox = QDialogButtonBox(QDialogButtonBox.Ok |
+                                     QDialogButtonBox.Cancel)
+        self.connect(buttonBox, SIGNAL("accepted()"),
+                     self, SLOT("accept()"))
+        self.connect(buttonBox, SIGNAL("rejected()"),
+                     self, SLOT("reject()"))
+
+        top_layout = QVBoxLayout()
+        top_layout.addWidget(self.widthComboBox)
+        top_layout.addWidget(buttonBox)
         self.setLayout(top_layout)
 
         self.setWindowTitle("Pop Up")
         return
+
+    # def updateButton1(self):
+    #    self.accept()
+    #    return
+
+    # def updateButton2(self):
+    #    self.reject()
+    #    return
+
 
 class UI(QDialog):
     '''
@@ -254,6 +304,13 @@ class UI(QDialog):
 
     def updateDial(self):
         self.DialLabel.setText("Dial %d" % self.Dial.value())
+
+        smart = SmartPopUp("Dial", self.Dial.value())
+        if smart.exec_():
+            print("Applied")
+        else:
+            print("Canceled")
+
         return
 
     def updateButton1(self):
@@ -261,9 +318,9 @@ class UI(QDialog):
         self.Button1.setText("Test Button 1: Count %d" % self.Button1Count)
         pop = PopUp()
         if pop.exec_():
-            print("Done")
-            print("%s" % (pop.widthSpinBox.currentText()))
-
+            print("%s" % (pop.widthComboBox.currentText()))
+        else:
+            print("Canceled!")
         return
 
     def updateButton2(self):
@@ -273,6 +330,13 @@ class UI(QDialog):
 
     def updateSlider(self):
         self.SliderLabel.setText("Slider %d" % self.SliderValue.value())
+
+        smart = SmartPopUp("Slider", self.SliderValue.value())
+        if smart.exec_():
+            print("Applied")
+        else:
+            print("Canceled")
+
         return
 
     def updateStartDate(self):

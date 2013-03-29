@@ -1,3 +1,5 @@
+#! /usr/bin/env python3
+
 '''
 Created on Dec 4, 2012
 

@@ -24,6 +24,7 @@ class UIw(QMainWindow):
 
         self.image = QImage()
         self.filename = None
+        self.file_data = []
         self.recentFiles = ""
 
         self.imageLabel = QLabel()
@@ -87,6 +88,18 @@ class UIw(QMainWindow):
         return
 
     def fileOpen(self):
+        self.filename = QFileDialog.getOpenFileName(self, "Open File", ".", "*.py")
+        if self.filename != "":
+            print ("Opening: %s" % self.filename)
+            try:
+                File = open(self.filename, "r")
+                self.file_data = File.readlines()
+                print (self.file_data)
+                File.close()
+            except:
+                print("Failed to open %s" % (self.filename))
+        else:
+            print("Canceled File Open")
         return
 
     def createAction(self, text, slot = None, shortcut = None, icon = None,

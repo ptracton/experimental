@@ -1,0 +1,53 @@
+\documentclass[xcolor=svgnames, 12pt]{beamer}
+\usetheme{Madrid}
+\usepackage{hyperref}
+\usepackage{listings}
+%\usepackage{tikz}
+
+\definecolor{UCLABlue}{RGB}{83, 104, 149}
+\definecolor{UCLAGold}{RGB}{254, 187, 54}
+
+\usecolortheme[named=UCLABlue]{structure} 
+\setbeamertemplate{navigation symbols}{}
+\author[P. Tracton]{Philip Tracton} 
+
+\institute[UCLA Extension]{
+  UCLA Extension\\
+  Department of Engineering and Technology\\
+  Los Angeles, CA 91340\\
+}
+\date{\today}
+
+\title[Experimental]{Experimental} 
+
+\begin{document}
+
+\begin{frame}
+
+I should \emph{emphasise} that this is an \alert{important} point.\\
+
+Text in \textbf{bold face}.\\
+Text in \textit{italics}.\\
+
+It \textcolor{red}{stops} and \textcolor{green}{starts}.\\
+
+\begin{block}{Interesting Fact}
+This is important.
+\end{block}
+
+\begin{alertblock}{Cautionary Tale}
+This is really important!
+\end{alertblock}
+
+\end{frame}
+
+\begin{frame}
+        \begin{itemize}
+        \item Can you feel the
+         \pause \item anticipation?
+        \item There many more clever ways of making animations in beamer; see also the \\only, \\alt, and \\uncover commands.
+        \end{itemize}
+\end{frame}
+
+
+\end{document}

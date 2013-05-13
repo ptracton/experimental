@@ -20,6 +20,10 @@ document:
 	$(LATEX) $(LATEX_OPTIONS) -output-directory=$(OUTPUT_DIR) $(DOC_SRC)
 	$(DVIPDF) $(OUTPUT_DIR)/$(DOC_NAME_ROOT).dvi $(DOC_PDF)
 
+doc2:
+	$(LATEX) $(LATEX_OPTIONS) -output-directory=$(OUTPUT_DIR) src/doc2.tex
+	$(LATEX) $(LATEX_OPTIONS) -output-directory=$(OUTPUT_DIR) src/doc2.tex
+	$(DVIPDF) $(OUTPUT_DIR)/doc2.dvi docs/doc2.pdf
 
 
 clean:

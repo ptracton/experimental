@@ -28,7 +28,7 @@ class PyWeather(object):
         ##
         ## Get the data
         ##
-        self._GetWeather()
+#        self._GetWeather()
 
     def _GetWeather(self):
         '''

@@ -15,22 +15,23 @@
 ;;
 ;; Add paths to 3rd party tools
 ;;
-(add-to-list 'load-path "/home/ptracton/.emacs.d/third-party/predictive")
 (add-to-list 'load-path "/home/ptracton/.emacs.d/third-party/")
+;(add-to-list 'load-path "/home/ptracton/.emacs.d/third-party/predictive")
+(add-to-list 'load-path "/home/ptracton/.emacs.d/third-party/color-theme-6.6.0")
 
 (setq inhibit-startup-message t)        ; Do without annoying startup msg.
 
 ;;
 ;; http://www.emacswiki.org/emacs/PredictiveMode
 ;;
-(require 'predictive)
+;(require 'predictive)
 ;(autoload 'predictive-mode "predictive" "predictive" t)
-(set-default 'predictive-auto-add-to-dict t)
-(setq 
-      predictive-auto-learn t
-      predictive-add-to-dict-ask nil
-      predictive-use-auto-learn-cache nil
-      predictive-which-dict t)
+;(set-default 'predictive-auto-add-to-dict t)
+;(setq 
+;      predictive-auto-learn t
+;      predictive-add-to-dict-ask nil
+;      predictive-use-auto-learn-cache nil
+;      predictive-which-dict t)
 
 
 ;;
@@ -79,10 +80,10 @@
 ;; http://www.emacswiki.org/emacs/CProgrammingLanguage
 ;;
 (setq c-default-style "python")
-(setq-default c-basic-offset 4
-	      c-indent-tabs-mode t 
-	      tab-width 4
-	      indent-tabs-mode t)
+(setq-default c-basic-offset 4)
+;	      c-indent-tabs-mode t 
+;	      tab-width 4
+;	      indent-tabs-mode t)
 (add-hook 'c-mode-common-hook '(lambda () (c-toggle-auto-state 1)))
 
 ;;
@@ -138,7 +139,7 @@
 	  verilog-case-indent              2
 	  verilog-auto-newline             t
 	  verilog-auto-indent-on-newline   t
-	  verilog-tab-always-indent        t
+;	  verilog-tab-always-indent        t
 	  verilog-auto-endcomments         t
       verilog-minimum-comment-distance 40
 	  verilog-indent-begin-after-if    t
@@ -169,23 +170,24 @@
     (setq reftex-plug-into-AUCTeX t)
 (setq TeX-PDF-mode t)
 (setq reftex-plug-into-AUCTeX t)
-(defun guess-TeX-master (filename)
-  "Guess the master file for FILENAME from currently open .tex files."
-  (let ((candidate nil)
-	(filename (file-name-nondirectory filename)))
-    (save-excursion
-      (dolist (buffer (buffer-list))
-	(with-current-buffer buffer
-	  (let ((name (buffer-name))
-		(file buffer-file-name))
-	    (if (and file (string-match "\\.tex$" file))
-		(progn
-		  (goto-char (point-min))
-		  (if (re-search-forward (concat "\\\\input{" filename "}") nil t)
-		      (setq candidate file))
-		  (if (re-search-forward (concat "\\\\include{" (file-name-sans-extension filename) "}") nil t)
-		      (setq candidate file))))))))
-    (if candidate
-	(message "TeX master document: %s" (file-name-nondirectory candidate)))
-    candidate))
-(setq TeX-master (guess-TeX-master (buffer-file-name)))
+
+;(defun guess-TeX-master (filename)
+;  "Guess the master file for FILENAME from currently open .tex files."
+;  (let ((candidate nil)
+;	(filename (file-name-nondirectory filename)))
+;    (save-excursion
+;      (dolist (buffer (buffer-list))
+;	(with-current-buffer buffer
+;	  (let ((name (buffer-name))
+;		(file buffer-file-name))
+;	    (if (and file (string-match "\\.tex$" file))
+;		(progn
+;		  (goto-char (point-min))
+;		  (if (re-search-forward (concat "\\\\input{" filename "}") nil t)
+;		      (setq candidate file))
+;		  (if (re-search-forward (concat "\\\\include{" (file-name-sans-extension filename) "}") nil t)
+;		      (setq candidate file))))))))
+;    (if candidate
+;	(message "TeX master document: %s" (file-name-nondirectory candidate)))
+;    candidate))
+;(setq TeX-master (guess-TeX-master (buffer-file-name)))

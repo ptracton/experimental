@@ -18,8 +18,50 @@
 (add-to-list 'load-path "/home/ptracton/.emacs.d/third-party/")
 ;(add-to-list 'load-path "/home/ptracton/.emacs.d/third-party/predictive")
 (add-to-list 'load-path "/home/ptracton/.emacs.d/third-party/color-theme-6.6.0")
+(add-to-list 'load-path "/home/ptracton/.emacs.d/third-party/cedet-1.1/common")
+
+
 
 (setq inhibit-startup-message t)        ; Do without annoying startup msg.
+
+;;
+;; CEDET
+;;
+
+(load-file "/home/ptracton/.emacs.d/third-party/cedet-1.1/common/cedet.el")
+;; Enable EDE (Project Management) features
+(global-ede-mode 1)
+
+;; Enable EDE for a pre-existing C++ project
+;; (ede-cpp-root-project "NAME" :file "~/myproject/Makefile")
+
+
+;; Enabling Semantic (code-parsing, smart completion) features
+;; Select one of the following:
+
+;; * This enables the database and idle reparse engines
+(semantic-load-enable-minimum-features)
+
+;; * This enables some tools useful for coding, such as summary mode,
+;;   imenu support, and the semantic navigator
+(semantic-load-enable-code-helpers)
+
+;; * This enables even more coding tools such as intellisense mode,
+;;   decoration mode, and stickyfunc mode (plus regular code helpers)
+;; (semantic-load-enable-gaudy-code-helpers)
+
+;; * This enables the use of Exuberant ctags if you have it installed.
+;;   If you use C++ templates or boost, you should NOT enable it.
+;; (semantic-load-enable-all-exuberent-ctags-support)
+;;   Or, use one of these two types of support.
+;;   Add support for new languages only via ctags.
+;; (semantic-load-enable-primary-exuberent-ctags-support)
+;;   Add support for using ctags as a backup parser.
+;; (semantic-load-enable-secondary-exuberent-ctags-support)
+
+;; Enable SRecode (Template management) minor-mode.
+;; (global-srecode-minor-mode 1)
+
 
 ;;
 ;; http://www.emacswiki.org/emacs/PredictiveMode
@@ -45,7 +87,7 @@
 (color-theme-clarity)
 (setq my-color-themes (list 'color-theme-arjen 'color-theme-clarity
                               'color-theme-hober 'color-theme-billw
-			      'color-theme-lethe 'color-theme-ld-dark
+                              'color-theme-lethe 'color-theme-ld-dark
                               'color-theme-charcoal-black 'color-theme-late-night
                               'color-theme-midnight 'color-theme-tty-dark))
   (defun my-theme-set-default () ; Set the first row
@@ -58,7 +100,7 @@
       (message "%s" (car theme-current)))
      
    ; Set the next theme (fixed by Chris Webber - tanks)
-    (defun my-theme-cycle ()		
+    (defun my-theme-cycle ()            
       (interactive)
       (setq theme-current (cdr theme-current))
       (if (null theme-current)
@@ -81,9 +123,9 @@
 ;;
 (setq c-default-style "python")
 (setq-default c-basic-offset 4)
-;	      c-indent-tabs-mode t 
-;	      tab-width 4
-;	      indent-tabs-mode t)
+;             c-indent-tabs-mode t 
+;             tab-width 4
+;             indent-tabs-mode t)
 (add-hook 'c-mode-common-hook '(lambda () (c-toggle-auto-state 1)))
 
 ;;
@@ -94,11 +136,11 @@
 ;          '(lambda ()
 ;             (setq autopair-handle-action-fns
 ;                   (append
-;					(if autopair-handle-action-fns
-;						autopair-handle-action-fns
-;					  '(autopair-default-handle-action))
-;					'((lambda (action pair pos-before)
-;						(hl-paren-color-update)))))))
+;                                       (if autopair-handle-action-fns
+;                                               autopair-handle-action-fns
+;                                         '(autopair-default-handle-action))
+;                                       '((lambda (action pair pos-before)
+;                                               (hl-paren-color-update)))))))
 ;
 ;(define-globalized-minor-mode global-highlight-parentheses-mode
 ;  highlight-parentheses-mode
@@ -132,18 +174,18 @@
 ;; http://www.cs.washington.edu/education/courses/cse467/04wi/misc/verilog-mode.el
 ;;
 (setq verilog-indent-level             4
-	  verilog-indent-level-module      4
-	  verilog-indent-level-declaration 4
-	  verilog-indent-level-behavioral  4
-	  verilog-indent-level-directive   4
-	  verilog-case-indent              2
-	  verilog-auto-newline             t
-	  verilog-auto-indent-on-newline   t
-;	  verilog-tab-always-indent        t
-	  verilog-auto-endcomments         t
+          verilog-indent-level-module      4
+          verilog-indent-level-declaration 4
+          verilog-indent-level-behavioral  4
+          verilog-indent-level-directive   4
+          verilog-case-indent              2
+          verilog-auto-newline             t
+          verilog-auto-indent-on-newline   t
+;         verilog-tab-always-indent        t
+          verilog-auto-endcomments         t
       verilog-minimum-comment-distance 40
-	  verilog-indent-begin-after-if    t
-	  verilog-auto-lineup              '(all))
+          verilog-indent-begin-after-if    t
+          verilog-auto-lineup              '(all))
 
 ;;
 ;; http://www.veripool.org/projects/verilog-mode/wiki/Faq#Why-when-others-edit-my-code-does-it-looks-unindented
@@ -174,20 +216,20 @@
 ;(defun guess-TeX-master (filename)
 ;  "Guess the master file for FILENAME from currently open .tex files."
 ;  (let ((candidate nil)
-;	(filename (file-name-nondirectory filename)))
+;       (filename (file-name-nondirectory filename)))
 ;    (save-excursion
 ;      (dolist (buffer (buffer-list))
-;	(with-current-buffer buffer
-;	  (let ((name (buffer-name))
-;		(file buffer-file-name))
-;	    (if (and file (string-match "\\.tex$" file))
-;		(progn
-;		  (goto-char (point-min))
-;		  (if (re-search-forward (concat "\\\\input{" filename "}") nil t)
-;		      (setq candidate file))
-;		  (if (re-search-forward (concat "\\\\include{" (file-name-sans-extension filename) "}") nil t)
-;		      (setq candidate file))))))))
+;       (with-current-buffer buffer
+;         (let ((name (buffer-name))
+;               (file buffer-file-name))
+;           (if (and file (string-match "\\.tex$" file))
+;               (progn
+;                 (goto-char (point-min))
+;                 (if (re-search-forward (concat "\\\\input{" filename "}") nil t)
+;                     (setq candidate file))
+;                 (if (re-search-forward (concat "\\\\include{" (file-name-sans-extension filename) "}") nil t)
+;                     (setq candidate file))))))))
 ;    (if candidate
-;	(message "TeX master document: %s" (file-name-nondirectory candidate)))
+;       (message "TeX master document: %s" (file-name-nondirectory candidate)))
 ;    candidate))
 ;(setq TeX-master (guess-TeX-master (buffer-file-name)))

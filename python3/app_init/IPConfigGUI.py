@@ -1,27 +1,31 @@
+#! /usr/bin/env python3
 
 import sys
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 import AppConfig
 import GUITools
+import ProjectConfig
+import VerilogParse
 
-
-class AppConfigGUI(QDialog):
+class IPConfigGUI(QDialog):
     
     def __init__(self, parent = None):
         #
         # Call contstructor of our Super Class, we inherit from QDialog
         #
-        super(AppConfigGUI, self).__init__(parent)
-        print ("STARTING Config GUI")
+        super(IPConfigGUI, self).__init__(parent)
+        print ("STARTING IP Config GUI")
         
         TopLayout = QVBoxLayout()
-        self.XilinxPath = GUITools.PathOptionEditor(parent = self, name = "Xilinx Path")
-        self.AlteraPath = GUITools.PathOptionEditor(parent = self, name = "Altera Path")
 
         ########################################################################
         #
+        # File Dialog and OK/Cancel
+        #
         ########################################################################        
+        self.ProjectFileLayout = GUITools.FileOptionEditor(name = "Verilog File")
+
         PushButtonLayout = QHBoxLayout()
         self.OKButton = QPushButton("OK")
         self.CancelButton = QPushButton("Cancel")
@@ -32,24 +36,34 @@ class AppConfigGUI(QDialog):
         QObject.connect(self.OKButton, SIGNAL("clicked()"), self.OKButtonClicked)
         QObject.connect(self.CancelButton, SIGNAL("clicked()"), self.CancelButtonClicked)
 
-        TopLayout.addLayout(self.XilinxPath.GetLayout())
-        TopLayout.addLayout(self.AlteraPath.GetLayout())
+        TopLayout.addLayout(self.ProjectFileLayout.GetLayout())
+
         TopLayout.addLayout(PushButtonLayout)
         
         self.setLayout(TopLayout)
-        self.setWindowTitle("App Config Editor")
+        self.setWindowTitle("IP Config Editor")
         
         return
-
     def OKButtonClicked(self):
-        app = AppConfig.AppConfig()       
-        app.AddSectionAndData("Xilinx", "Path", self.XilinxPath.LineEdit.text())
-        app.AddSectionAndData("Altera", "Path", self.AlteraPath.LineEdit.text())
-        app.AddSectionAndData("Projects", "Path", [])
-        app.WriteFile()
+
+        ConfigFile = self.ProjectFileLayout.LineEdit.text()
+
+        print(ConfigFile)
+        parser = VerilogParse.VerilogParse(FileName = ConfigFile)
+        parser.GetPorts()
         self.accept()
         return
 
     def CancelButtonClicked(self):
         self.reject()
         return
+
+
+if __name__ == '__main__':
+
+    app = QApplication(sys.argv)
+    gui = IPConfigGUI()
+    gui.show()
+    app.exec_()    
+    
+    pass

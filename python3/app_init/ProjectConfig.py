@@ -1,23 +1,10 @@
 import sys
 import os
 import configparser
+import ConfigTools
 
-class TechnologyOptions(object):
-    def __init__(self):
-        self.Netlist = None
-        self.SDF = None
-        self.Constraints = None
-        self.FPGA = None
-        self.SynthesisOptions = []
-        self.SynthesisFilesList = []
 
-class SimulationOptions(object):
-    def __init__(self):
-        self.SimulationFilesList = []
-        self.SimulationOptionsList = []
-        self.SimulationIncludePathList = []
-
-class ProjectConfig( configparser.SafeConfigParser ):
+class ProjectConfig( ConfigTools.ConfigTools ):
 
     def __init__(self):
         super().__init__()
@@ -37,28 +24,28 @@ class ProjectConfig( configparser.SafeConfigParser ):
         ##
         ## Project Specific
         ##
-        self.ProjectSimulation = SimulationOptions()
+        self.ProjectSimulation = ConfigTools.ToolOptions()
 
         ##
         ## Cores that we are using
         ## 
         self.CoreList = []
-        self.CoresSimulation = SimulationOptions()
+        self.CoresSimulation = ConfigTools.ToolOptions()
 
         ##
         ## Xilinx Specific
         ##
-        self.Xilinx = TechnologyOptions()
+        self.Xilinx = ConfigTools.TechnologyOptions()
 
         ##
         ## Altera Specific
         ##
-        self.Altera = TechnologyOptions()
+        self.Altera = ConfigTools.TechnologyOptions()
 
         ##
         ## ASIC Specific
         ##
-        self.ASIC = TechnologyOptions()
+        self.ASIC = ConfigTools.TechnologyOptions()
 
         return
 

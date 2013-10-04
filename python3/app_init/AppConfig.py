@@ -1,9 +1,9 @@
 
 import sys
 import os
-import configparser
+import ConfigTools
 
-class AppConfig( configparser.SafeConfigParser ):
+class AppConfig( ConfigTools.ConfigTools ):
 
     def __init__(self):
         super().__init__()

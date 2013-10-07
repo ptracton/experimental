@@ -1,7 +1,25 @@
 
-TOOLCHAIN_DIR = /home/ptracton/src/software/STM32/libopencm3
+##
+## Name of our project and executable
+##
+TARGET = main
 
-BINARY = main
+SRC_DIR = src
+OBJ_DIR = objects
+INC_DIR = includes
+EXEC_DIR = executable
+
+SOURCES = $(wildcard $(SRC_DIR)/*.c)
+OBJECTS  = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SOURCES))
+
+ELF_FILE  = $(EXEC_DIR)/$(TARGET).elf
+LIST_FILE = $(EXEC_DIR)/$(TARGET).lst
+HEX_FILE  = $(EXEC_DIR)/$(TARGET).hex
+SREC_FILE = $(EXEC_DIR)/$(TARGET).srec
+BIN_FILE  = $(EXEC_DIR)/$(TARGET).bin
+
+#TOOLCHAIN_DIR = /home/ptracton/src/software/STM32/libopencm3
+TOOLCHAIN_DIR = $(LIBOPENCM3_PATH)
 LDSCRIPT = src/stm32f3-discovery.ld
 
 PREFIX	?= arm-none-eabi
@@ -13,48 +31,52 @@ OBJDUMP		= $(PREFIX)-objdump
 GDB		= $(PREFIX)-gdb
 FLASH		= $(shell which st-flash)
 
-CFLAGS		+= -Os -g -Wall -Wextra -I$(TOOLCHAIN_DIR)/include \
-		   -fno-common -mcpu=cortex-m4 -mthumb \
-		   -mfloat-abi=hard -mfpu=fpv4-sp-d16 -MD -DSTM32F3
-LDFLAGS		+= --static -lc -lnosys -L$(TOOLCHAIN_DIR)/lib \
-			 -L$(TOOLCHAIN_DIR)/lib/stm32/f3 \
-		   -T$(LDSCRIPT) -nostartfiles -Wl,--gc-sections \
-		   -mthumb -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16
-OBJS		+= objects/$(BINARY).o
-
 OOCD		?= openocd
 OOCD_INTERFACE	?= stlink-v2
 OOCD_BOARD	?= stm32f3discovery
 
-all: $(BINARY).elf $(BINARY).bin $(BINARY).hex $(BINARY).srec $(BINARY).list
 
-$(BINARY).images: %.bin %.hex %.srec %.list
-	echo "*** $* images generated ***"
+CFLAGS		+= -Os -g -Wall -Wextra -I$(TOOLCHAIN_DIR)/include \
+		   -fno-common -mcpu=cortex-m4 -mthumb \
+		   -mfloat-abi=hard -mfpu=fpv4-sp-d16 -MD -DSTM32F3
 
-$(BINARY).bin: $(BINARY).elf
-	$(OBJCOPY) -Obinary executable/$(BINARY).elf  executable/$(BINARY).bin
+#LDFLAGS		+= --static -lc -lnosys -L$(TOOLCHAIN_DIR)/lib \
+			 -L$(TOOLCHAIN_DIR)/lib/stm32/f3 \
+		   -T$(LDSCRIPT) -nostartfiles -Wl,--gc-sections \
+		   -mthumb -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16
 
-$(BINARY).hex: $(BINARY).elf
-	$(OBJCOPY) -Oihex executable/$(BINARY).elf  executable/$(BINARY).hex
+LDFLAGS		+= --static -lc -L$(TOOLCHAIN_DIR)/lib \
+			 -L$(TOOLCHAIN_DIR)/lib/stm32/f3 \
+		   -T$(LDSCRIPT) -nostartfiles -Wl,--gc-sections \
+		   -mthumb -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16
 
-$(BINARY).srec: $(BINARY).elf
-	$(OBJCOPY) -Osrec executable/$(BINARY).elf  executable/$(BINARY).srec
+all: $(LIST_FILE) $(HEX_FILE) $(SREC_FILE) $(BIN_FILE)
 
-$(BINARY).list: $(BINARY).elf
-	$(OBJDUMP) -S executable/$(BINARY).elf >  executable/$(BINARY).list
+$(HEX_FILE) :$(ELF_FILE)
+	$(OBJCOPY) -Oihex $(ELF_FILE) $(HEX_FILE)
 
-$(BINARY).elf: $(OBJS)
-	$(LD) -o executable/$(BINARY).elf $(OBJS) -lopencm3_stm32f3 $(LDFLAGS)
+$(SREC_FILE):$(ELF_FILE)
+	$(OBJCOPY) -Osrec $(ELF_FILE)  $(SREC_FILE)
 
-$(OBJS):
-	$(CC) $(CFLAGS) -o $@ -c src/main.c
+$(BIN_FILE):$(ELF_FILE)
+	$(OBJCOPY) -Obinary $(ELF_FILE) $(BIN_FILE)
+
+$(LIST_FILE):$(ELF_FILE)
+	$(OBJDUMP) -S $(ELF_FILE) >  $(LIST_FILE)
+
+$(ELF_FILE): $(OBJECTS)
+	$(LD) -o $(ELF_FILE) $(OBJECTS) -lopencm3_stm32f3 $(LDFLAGS)
+
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c 
+	@echo $@ $<  
+	$(CC) $(CFLAGS) -o $@ -c $< 
 
 
-$(BINARY).stlink-flash: $(BINARY).bin
-	$(Q)$(FLASH) write executable/$(BINARY).bin 0x8000000
+FLASH: $(BIN_FILE)
+	$(FLASH) write $(BIN_FILE) 0x8000000
 
 clean:
-	/bin/rm -f objects/*.o src/*~ *~  executable/$(BINARY)*
+	rm -f $(OBJECTS) $(SRC_DIR)/*~ *~ $(ELF_FILE) $(LIST_FILE) $(BIN_FILE) $(HEX_FILE) $(SREC_FILE) $(OBJ_DIR)/*.d
 
 .PHONY: images clean
 

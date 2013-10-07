@@ -36,7 +36,7 @@ OOCD_INTERFACE	?= stlink-v2
 OOCD_BOARD	?= stm32f3discovery
 
 
-CFLAGS		+= -Os -g -Wall -Wextra -I$(TOOLCHAIN_DIR)/include \
+CFLAGS		+= -Os -g -Wall -Wextra -I$(TOOLCHAIN_DIR)/include -I $(INC_DIR)\
 		   -fno-common -mcpu=cortex-m4 -mthumb \
 		   -mfloat-abi=hard -mfpu=fpv4-sp-d16 -MD -DSTM32F3
 
@@ -68,7 +68,6 @@ $(ELF_FILE): $(OBJECTS)
 	$(LD) -o $(ELF_FILE) $(OBJECTS) -lopencm3_stm32f3 $(LDFLAGS)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c 
-	@echo $@ $<  
 	$(CC) $(CFLAGS) -o $@ -c $< 
 
 

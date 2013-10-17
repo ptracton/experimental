@@ -1,0 +1,110 @@
+
+##
+## Name of our project and executable
+##
+TARGET = stm32f3_basic
+
+SRC_DIR = src
+OBJ_DIR = objects
+INC_DIR = includes
+EXEC_DIR = executable
+LD_DIR = linker
+
+SOURCES     = $(wildcard $(SRC_DIR)/*.c)
+OBJECTS     = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SOURCES))
+
+ASM_SOURCES     = $(wildcard $(SRC_DIR)/*.s)
+ASM_OBJECTS     = $(patsubst $(SRC_DIR)/%.s,$(OBJ_DIR)/%.o,$(SOURCES))
+
+ELF_FILE  = $(EXEC_DIR)/$(TARGET).elf
+LIST_FILE = $(EXEC_DIR)/$(TARGET).lst
+HEX_FILE  = $(EXEC_DIR)/$(TARGET).hex
+SREC_FILE = $(EXEC_DIR)/$(TARGET).srec
+BIN_FILE  = $(EXEC_DIR)/$(TARGET).bin
+
+##
+## STM32F3_DISCOVERY_LIBRARY is an environment variable pointing to the location of the library
+##
+STD_PERIPHERAL_INCLUDE = $(STM32F3_DISCOVERY_LIBRARY)/Libraries/STM32F30x_StdPeriph_Driver/inc
+CMSIS_INCLUDES = $(STM32F3_DISCOVERY_LIBRARY)/Libraries/CMSIS/Include
+DEVICE_INCLUDES = $(STM32F3_DISCOVERY_LIBRARY)/Libraries/CMSIS/Device/ST/STM32F30x/Include
+
+STD_PERIPHERAL_LIB_DIR = $(STM32F3_DISCOVERY_LIBRARY)/Libraries/STM32F30x_StdPeriph_Driver/lib
+STD_PERIPHERAL_LIBRARY = stm32f3xx
+
+PREFIX	?= arm-none-eabi
+# PREFIX		?= arm-elf
+CC		= $(PREFIX)-gcc
+LD		= $(PREFIX)-gcc
+OBJCOPY		= $(PREFIX)-objcopy
+OBJDUMP		= $(PREFIX)-objdump
+GDB		= $(PREFIX)-gdb
+FLASH		= $(shell which st-flash)
+
+OOCD		?= openocd
+OOCD_INTERFACE	?= stlink-v2
+OOCD_BOARD	?= stm32f3discovery
+
+CINCLUDES  = -I$(STD_PERIPHERAL_INCLUDE)
+CINCLUDES += -I$(CMSIS_INCLUDES)
+CINCLUDES += -I$(DEVICE_INCLUDES)
+CINCLUDES += -I$(INC_DIR)
+
+CFLAGS	+= -Os -g -Wall -Wextra $(CINCLUDES)\
+	   -fno-common -mcpu=cortex-m4 -mthumb \
+	   -mfloat-abi=hard -mfpu=fpv4-sp-d16 -MD -DSTM32F3
+#CFLAGS += -Werrror
+
+
+LDSCRIPT = $(LD_DIR)/stm32f3.ld
+
+LDFLAGS		+= --static -lc -L$(STD_PERIPHERAL_LIB_DIR) -l$(STD_PERIPHERAL_LIBRARY) \
+		   -T$(LDSCRIPT) -nostartfiles -Wl,--gc-sections \
+		   -mthumb -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16
+
+all: dirs $(LIST_FILE) $(HEX_FILE) $(SREC_FILE) $(BIN_FILE)
+
+dirs:
+	mkdir -p $(EXEC_DIR)
+	mkdir -p $(OBJ_DIR)
+
+$(HEX_FILE) :$(ELF_FILE)
+	$(OBJCOPY) -Oihex $(ELF_FILE) $(HEX_FILE)
+
+$(SREC_FILE):$(ELF_FILE)
+	$(OBJCOPY) -Osrec $(ELF_FILE)  $(SREC_FILE)
+
+$(BIN_FILE):$(ELF_FILE)
+	$(OBJCOPY) -Obinary $(ELF_FILE) $(BIN_FILE)
+
+$(LIST_FILE):$(ELF_FILE)
+	$(OBJDUMP) -S $(ELF_FILE) >  $(LIST_FILE)
+
+$(ELF_FILE): $(OBJECTS)
+	@echo "Linking $(ELF_FILE)"
+	$(CC) $(CFLAGS) -o $(OBJ_DIR)/startup_stm32f30x.o -c $(SRC_DIR)/startup_stm32f30x.s
+	@$(LD) -o $(ELF_FILE) $(OBJECTS) $(OBJ_DIR)/startup_stm32f30x.o $(LDFLAGS)
+
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c 
+	@echo "Building $<"
+	@$(CC) $(CFLAGS) -o $@ -c $< 
+
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.s 
+	@echo "Building $<"
+	@$(CC) $(CFLAGS) -o $@ -c $< 
+
+TAGS:
+	etags $(SRC_DIR)/*.c $(INC_DIR)/*.h $(STD_PERIPHERAL_INCLUDE)/*.h $(CMSIS_INCLUDES)/*.h $(DEVICE_INCLUDES)/*.h $(STM32F3_DISCOVERY_LIBRARY)/Libraries/STM32F30x_StdPeriph_Driver/src/*.c
+
+FLASH: $(BIN_FILE)
+	$(FLASH) write $(BIN_FILE) 0x8000000
+
+clean:
+	rm -rf $(OBJ_DIR)
+	rm -rf $(EXEC_DIR)
+	find . -name "*~" | xargs rm -f 
+
+.PHONY: images clean
+
+-include $(OBJS:.o=.d)
+

@@ -25,11 +25,11 @@ BIN_FILE  = $(EXEC_DIR)/$(TARGET).bin
 ##
 ## STM32F3_DISCOVERY_LIBRARY is an environment variable pointing to the location of the library
 ##
-STD_PERIPHERAL_INCLUDE = $(STM32F3_DISCOVERY_LIBRARY)/Libraries/STM32F30x_StdPeriph_Driver/inc
-CMSIS_INCLUDES = $(STM32F3_DISCOVERY_LIBRARY)/Libraries/CMSIS/Include
-DEVICE_INCLUDES = $(STM32F3_DISCOVERY_LIBRARY)/Libraries/CMSIS/Device/ST/STM32F30x/Include
+STD_PERIPHERAL_INCLUDE = ../Libraries/STM32F30x_StdPeriph_Driver/inc
+CMSIS_INCLUDES = ../Libraries/CMSIS/Include
+DEVICE_INCLUDES = ../Libraries/CMSIS/Device/ST/STM32F30x/Include
 
-STD_PERIPHERAL_LIB_DIR = $(STM32F3_DISCOVERY_LIBRARY)/Libraries/STM32F30x_StdPeriph_Driver/lib
+STD_PERIPHERAL_LIB_DIR = ../Libraries/STM32F30x_StdPeriph_Driver/lib
 STD_PERIPHERAL_LIBRARY = stm32f3xx
 
 PREFIX	?= arm-none-eabi
@@ -81,6 +81,8 @@ $(LIST_FILE):$(ELF_FILE)
 	$(OBJDUMP) -S $(ELF_FILE) >  $(LIST_FILE)
 
 $(ELF_FILE): $(OBJECTS)
+	@echo "Make sure libstm32fxx.a is built"
+	make -C ../Libraries/STM32F30x_StdPeriph_Driver
 	@echo "Linking $(ELF_FILE)"
 	$(CC) $(CFLAGS) -o $(OBJ_DIR)/startup_stm32f30x.o -c $(SRC_DIR)/startup_stm32f30x.s
 	@$(LD) -o $(ELF_FILE) $(OBJECTS) $(OBJ_DIR)/startup_stm32f30x.o $(LDFLAGS)

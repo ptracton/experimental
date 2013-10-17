@@ -12,6 +12,6 @@ LIBOPENCM3_DEFINE_CPU = STM32F4
 
 include ../Makefile.include
 
-
+all: $(LIST_FILE) $(HEX_FILE) $(SREC_FILE) $(BIN_FILE)
 
 

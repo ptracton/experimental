@@ -120,6 +120,10 @@ tags:
 program: dirs $(BIN_FILE)
 	$(FLASH) write $(BIN_FILE) 0x8000000
 
+debug: $(ELF_FILE)
+	$(GDB) --tui -x ../debugger/gdb_cmds $(ELF_FILE)
+
+
 clean:
 	rm -rf $(OBJ_DIR)
 	rm -rf $(EXEC_DIR)

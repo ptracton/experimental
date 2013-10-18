@@ -9,8 +9,8 @@ You can use, copy and distribute this file freely, but without any waranty.
 */
 
 /* include the memory spaces definitions sub-script */
-INCLUDE "linker/stm32f3discovery_def.ld"
+INCLUDE "../linker/stm32f3discovery_def.ld"
 
 /* include the sections management sub-script for FLASH mode */
-INCLUDE "linker/sections_flash.ld"
+INCLUDE "../linker/sections_flash.ld"
 

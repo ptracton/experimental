@@ -17,7 +17,10 @@ SRC_DIR = src
 OBJ_DIR = objects
 INC_DIR = includes
 EXEC_DIR = executable
-LD_DIR = linker
+LD_DIR = ../linker
+COMMON_DIR = ../common
+COMMON_SRC = $(COMMON_DIR)/src
+COMMON_INC = $(COMMON_DIR)/includes
 
 ##
 ## Project sources converted to objects
@@ -54,6 +57,7 @@ CINCLUDES += -I$(STD_PERIPHERAL_INCLUDE)
 CINCLUDES += -I$(CMSIS_INCLUDES)
 CINCLUDES += -I$(DEVICE_INCLUDES)
 CINCLUDES += -I$(INC_DIR)
+CINCLUDES += -I$(COMMON_INC)
 
 ##
 ## Options passed to the C compiler
@@ -96,26 +100,31 @@ $(LIST_FILE):$(ELF_FILE)
 	$(OBJDUMP) -S $(ELF_FILE) >  $(LIST_FILE)
 
 $(ELF_FILE): $(OBJECTS)
+	@echo "Building Common"
+	@$(CC) $(CFLAGS) -o $(OBJ_DIR)/startup_stm32f30x.o -c $(COMMON_SRC)/startup_stm32f30x.s
+	@$(CC) $(CFLAGS) -o $(OBJ_DIR)/system_stm32f30x.o -c $(COMMON_SRC)/system_stm32f30x.c
+
 	@echo "Make sure libstm32fxx.a is built"
 	make -C ../Libraries/STM32F30x_StdPeriph_Driver
+
 	@echo "Linking $(ELF_FILE)"
-	$(CC) $(CFLAGS) -o $(OBJ_DIR)/startup_stm32f30x.o -c $(SRC_DIR)/startup_stm32f30x.s
-	@$(LD) -o $(ELF_FILE) $(OBJECTS) $(OBJ_DIR)/startup_stm32f30x.o $(LDFLAGS)
+	@$(LD) -o $(ELF_FILE) $(OBJECTS) $(OBJ_DIR)/startup_stm32f30x.o $(OBJ_DIR)/system_stm32f30x.o $(LDFLAGS)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c 
 	@echo "Building $<"
 	@$(CC) $(CFLAGS) -o $@ -c $< 
 
-TAGS:
-	etags $(SRC_DIR)/*.c $(INC_DIR)/*.h $(STD_PERIPHERAL_INCLUDE)/*.h $(CMSIS_INCLUDES)/*.h $(DEVICE_INCLUDES)/*.h $(STD_PERIPHERAL_DIR)/src/*.c
+tags:
+	etags $(SRC_DIR)/*.c $(INC_DIR)/*.h $(STD_PERIPHERAL_INCLUDE)/*.h $(CMSIS_INCLUDES)/*.h $(DEVICE_INCLUDES)/*.h $(STD_PERIPHERAL_DIR)/src/*.c $(COMMON_SRC)/*.c $(COMMON_SRC)/*.s #$(COMMON_INC)/*h
 
-FLASH: $(BIN_FILE)
+program: dirs $(BIN_FILE)
 	$(FLASH) write $(BIN_FILE) 0x8000000
 
 clean:
 	rm -rf $(OBJ_DIR)
 	rm -rf $(EXEC_DIR)
 	find . -name "*~" | xargs rm -f 
+	rm -f TAGS
 
 .PHONY: images clean
 

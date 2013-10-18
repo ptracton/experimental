@@ -1,0 +1,123 @@
+
+
+
+PREFIX	?= arm-none-eabi
+# PREFIX		?= arm-elf
+CC		= $(PREFIX)-gcc
+LD		= $(PREFIX)-gcc
+OBJCOPY		= $(PREFIX)-objcopy
+OBJDUMP		= $(PREFIX)-objdump
+GDB		= $(PREFIX)-gdb
+FLASH		= $(shell which st-flash)
+
+##
+## Project Directories
+##
+SRC_DIR = src
+OBJ_DIR = objects
+INC_DIR = includes
+EXEC_DIR = executable
+LD_DIR = linker
+
+##
+## Project sources converted to objects
+##
+SOURCES     = $(wildcard $(SRC_DIR)/*.c)
+OBJECTS     = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SOURCES))
+
+##
+## Paths to the various parts of the STM32 libraries
+##
+STD_PERIPHERAL_DIR = ../Libraries/STM32F4x_StdPeriph_Driver/
+CMSIS_DIR = ../Libraries/CMSIS/
+
+STD_PERIPHERAL_INCLUDE = $(STD_PERIPHERAL_DIR)/inc
+CMSIS_INCLUDES = $(CMSIS_DIR)/Include
+DEVICE_INCLUDES = $(CMSIS_DIR)/Device/ST/STM32F4x/Include
+
+STD_PERIPHERAL_LIB_DIR = ../Libraries/STM32F4x_StdPeriph_Driver/lib
+STD_PERIPHERAL_LIBRARY = stm32f3xx
+
+##
+## The files we are creating
+##
+ELF_FILE  = $(EXEC_DIR)/$(TARGET).elf
+LIST_FILE = $(EXEC_DIR)/$(TARGET).lst
+HEX_FILE  = $(EXEC_DIR)/$(TARGET).hex
+SREC_FILE = $(EXEC_DIR)/$(TARGET).srec
+BIN_FILE  = $(EXEC_DIR)/$(TARGET).bin
+
+##
+## Paths for C header files
+##
+CINCLUDES += -I$(STD_PERIPHERAL_INCLUDE)
+CINCLUDES += -I$(CMSIS_INCLUDES)
+CINCLUDES += -I$(DEVICE_INCLUDES)
+CINCLUDES += -I$(INC_DIR)
+
+##
+## Options passed to the C compiler
+##
+CFLAGS	+= -Os -g -Wall -Wextra -Werror $(CINCLUDES)\
+	   -fno-common -mcpu=cortex-m4 -mthumb \
+	   -mfloat-abi=hard -mfpu=fpv4-sp-d16 -MD -DSTM32F3
+
+##
+## Linker configuration
+##
+LDSCRIPT = $(LD_DIR)/stm32f3.ld
+LDFLAGS		+= --static -lc -L$(STD_PERIPHERAL_LIB_DIR) -l$(STD_PERIPHERAL_LIBRARY) \
+		   -T$(LDSCRIPT) -nostartfiles -Wl,--gc-sections \
+		   -mthumb -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16
+
+##
+## OpenOCD setup
+##
+OOCD		?= openocd
+OOCD_INTERFACE	?= stlink-v2
+OOCD_BOARD	?= stm32f3discovery
+
+all: dirs $(LIST_FILE) $(HEX_FILE) $(SREC_FILE) $(BIN_FILE)
+
+dirs:
+	mkdir -p $(EXEC_DIR)
+	mkdir -p $(OBJ_DIR)
+
+$(HEX_FILE) :$(ELF_FILE)
+	$(OBJCOPY) -Oihex $(ELF_FILE) $(HEX_FILE)
+
+$(SREC_FILE):$(ELF_FILE)
+	$(OBJCOPY) -Osrec $(ELF_FILE)  $(SREC_FILE)
+
+$(BIN_FILE):$(ELF_FILE)
+	$(OBJCOPY) -Obinary $(ELF_FILE) $(BIN_FILE)
+
+$(LIST_FILE):$(ELF_FILE)
+	$(OBJDUMP) -S $(ELF_FILE) >  $(LIST_FILE)
+
+$(ELF_FILE): $(OBJECTS)
+	@echo "Make sure libstm32fxx.a is built"
+	make -C ../Libraries/STM32F4x_StdPeriph_Driver
+	@echo "Linking $(ELF_FILE)"
+	$(CC) $(CFLAGS) -o $(OBJ_DIR)/startup_stm32f4x.o -c $(SRC_DIR)/startup_stm32f4x.s
+	@$(LD) -o $(ELF_FILE) $(OBJECTS) $(OBJ_DIR)/startup_stm32f4x.o $(LDFLAGS)
+
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c 
+	@echo "Building $<"
+	@$(CC) $(CFLAGS) -o $@ -c $< 
+
+TAGS:
+	etags $(SRC_DIR)/*.c $(INC_DIR)/*.h $(STD_PERIPHERAL_INCLUDE)/*.h $(CMSIS_INCLUDES)/*.h $(DEVICE_INCLUDES)/*.h $(STD_PERIPHERAL_DIR)/src/*.c
+
+FLASH: $(BIN_FILE)
+	$(FLASH) write $(BIN_FILE) 0x8000000
+
+clean:
+	rm -rf $(OBJ_DIR)
+	rm -rf $(EXEC_DIR)
+	find . -name "*~" | xargs rm -f 
+
+.PHONY: images clean
+
+-include $(OBJS:.o=.d)
+

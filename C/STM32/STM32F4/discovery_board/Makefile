@@ -10,7 +10,7 @@ LIBOPENCM3_DEFINE_CPU = STM32F4
 BOARD = $(CPU)_discovery_board
 LIBRARY = $(LIB_DIR)/lib$(BOARD).a
 
-include ../Makefile.include
+include ../Makefile.stm32f4
 
 library: $(LIBRARY) 
 

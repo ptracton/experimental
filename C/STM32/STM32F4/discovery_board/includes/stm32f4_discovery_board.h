@@ -1,7 +1,0 @@
-
-
-#ifndef __STM32F4_DISCOVERY_BOARD__
-#define __STM32F4_DISCOVERY_BOARD__
-
-
-#endif

@@ -17,7 +17,7 @@ SRC_DIR = src
 OBJ_DIR = objects
 INC_DIR = includes
 EXEC_DIR = executable
-LD_DIR = linker
+LD_DIR = ../linker
 
 ##
 ## Project sources converted to objects
@@ -35,8 +35,12 @@ STD_PERIPHERAL_INCLUDE = $(STD_PERIPHERAL_DIR)/inc
 CMSIS_INCLUDES = $(CMSIS_DIR)/Include
 DEVICE_INCLUDES = $(CMSIS_DIR)/Device/ST/STM32F4x/Include
 
-STD_PERIPHERAL_LIB_DIR = ../Libraries/STM32F4x_StdPeriph_Driver/lib
-STD_PERIPHERAL_LIBRARY = stm32f3xx
+STD_PERIPHERAL_LIB_DIR = ../Libraries/STM32F4xx_StdPeriph_Driver/lib
+STD_PERIPHERAL_LIBRARY = stm32f4xx
+
+COMMON_DIR = ../common
+COMMON_SRC = $(COMMON_DIR)/src
+COMMON_INC = $(COMMON_DIR)/includes
 
 ##
 ## The files we are creating
@@ -54,18 +58,19 @@ CINCLUDES += -I$(STD_PERIPHERAL_INCLUDE)
 CINCLUDES += -I$(CMSIS_INCLUDES)
 CINCLUDES += -I$(DEVICE_INCLUDES)
 CINCLUDES += -I$(INC_DIR)
+CINCLUDES += -I$(COMMON_INC)
 
 ##
 ## Options passed to the C compiler
 ##
 CFLAGS	+= -Os -g -Wall -Wextra -Werror $(CINCLUDES)\
 	   -fno-common -mcpu=cortex-m4 -mthumb \
-	   -mfloat-abi=hard -mfpu=fpv4-sp-d16 -MD -DSTM32F3
+	   -mfloat-abi=hard -mfpu=fpv4-sp-d16 -MD -DSTM32F4
 
 ##
 ## Linker configuration
 ##
-LDSCRIPT = $(LD_DIR)/stm32f3.ld
+LDSCRIPT = $(LD_DIR)/stm32f4.ld
 LDFLAGS		+= --static -lc -L$(STD_PERIPHERAL_LIB_DIR) -l$(STD_PERIPHERAL_LIBRARY) \
 		   -T$(LDSCRIPT) -nostartfiles -Wl,--gc-sections \
 		   -mthumb -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16
@@ -75,7 +80,7 @@ LDFLAGS		+= --static -lc -L$(STD_PERIPHERAL_LIB_DIR) -l$(STD_PERIPHERAL_LIBRARY)
 ##
 OOCD		?= openocd
 OOCD_INTERFACE	?= stlink-v2
-OOCD_BOARD	?= stm32f3discovery
+OOCD_BOARD	?= stm32f4discovery
 
 all: dirs $(LIST_FILE) $(HEX_FILE) $(SREC_FILE) $(BIN_FILE)
 
@@ -84,23 +89,30 @@ dirs:
 	mkdir -p $(OBJ_DIR)
 
 $(HEX_FILE) :$(ELF_FILE)
-	$(OBJCOPY) -Oihex $(ELF_FILE) $(HEX_FILE)
+	@echo "Create $(HEX_FILE)"
+	@$(OBJCOPY) -Oihex $(ELF_FILE) $(HEX_FILE)
 
 $(SREC_FILE):$(ELF_FILE)
-	$(OBJCOPY) -Osrec $(ELF_FILE)  $(SREC_FILE)
+	@echo "Create $(SREC_FILE)"
+	@$(OBJCOPY) -Osrec $(ELF_FILE)  $(SREC_FILE)
 
 $(BIN_FILE):$(ELF_FILE)
-	$(OBJCOPY) -Obinary $(ELF_FILE) $(BIN_FILE)
+	@echo "Create $(BIN_FILE)"
+	@$(OBJCOPY) -Obinary $(ELF_FILE) $(BIN_FILE)
 
 $(LIST_FILE):$(ELF_FILE)
-	$(OBJDUMP) -S $(ELF_FILE) >  $(LIST_FILE)
+	@echo "Create $(LIST_FILE)"
+	@$(OBJDUMP) -S $(ELF_FILE) >  $(LIST_FILE)
 
 $(ELF_FILE): $(OBJECTS)
+	@echo "Build $(COMMON_SRC)/startup_stm32f4xx.s"
+	@$(CC) $(CFLAGS) -o $(OBJ_DIR)/startup_stm32f4x.o -c $(COMMON_SRC)/startup_stm32f4xx.s
+	@echo "Build $(COMMON_SRC)/system_stm32f4xx.c"
+	@$(CC) $(CFLAGS) -o $(OBJ_DIR)/system_stm32f4xx.o -c $(COMMON_SRC)/system_stm32f4xx.c
 	@echo "Make sure libstm32fxx.a is built"
-	make -C ../Libraries/STM32F4x_StdPeriph_Driver
+	@make -C ../Libraries/STM32F4xx_StdPeriph_Driver/
 	@echo "Linking $(ELF_FILE)"
-	$(CC) $(CFLAGS) -o $(OBJ_DIR)/startup_stm32f4x.o -c $(SRC_DIR)/startup_stm32f4x.s
-	@$(LD) -o $(ELF_FILE) $(OBJECTS) $(OBJ_DIR)/startup_stm32f4x.o $(LDFLAGS)
+	@$(LD) -o $(ELF_FILE) $(OBJECTS) $(OBJ_DIR)/system_stm32f4xx.o $(OBJ_DIR)/startup_stm32f4x.o $(LDFLAGS)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c 
 	@echo "Building $<"

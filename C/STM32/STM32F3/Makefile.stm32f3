@@ -11,6 +11,13 @@ GDB		= $(PREFIX)-gdb
 FLASH		= $(shell which st-flash)
 
 ##
+## OpenOCD setup
+##
+OOCD		?= openocd
+OOCD_INTERFACE	?= stlink-v2
+OOCD_BOARD	?= stm32f3discovery
+
+##
 ## Project Directories
 ##
 SRC_DIR = src
@@ -60,6 +67,26 @@ CINCLUDES += -I$(INC_DIR)
 CINCLUDES += -I$(COMMON_INC)
 
 ##
+## ELF Target
+##
+ELF_REQUIREMENTS = $(OBJECTS)
+
+
+##
+## Tag files
+##
+TAG_FILES = $(SRC_DIR)/*.c $(INC_DIR)/*.h $(STD_PERIPHERAL_INCLUDE)/*.h $(STD_PERIPHERAL_DIR)/src/*.c $(COMMON_SRC)/*.c $(COMMON_INC)/*.h $(CMSIS_INCLUDES)/*.h
+
+##
+## Files to link together
+##
+LINK_OBJECTS = $(OBJECTS) $(OBJ_DIR)/system_stm32f30x.o $(OBJ_DIR)/startup_stm32f30x.o 
+
+ifeq ($(FREE_RTOS_USE),1)
+include ../Makefile.freertos
+endif 
+
+##
 ## Options passed to the C compiler
 ##
 CFLAGS	+= -Os -g -Wall -Wextra -Werror $(CINCLUDES)\
@@ -74,12 +101,6 @@ LDFLAGS		+= --static -lc -L$(STD_PERIPHERAL_LIB_DIR) -l$(STD_PERIPHERAL_LIBRARY)
 		   -T$(LDSCRIPT) -nostartfiles -Wl,--gc-sections \
 		   -mthumb -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16
 
-##
-## OpenOCD setup
-##
-OOCD		?= openocd
-OOCD_INTERFACE	?= stlink-v2
-OOCD_BOARD	?= stm32f3discovery
 
 all: dirs $(LIST_FILE) $(HEX_FILE) $(SREC_FILE) $(BIN_FILE)
 
@@ -99,7 +120,7 @@ $(BIN_FILE):$(ELF_FILE)
 $(LIST_FILE):$(ELF_FILE)
 	$(OBJDUMP) -S $(ELF_FILE) >  $(LIST_FILE)
 
-$(ELF_FILE): $(OBJECTS)
+$(ELF_FILE): $(ELF_REQUIREMENTS)
 	@echo "Building Common"
 	@$(CC) $(CFLAGS) -o $(OBJ_DIR)/startup_stm32f30x.o -c $(COMMON_SRC)/startup_stm32f30x.s
 	@$(CC) $(CFLAGS) -o $(OBJ_DIR)/system_stm32f30x.o -c $(COMMON_SRC)/system_stm32f30x.c
@@ -108,14 +129,14 @@ $(ELF_FILE): $(OBJECTS)
 	make -C ../Libraries/STM32F30x_StdPeriph_Driver
 
 	@echo "Linking $(ELF_FILE)"
-	@$(LD) -o $(ELF_FILE) $(OBJECTS) $(OBJ_DIR)/startup_stm32f30x.o $(OBJ_DIR)/system_stm32f30x.o $(LDFLAGS)
+	@$(LD) -o $(ELF_FILE) $(LINK_OBJECTS) $(LDFLAGS)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c 
 	@echo "Building $<"
 	@$(CC) $(CFLAGS) -o $@ -c $< 
 
 tags:
-	etags $(SRC_DIR)/*.c $(INC_DIR)/*.h $(STD_PERIPHERAL_INCLUDE)/*.h $(CMSIS_INCLUDES)/*.h $(DEVICE_INCLUDES)/*.h $(STD_PERIPHERAL_DIR)/src/*.c $(COMMON_SRC)/*.c $(COMMON_SRC)/*.s #$(COMMON_INC)/*h
+	etags $(TAG_FILES)
 
 program: dirs $(BIN_FILE)
 	$(FLASH) write $(BIN_FILE) 0x8000000
@@ -129,6 +150,9 @@ clean:
 	rm -rf $(EXEC_DIR)
 	find . -name "*~" | xargs rm -f 
 	rm -f TAGS
+
+all_clean: clean
+	@make -C ../Libraries/STM32F30x_StdPeriph_Driver clean
 
 .PHONY: images clean
 

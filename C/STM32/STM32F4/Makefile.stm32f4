@@ -1,12 +1,21 @@
 
+##
+## Tools needed to make image and other files
+##
 PREFIX	?= arm-none-eabi
-# PREFIX		?= arm-elf
 CC		= $(PREFIX)-gcc
 LD		= $(PREFIX)-gcc
 OBJCOPY		= $(PREFIX)-objcopy
 OBJDUMP		= $(PREFIX)-objdump
 GDB		= $(PREFIX)-gdb
 FLASH		= $(shell which st-flash)
+
+##
+## OpenOCD setup
+##
+OOCD		?= openocd
+OOCD_INTERFACE	?= stlink-v2
+OOCD_BOARD	?= stm32f4discovery
 
 ##
 ## Project Directories
@@ -16,12 +25,6 @@ OBJ_DIR = objects
 INC_DIR = includes
 EXEC_DIR = executable
 LD_DIR = ../linker
-
-##
-## Project sources converted to objects
-##
-SOURCES     = $(wildcard $(SRC_DIR)/*.c)
-OBJECTS     = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SOURCES))
 
 ##
 ## Paths to the various parts of the STM32 libraries
@@ -41,27 +44,6 @@ COMMON_SRC = $(COMMON_DIR)/src
 COMMON_INC = $(COMMON_DIR)/includes
 
 ##
-## Free RTOS
-##
-FREE_RTOS_VERSION = 7.5.3
-FREE_RTOS_PATH = ../../RTOS/FreeRTOSV$(FREE_RTOS_VERSION)/FreeRTOS/
-FREE_RTOS_SRC_DIR = $(FREE_RTOS_PATH)/Source
-FREE_RTOS_INC_DIR = $(FREE_RTOS_PATH)/Source/include
-FREE_RTOS_PORT_DIR = $(FREE_RTOS_SRC_DIR)/portable/GCC/ARM_CM4F
-
-FREE_RTOS_PORT_OBJ_DIR = $(OBJ_DIR)
-FREE_RTOS_OBJ_DIR = $(OBJ_DIR)
-
-ifeq ($(FREE_RTOS_USE),1)
-FREE_RTOS_SOURCES     = $(wildcard $(FREE_RTOS_SRC_DIR)/*.c)
-FREE_RTOS_OBJECTS     = $(patsubst $(FREE_RTOS_SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(FREE_RTOS_SOURCES))
-
-FREE_RTOS_PORT_SOURCES     = $(wildcard $(FREE_RTOS_PORT_DIR)/*.c)
-FREE_RTOS_PORT_OBJECTS     = $(patsubst $(FREE_RTOS_PORT_DIR)/%.c,$(OBJ_DIR)/%.o,$(FREE_RTOS_PORT_SOURCES))
-endif
-
-
-##
 ## The files we are creating
 ##
 ELF_FILE  = $(EXEC_DIR)/$(TARGET).elf
@@ -78,19 +60,31 @@ CINCLUDES += -I$(CMSIS_INCLUDES)
 CINCLUDES += -I$(DEVICE_INCLUDES)
 CINCLUDES += -I$(INC_DIR)
 CINCLUDES += -I$(COMMON_INC)
-ifeq ($(FREE_RTOS_USE),1)
-CINCLUDES += -I$(FREE_RTOS_INC_DIR)
-CINCLUDES += -I$(FREE_RTOS_PORT_DIR)
-endif
 
 ##
 ## ELF Target
 ##
 ELF_REQUIREMENTS = $(OBJECTS)
+
+##
+## Tag files
+##
+TAG_FILES = $(SRC_DIR)/*.c $(INC_DIR)/*.h $(STD_PERIPHERAL_INCLUDE)/*.h $(STD_PERIPHERAL_DIR)/src/*.c $(COMMON_SRC)/*.c $(COMMON_INC)/*.h $(CMSIS_INCLUDES)/*.h
+
+##
+## Project sources converted to objects
+##
+SOURCES     = $(wildcard $(SRC_DIR)/*.c)
+OBJECTS     = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SOURCES))
+
+##
+## Files to link together
+##
+LINK_OBJECTS = $(OBJECTS) $(OBJ_DIR)/system_stm32f4xx.o $(OBJ_DIR)/startup_stm32f4x.o 
+
 ifeq ($(FREE_RTOS_USE),1)
-ELF_REQUIREMENTS += $(FREE_RTOS_OBJECTS)
-ELF_REQUIREMENTS += $(FREE_RTOS_PORT_OBJECTS)
-endif
+include ../Makefile.freertos
+endif 
 
 ##
 ## Options passed to the C compiler
@@ -103,22 +97,11 @@ CFLAGS	+= -Os -g -Wall -Wextra -Werror $(CINCLUDES)\
 ## Linker configuration
 ##
 LDSCRIPT = $(LD_DIR)/stm32f4.ld
-LDFLAGS		+= --static -lc -L$(STD_PERIPHERAL_LIB_DIR) -l$(STD_PERIPHERAL_LIBRARY) \
-		   -T$(LDSCRIPT) -nostartfiles -Wl,--gc-sections \
-		   -mthumb -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 
-
-LINK_OBJECTS = $(OBJECTS) $(OBJ_DIR)/system_stm32f4xx.o $(OBJ_DIR)/startup_stm32f4x.o 
-ifeq ($(FREE_RTOS_USE),1)
-LINK_OBJECTS += $(FREE_RTOS_OBJECTS) $(FREE_RTOS_PORT_OBJECTS)
-endif
+LDFLAGS	+= --static -lc -L$(STD_PERIPHERAL_LIB_DIR) -l$(STD_PERIPHERAL_LIBRARY) \
+	   -T$(LDSCRIPT) -nostartfiles -Wl,--gc-sections \
+	   -mthumb -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 
 
 
-##
-## OpenOCD setup
-##
-OOCD		?= openocd
-OOCD_INTERFACE	?= stlink-v2
-OOCD_BOARD	?= stm32f4discovery
 
 all: dirs $(LIST_FILE) $(HEX_FILE) $(SREC_FILE) $(BIN_FILE)
 
@@ -153,19 +136,12 @@ $(ELF_FILE): $(ELF_REQUIREMENTS)
 	$(LD) -o $(ELF_FILE) $(LINK_OBJECTS) $(LDFLAGS)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c 
-	@echo "Building $<"
-	$(CC) $(CFLAGS) -o $@ -c $< 
+	@echo "Building Application $<"
+	@$(CC) $(CFLAGS) -o $@ -c $< 
 
-$(FREE_RTOS_OBJ_DIR)/%.o: $(FREE_RTOS_SRC_DIR)/%.c 
-	@echo "Building $<"
-	$(CC) $(CFLAGS) -o $@ -c $< 
-
-$(FREE_RTOS_PORT_OBJ_DIR)/%.o: $(FREE_RTOS_PORT_DIR)/%.c 
-	@echo "Building $<"
-	$(CC) $(CFLAGS) -o $@ -c $< 
 
 tags:
-	etags $(SRC_DIR)/*.c $(INC_DIR)/*.h $(STD_PERIPHERAL_INCLUDE)/*.h $(STD_PERIPHERAL_DIR)/src/*.c $(COMMON_SRC)/*.c $(COMMON_INC)/*.h $(CMSIS_INCLUDES)/*.h
+	etags $(TAG_FILES)
 
 FLASH: $(BIN_FILE)
 	$(FLASH) write $(BIN_FILE) 0x8000000
@@ -174,6 +150,9 @@ clean:
 	rm -rf $(OBJ_DIR)
 	rm -rf $(EXEC_DIR)
 	find . -name "*~" | xargs rm -f 
+
+all_clean: clean
+	@make -C ../Libraries/STM32F4xx_StdPeriph_Driver/ clean
 
 .PHONY: images clean
 

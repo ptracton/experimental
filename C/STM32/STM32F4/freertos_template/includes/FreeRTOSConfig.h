@@ -25,5 +25,7 @@
 #define configCPU_CLOCK_HZ (168000000uL)
 #define configTICK_RATE_HZ 100
 
+#define configTOTAL_HEAP_SIZE 128
+
 #endif
 

@@ -1,0 +1,68 @@
+##
+## Free RTOS
+##
+FREE_RTOS_VERSION = 7.5.3
+FREE_RTOS_PATH = ../../RTOS/FreeRTOSV$(FREE_RTOS_VERSION)/FreeRTOS
+
+##
+## paths to C and H files
+##
+FREE_RTOS_SRC_DIR  = $(FREE_RTOS_PATH)/Source
+FREE_RTOS_INC_DIR  = $(FREE_RTOS_PATH)/Source/include
+FREE_RTOS_PORT_DIR = $(FREE_RTOS_SRC_DIR)/portable/GCC/ARM_CM4F
+FREE_RTOS_MEM_DIR  = $(FREE_RTOS_SRC_DIR)/portable/MemMang
+
+##
+## All objects end up together
+##
+FREE_RTOS_PORT_OBJ_DIR = $(OBJ_DIR)
+FREE_RTOS_OBJ_DIR      = $(OBJ_DIR)
+FREE_RTOS_MEM_OBJ_DIR  = $(OBJ_DIR)
+
+##
+## Sources needed to make objects
+##
+FREE_RTOS_SOURCES     = $(wildcard $(FREE_RTOS_SRC_DIR)/*.c)
+FREE_RTOS_OBJECTS     = $(patsubst $(FREE_RTOS_SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(FREE_RTOS_SOURCES))
+
+FREE_RTOS_PORT_SOURCES     = $(wildcard $(FREE_RTOS_PORT_DIR)/*.c)
+FREE_RTOS_PORT_OBJECTS     = $(patsubst $(FREE_RTOS_PORT_DIR)/%.c,$(OBJ_DIR)/%.o,$(FREE_RTOS_PORT_SOURCES))
+
+FREE_RTOS_MEM_SOURCES     = $(wildcard $(FREE_RTOS_MEM_DIR)/*.c)
+FREE_RTOS_MEM_OBJECTS     = $(patsubst $(FREE_RTOS_MEM_DIR)/%.c,$(OBJ_DIR)/%.o,$(FREE_RTOS_MEM_SOURCES))
+
+##
+## Header file search paths
+##
+CINCLUDES += -I$(FREE_RTOS_INC_DIR)
+CINCLUDES += -I$(FREE_RTOS_PORT_DIR)
+CINCLUDES += -I$(FREE_RTOS_MEM_DIR)
+
+##
+## Objects needed to make ELF file
+##
+ELF_REQUIREMENTS += $(FREE_RTOS_OBJECTS)
+ELF_REQUIREMENTS += $(FREE_RTOS_PORT_OBJECTS)
+ELF_REQUIREMENTS += $(OBJ_DIR)/heap_2.o
+
+##
+## List of objects to link together
+##
+LINK_OBJECTS += $(FREE_RTOS_OBJECTS) $(FREE_RTOS_PORT_OBJECTS) $(OBJ_DIR)/heap_2.o
+
+##
+## Files to include when making the tags
+##
+TAG_FILES += $(FREE_RTOS_SRC_DIR)/*.c $(FREE_RTOS_INC_DIR)/*h $(FREE_RTOS_PORT_DIR)/*
+
+$(FREE_RTOS_OBJ_DIR)/%.o: $(FREE_RTOS_SRC_DIR)/%.c 
+	@echo "Building FreeRTOS $<"
+	@$(CC) $(CFLAGS) -o $@ -c $< 
+
+$(FREE_RTOS_PORT_OBJ_DIR)/%.o: $(FREE_RTOS_PORT_DIR)/%.c 
+	@echo "Building Port $<"
+	@$(CC) $(CFLAGS) -o $@ -c $< 
+
+$(FREE_RTOS_MEM_OBJ_DIR)/%.o: $(FREE_RTOS_MEM_DIR)/%.c 
+	@echo "Building Mem $<"
+	@$(CC) $(CFLAGS) -o $@ -c $< 

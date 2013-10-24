@@ -61,6 +61,25 @@ CINCLUDES += -I$(INC_DIR)
 CINCLUDES += -I$(COMMON_INC)
 
 ##
+## ELF Target
+##
+ELF_REQUIREMENTS = $(OBJECTS)
+
+##
+## Tag files
+##
+TAG_FILES = $(SRC_DIR)/*.c $(INC_DIR)/*.h $(STD_PERIPHERAL_INCLUDE)/*.h $(STD_PERIPHERAL_DIR)/src/*.c $(COMMON_SRC)/*.c $(COMMON_INC)/*.h $(CMSIS_INCLUDES)/*.h
+
+##
+## Files to link together
+##
+LINK_OBJECTS = $(OBJECTS) $(OBJ_DIR)/system_stm32l1xx.o $(OBJ_DIR)/startup_stm32l1xx_md.o
+
+ifeq ($(FREE_RTOS_USE),1)
+include ../Makefile.freertos
+endif 
+
+##
 ## Options passed to the C compiler
 ##
 CFLAGS	+= -Os -g -Wall -Wextra -Werror $(CINCLUDES)\
@@ -104,7 +123,7 @@ $(LIST_FILE):$(ELF_FILE)
 	@echo "Create $(LIST_FILE)"
 	@$(OBJDUMP) -S $(ELF_FILE) >  $(LIST_FILE)
 
-$(ELF_FILE): $(OBJECTS)
+$(ELF_FILE): $(ELF_REQUIREMENTS)
 	@echo "Build $(COMMON_SRC)/startup_stm32f4xx.s"
 	@$(CC) $(CFLAGS) -o $(OBJ_DIR)/startup_stm32l1xx_md.o -c $(COMMON_SRC)/startup_stm32l1xx_md.s
 	@echo "Build $(COMMON_SRC)/system_stm32l1xx.c"
@@ -112,14 +131,14 @@ $(ELF_FILE): $(OBJECTS)
 	@echo "Make sure libstm32l1xx.a is built"
 	@make -C $(STD_PERIPHERAL_DIR)
 	@echo "Linking $(ELF_FILE)"
-	$(LD) -o $(ELF_FILE) $(OBJECTS) $(OBJ_DIR)/system_stm32l1xx.o $(OBJ_DIR)/startup_stm32l1xx_md.o $(LDFLAGS)
+	$(LD) -o $(ELF_FILE) $(LINK_OBJECTS)  $(LDFLAGS)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c 
 	@echo "Building $<"
 	$(CC) $(CFLAGS) -o $@ -c $< 
 
 tags:
-	etags $(SRC_DIR)/*.c $(INC_DIR)/*.h $(STD_PERIPHERAL_INCLUDE)/*.h $(STD_PERIPHERAL_DIR)/src/*.c $(COMMON_SRC)/*.c $(COMMON_INC)/*.h $(CMSIS_INCLUDES)/*.h
+	etags $(TAG_FILES)
 
 FLASH: $(BIN_FILE)
 	$(FLASH) write $(BIN_FILE) 0x8000000
@@ -127,7 +146,12 @@ FLASH: $(BIN_FILE)
 clean:
 	rm -rf $(OBJ_DIR)
 	rm -rf $(EXEC_DIR)
+	rm -f TAGS
 	find . -name "*~" | xargs rm -f 
+
+
+all_clean: clean
+	@make -C $(STD_PERIPHERAL_DIR)  clean
 
 .PHONY: images clean
 

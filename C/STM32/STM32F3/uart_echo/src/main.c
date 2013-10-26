@@ -3,18 +3,14 @@
 #include <stm32f30x_gpio.h>
 #include <stm32f30x_usart.h>
 
+
+
+
 int main(void)
 {
-    RCC_ClocksTypeDef RCC_Clocks;
     GPIO_InitTypeDef GPIO_A2;
     GPIO_InitTypeDef GPIO_A3;
     USART_InitTypeDef USART_2;    
-
-    //
-    // SysTick end of count event each 10ms 
-    //
-    RCC_GetClocksFreq(&RCC_Clocks);
-    SysTick_Config(RCC_Clocks.HCLK_Frequency / 100);
 
     //
     // Turn on clock to the GPIO and UART
@@ -58,17 +54,20 @@ int main(void)
     USART_Init(USART2, &USART_2);
 
     //
-    // Interrupt on Transmission Complete or RX Not Empty
+    // Interrupt on RX Not Empty
     //
-    USART_ITConfig(USART2,  USART_IT_TC  |  USART_IT_RXNE, ENABLE);
-    
+    USART_ITConfig(USART2, USART_IT_RXNE, ENABLE);
+    NVIC_EnableIRQ(USART2_IRQn);
+     
     //
     // Enable the USART block
     //
     USART_Cmd(USART2, ENABLE);    
 
+    __enable_irq();
+    
     while(1){
-	USART_SendData(USART2, 'A');	
+//	USART_SendData(USART2, 'A');	
     }
     
 

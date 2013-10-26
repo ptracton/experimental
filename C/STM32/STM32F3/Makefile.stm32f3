@@ -35,6 +35,9 @@ COMMON_INC = $(COMMON_DIR)/includes
 SOURCES     = $(wildcard $(SRC_DIR)/*.c)
 OBJECTS     = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SOURCES))
 
+COMMON_SOURCES     = $(wildcard $(COMMON_SRC)/*.c)
+COMMON_OBJECTS     = $(patsubst $(COMMON_SRC)/%.c,$(OBJ_DIR)/%.o,$(COMMON_SOURCES))
+
 ##
 ## Paths to the various parts of the STM32 libraries
 ##
@@ -69,7 +72,7 @@ CINCLUDES += -I$(COMMON_INC)
 ##
 ## ELF Target
 ##
-ELF_REQUIREMENTS = $(OBJECTS)
+ELF_REQUIREMENTS = $(OBJECTS) $(COMMON_OBJECTS)
 
 
 ##
@@ -121,15 +124,18 @@ $(LIST_FILE):$(ELF_FILE)
 	$(OBJDUMP) -S $(ELF_FILE) >  $(LIST_FILE)
 
 $(ELF_FILE): $(ELF_REQUIREMENTS)
-	@echo "Building Common"
+	@echo "Building Startup Code"
 	@$(CC) $(CFLAGS) -o $(OBJ_DIR)/startup_stm32f30x.o -c $(COMMON_SRC)/startup_stm32f30x.s
-	@$(CC) $(CFLAGS) -o $(OBJ_DIR)/system_stm32f30x.o -c $(COMMON_SRC)/system_stm32f30x.c
 
 	@echo "Make sure libstm32fxx.a is built"
 	make -C ../Libraries/STM32F30x_StdPeriph_Driver
 
 	@echo "Linking $(ELF_FILE)"
 	@$(LD) -o $(ELF_FILE) $(LINK_OBJECTS) $(LDFLAGS)
+
+$(OBJ_DIR)/%.o: $(COMMON_SRC)/%.c 
+	@echo "Building $<"
+	@$(CC) $(CFLAGS) -o $@ -c $< 
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c 
 	@echo "Building $<"
@@ -144,10 +150,11 @@ program: dirs $(BIN_FILE)
 debug: $(ELF_FILE)
 	$(GDB) --tui -x ../debugger/gdb_cmds $(ELF_FILE)
 
-
 clean:
 	rm -rf $(OBJ_DIR)
 	rm -rf $(EXEC_DIR)
+	rm -rf $(COMMON_SRC)/*~
+	rm -rf $(COMMON_INC)/*~
 	find . -name "*~" | xargs rm -f 
 	rm -f TAGS
 

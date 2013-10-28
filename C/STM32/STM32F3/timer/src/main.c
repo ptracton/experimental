@@ -4,7 +4,7 @@
 #include <stm32f30x_misc.h>
 #include "leds.h"
 
-#define WAIT_1SECOND 8000000
+#define WAIT_1SECOND 6000000
 
 void Wait(uint32_t time)
 {
@@ -22,36 +22,35 @@ int main(void)
     LEDS_Init();
     
     /* TIM3 clock enable */
-    RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE);
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
     
     /* Enable the TIM3 gloabal Interrupt */
-    NVIC_InitStructure.NVIC_IRQChannel = TIM3_IRQn;
+    NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;
     NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
     NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;
     NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
     NVIC_Init(&NVIC_InitStructure);
     
     /* Compute the prescaler value */
-    PrescalerValue = (uint16_t) ((SystemCoreClock) / 72000000) - 1;
+    PrescalerValue = 0;//(uint16_t) ((SystemCoreClock) / 72000000) - 1;
     
     /* Time base configuration */
-    TIM_TimeBaseStructure.TIM_Period = 65535;
-    TIM_TimeBaseStructure.TIM_Prescaler = 0;
-    TIM_TimeBaseStructure.TIM_ClockDivision = 0;
-    TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
+    TIM_TimeBaseStructInit(&TIM_TimeBaseStructure);    
+    TIM_TimeBaseStructure.TIM_Period = 72000000;
+    TIM_TimeBaseStructure.TIM_Prescaler = TIM_ICPSC_DIV1;
+    TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1;
+    TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Down;
     
-    TIM_TimeBaseInit(TIM3, &TIM_TimeBaseStructure);
+    TIM_TimeBaseInit(TIM2, &TIM_TimeBaseStructure);
 
     /* Prescaler configuration */
-    TIM_PrescalerConfig(TIM3, PrescalerValue, TIM_PSCReloadMode_Immediate);
+    TIM_PrescalerConfig(TIM2, PrescalerValue, TIM_PSCReloadMode_Immediate);
     
     /* TIM Interrupts enable */
-    TIM_ITConfig(TIM3, TIM_IT_CC1 | TIM_IT_CC2 | TIM_IT_CC3 | TIM_IT_CC4, ENABLE);
+    TIM_ITConfig(TIM2, TIM_IT_Update, ENABLE);
     
     /* TIM3 enable counter */
-    TIM_Cmd(TIM3, ENABLE);
-
-    __enable_irq();
+    TIM_Cmd(TIM2, ENABLE);
 
     while(1){
 	LEDS_Toggle(LED_1);

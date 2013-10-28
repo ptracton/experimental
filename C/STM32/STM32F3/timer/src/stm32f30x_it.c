@@ -29,6 +29,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f30x_it.h"
+#include <stm32f30x_tim.h>
 #include "leds.h"
 
 /** @addtogroup STM32F3-Discovery_Demo
@@ -63,6 +64,7 @@ void NMI_Handler(void)
   */
 void HardFault_Handler(void)
 {
+    LEDS_Toggle(LED_3);
   /* Go to infinite loop when Hard Fault exception occurs */
   while (1)
   {
@@ -76,6 +78,7 @@ void HardFault_Handler(void)
   */
 void MemManage_Handler(void)
 {
+    LEDS_Toggle(LED_4);
   /* Go to infinite loop when Memory Manage exception occurs */
   while (1)
   {
@@ -89,6 +92,7 @@ void MemManage_Handler(void)
   */
 void BusFault_Handler(void)
 {
+    LEDS_Toggle(LED_5);
   /* Go to infinite loop when Bus Fault exception occurs */
   while (1)
   {
@@ -102,6 +106,7 @@ void BusFault_Handler(void)
   */
 void UsageFault_Handler(void)
 {
+    LEDS_Toggle(LED_6);
   /* Go to infinite loop when Usage Fault exception occurs */
   while (1)
   {
@@ -150,37 +155,33 @@ void SysTick_Handler(void)
 /*  available peripheral interrupt handler's name please refer to the startup */
 /*  file (startup_stm32f30x.s).                                            */
 /******************************************************************************/
-/**
-  * @brief  This function handles EXTI0_IRQ Handler.
-  * @param  None
-  * @retval None
-  */
-void EXTI0_IRQHandler(void)
-{ 
-}
-
 
 /**
   * @brief  This function handles TIM3 interrupt request.
   * @param  None
   * @retval None
   */
-void TIM3_IRQHandler(void)
+void TIM2_IRQHandler(void)
 {
     LEDS_Toggle(LED_0);
+
+    //
+    // Clear the timer.  Failure to do so and you will just 
+    // stay here since the timer will keep the IRQ asserted
+    //
+    //TIM2->SR &= ~TIM_SR_UIF;
+    TIM_ClearFlag(TIM2, TIM_SR_UIF);
+    
+    
+    //
+    // Clear the interrupt at the NVIC level
+    //
+    NVIC_ClearPendingIRQ(TIM2_IRQn);
+
     return;    
 }
 
 
-
-/**
-  * @brief  This function handles PPP interrupt request.
-  * @param  None
-  * @retval None
-  */
-/*void PPP_IRQHandler(void)
-{
-}*/
 
 /**
   * @}

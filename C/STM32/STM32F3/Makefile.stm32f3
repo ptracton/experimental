@@ -1,14 +1,22 @@
 
 
-
+##
+## Prefix of the GCC ARM Cross Compiler
+##
 PREFIX	?= arm-none-eabi
-# PREFIX		?= arm-elf
-CC		= $(PREFIX)-gcc
-LD		= $(PREFIX)-gcc
-OBJCOPY		= $(PREFIX)-objcopy
-OBJDUMP		= $(PREFIX)-objdump
-GDB		= $(PREFIX)-gdb
-FLASH		= $(shell which st-flash)
+
+##
+## Tools we use for building
+##
+CC	= $(PREFIX)-gcc
+LD	= $(PREFIX)-gcc
+OBJCOPY	= $(PREFIX)-objcopy
+OBJDUMP	= $(PREFIX)-objdump
+AR	= $(PREFIX)-ar
+GDB	= $(PREFIX)-gdb
+FLASH	= $(shell which st-flash)
+MKDIR   = mkdir
+RM      = rm
 
 ##
 ## OpenOCD setup
@@ -25,31 +33,6 @@ OBJ_DIR = objects
 INC_DIR = includes
 EXEC_DIR = executable
 LD_DIR = ../linker
-COMMON_DIR = ../common
-COMMON_SRC = $(COMMON_DIR)/src
-COMMON_INC = $(COMMON_DIR)/includes
-
-##
-## Project sources converted to objects
-##
-SOURCES     = $(wildcard $(SRC_DIR)/*.c)
-OBJECTS     = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SOURCES))
-
-COMMON_SOURCES     = $(wildcard $(COMMON_SRC)/*.c)
-COMMON_OBJECTS     = $(patsubst $(COMMON_SRC)/%.c,$(OBJ_DIR)/%.o,$(COMMON_SOURCES))
-
-##
-## Paths to the various parts of the STM32 libraries
-##
-STD_PERIPHERAL_DIR = ../Libraries/STM32F30x_StdPeriph_Driver/
-CMSIS_DIR = ../Libraries/CMSIS/
-
-STD_PERIPHERAL_INCLUDE = $(STD_PERIPHERAL_DIR)/inc
-CMSIS_INCLUDES = $(CMSIS_DIR)/Include
-DEVICE_INCLUDES = $(CMSIS_DIR)/Device/ST/STM32F30x/Include
-
-STD_PERIPHERAL_LIB_DIR = ../Libraries/STM32F30x_StdPeriph_Driver/lib
-STD_PERIPHERAL_LIBRARY = stm32f3xx
 
 ##
 ## The files we are creating
@@ -61,13 +44,65 @@ SREC_FILE = $(EXEC_DIR)/$(TARGET).srec
 BIN_FILE  = $(EXEC_DIR)/$(TARGET).bin
 
 ##
-## Paths for C header files
+## Project sources converted to objects
 ##
+SOURCES     = $(wildcard $(SRC_DIR)/*.c)
+OBJECTS     = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SOURCES))
+
+##
+## Files to link together
+##
+LINK_OBJECTS = $(OBJECTS) 
+
+BUILD_LIST = dirs $(ELF_FILE)
+
+##
+## If we are building an application, then LIBRARY is 0 and we need other files
+##
+ifeq ($(LIBRARY),0)
+COMMON_DIR = ../common
+COMMON_SRC = $(COMMON_DIR)/src
+COMMON_INC = $(COMMON_DIR)/includes
+COMMON_SOURCES     = $(wildcard $(COMMON_SRC)/*.c)
+COMMON_OBJECTS     = $(patsubst $(COMMON_SRC)/%.c,$(OBJ_DIR)/%.o,$(COMMON_SOURCES))
+CINCLUDES += -I$(COMMON_INC)
+TAG_FILES += $(COMMON_INC)/*.h $(COMMON_SRC)/*.c
+
 CINCLUDES += -I$(STD_PERIPHERAL_INCLUDE)
+CINCLUDES += -I$(INC_DIR)
+
+LINK_OBJECTS += $(OBJ_DIR)/system_stm32f30x.o $(OBJ_DIR)/$(STARTUP_FILE).o $(OBJ_DIR)/syscalls.o
+
+BUILD_LIST += $(LIST_FILE) $(HEX_FILE) $(SREC_FILE) $(BIN_FILE)
+VPATH += $(COMMON_SRC)
+CFLAGS += -Werror
+
+##
+## We are building a LIBRARY
+##
+else
+
+CINCLUDES += -Iinc
+CFLAGS += -DUSE_STDPERIPH_DRIVER
+
+endif
+
 CINCLUDES += -I$(CMSIS_INCLUDES)
 CINCLUDES += -I$(DEVICE_INCLUDES)
-CINCLUDES += -I$(INC_DIR)
-CINCLUDES += -I$(COMMON_INC)
+
+##
+## Paths to the various parts of the STM32 libraries
+##
+STD_PERIPHERAL_DIR = ../STM32F30x_StdPeriph_Driver/
+CMSIS_DIR = ../CMSIS/
+
+STD_PERIPHERAL_INCLUDE = $(STD_PERIPHERAL_DIR)/inc
+CMSIS_INCLUDES = $(CMSIS_DIR)/Include
+DEVICE_INCLUDES = $(CMSIS_DIR)/Device/ST/STM32F30x/Include
+
+STD_PERIPHERAL_LIB_DIR = ../STM32F30x_StdPeriph_Driver/lib
+STD_PERIPHERAL_LIBRARY = stm32f3xx
+
 
 ##
 ## ELF Target
@@ -82,12 +117,9 @@ STARTUP_FILE = startup_stm32f30x
 ##
 ## Tag files
 ##
-TAG_FILES = $(SRC_DIR)/*.c $(INC_DIR)/*.h $(STD_PERIPHERAL_INCLUDE)/*.h $(STD_PERIPHERAL_DIR)/src/*.c $(COMMON_SRC)/*.c $(COMMON_INC)/*.h $(CMSIS_INCLUDES)/*.h
+TAG_FILES += $(SRC_DIR)/*.c $(INC_DIR)/*.h $(STD_PERIPHERAL_INCLUDE)/*.h $(STD_PERIPHERAL_DIR)/src/*.c $(CMSIS_INCLUDES)/*.h
 
-##
-## Files to link together
-##
-LINK_OBJECTS = $(OBJECTS) $(OBJ_DIR)/system_stm32f30x.o $(OBJ_DIR)/$(STARTUP_FILE).o $(OBJ_DIR)/syscalls.o
+
 
 ifeq ($(FREE_RTOS_USE),1)
 include ../Makefile.freertos
@@ -100,8 +132,6 @@ CFLAGS	+= -Os -g -Wall -Wextra  $(CINCLUDES)\
 	   -fno-common -mcpu=cortex-m4 -mthumb \
 	   -mfloat-abi=hard -mfpu=fpv4-sp-d16 -MD -DSTM32F3
 
-#CFLAGS += -Werror
-
 ##
 ## Linker configuration
 ##
@@ -112,11 +142,27 @@ LDFLAGS		+= --static -lc -L$(STD_PERIPHERAL_LIB_DIR) -l$(STD_PERIPHERAL_LIBRARY)
 		   -mthumb -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16
 
 
-all: dirs $(LIST_FILE) $(HEX_FILE) $(SREC_FILE) $(BIN_FILE)
+##
+## Look in $(SRC_DIR) for code to build
+##
+VPATH += $(SRC_DIR)
+VPATH += $(STD_PERIPHERAL_DIR)/src/
+
+##
+## The directories to make for this build.
+##
+MAKE_DIRS += $(OBJ_DIR) $(TARGET_DIR)
+
+##
+## These are other directories that must be build for this application
+##
+BUILD_DIRS += ../STM32F30x_StdPeriph_Driver/
+
+all: $(BUILD_LIST) 
 
 dirs:
-	mkdir -p $(EXEC_DIR)
-	mkdir -p $(OBJ_DIR)
+	@echo "Making directories $(MAKE_DIRS)"
+	@$(MKDIR) -p $(MAKE_DIRS)
 
 $(HEX_FILE) :$(ELF_FILE)
 	$(OBJCOPY) -Oihex $(ELF_FILE) $(HEX_FILE)
@@ -131,21 +177,26 @@ $(LIST_FILE):$(ELF_FILE)
 	$(OBJDUMP) -S $(ELF_FILE) >  $(LIST_FILE)
 
 $(ELF_FILE): $(ELF_REQUIREMENTS)
+
+ifeq ($(LIBRARY),1)
+	@echo "Building Library $(TARGET_DIR)/$(TARGET)"
+	$(AR) rcs $(TARGET_DIR)/$(TARGET) $(OBJECTS)
+else
 	@echo "Building Startup Code"
 	@$(CC) $(CFLAGS) -o $(OBJ_DIR)/$(STARTUP_FILE).o -c $(COMMON_SRC)/$(STARTUP_FILE).s
 
-	@echo "Make sure libstm32fxx.a is built"
-	make -C ../Libraries/STM32F30x_StdPeriph_Driver
+	@echo "Build Libraries"
+	$(foreach c,$(BUILD_DIRS),$(MAKE) -C $(c) && ) true
 
 	@echo "Linking $(ELF_FILE)"
 	@$(LD) -o $(ELF_FILE) $(LINK_OBJECTS) $(LDFLAGS)
+endif
 
-$(OBJ_DIR)/%.o: $(COMMON_SRC)/%.c 
-	@echo "Building $<"
-	@$(CC) $(CFLAGS) -o $@ -c $< 
-
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c 
-	@echo "Building $<"
+##
+## Turn out C code into objects in our $(OBJ_DIR)
+##
+$(OBJ_DIR)/%.o:%.c
+	@echo "Building Object $@"
 	@$(CC) $(CFLAGS) -o $@ -c $< 
 
 tags:
@@ -158,15 +209,14 @@ debug: $(ELF_FILE)
 	$(GDB) --tui -x ../debugger/gdb_cmds $(ELF_FILE)
 
 clean:
-	rm -rf $(OBJ_DIR)
-	rm -rf $(EXEC_DIR)
+	rm -rf $(MAKE_DIRS)
 	rm -rf $(COMMON_SRC)/*~
 	rm -rf $(COMMON_INC)/*~
 	find . -name "*~" | xargs rm -f 
 	rm -f TAGS
 
 all_clean: clean
-	@make -C ../Libraries/STM32F30x_StdPeriph_Driver clean
+	$(foreach c,$(BUILD_DIRS),$(MAKE) -C $(c) clean && ) true
 
 .PHONY: images clean
 

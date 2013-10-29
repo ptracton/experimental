@@ -1,13 +1,39 @@
+#include "stdio.h"
+#include "string.h"
+#include <stdint.h>
+
 #include <stm32f30x.h>
 #include <stm32f30x_rcc.h>
 #include <stm32f30x_gpio.h>
 #include <stm32f30x_usart.h>
 
 
+int uartPutch(int ch)
+{
+    static int last;
+
+    if ((ch == (int)'\n') && (last != (int)'\r'))
+    {
+	last = (int)'\r';
+
+	while(USART_GetFlagStatus(USART2, USART_FLAG_TXE) == RESET);
+
+	USART_SendData(USART2, last);
+    }
+    else
+	last = ch;
+
+    while(USART_GetFlagStatus(USART2, USART_FLAG_TXE) == RESET);
+
+    USART_SendData(USART2, ch);
+
+    return(ch);
+}
 
 
 int main(void)
 {
+    char i;    
     GPIO_InitTypeDef GPIO_A2;
     GPIO_InitTypeDef GPIO_A3;
     USART_InitTypeDef USART_2;    
@@ -66,8 +92,11 @@ int main(void)
 
     __enable_irq();
     
+    i=0;    
     while(1){
 //	USART_SendData(USART2, 'A');	
+//	i++;	
+//	printf("print %d\n", i);	
     }
     
 

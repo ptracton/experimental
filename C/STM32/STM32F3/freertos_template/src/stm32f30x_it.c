@@ -149,38 +149,30 @@ void SysTick_Handler(void)
 /*  available peripheral interrupt handler's name please refer to the startup */
 /*  file (startup_stm32f30x.s).                                            */
 /******************************************************************************/
+
+
 /**
-  * @brief  This function handles EXTI0_IRQ Handler.
+  * @brief  This function handles USART2_IRQ Handler.  Just echo the character
   * @param  None
   * @retval None
   */
-void EXTI0_IRQHandler(void)
-{ 
+void USART2_IRQHandler(void)
+{
+    uint16_t data;
+  
+    if (USART_GetITStatus(USART2, USART_IT_RXNE) == SET){
+	
+	data = USART_ReceiveData(USART2);
+	USART_SendData(USART2, data);	
+    }
+    
+    //
+    // Clear the interrupt at the NVIC level
+    //
+    NVIC_ClearPendingIRQ(USART2_IRQn);
 }
 
-// #if defined (USB_INT_DEFAULT)
-// void USB_LP_CAN1_RX0_IRQHandler(void)
-// #elif defined (USB_INT_REMAP)
-// void USB_LP_IRQHandler(void)
-// #endif
-// {
-// }
 
-// #if defined (USB_INT_DEFAULT)
-// void USBWakeUp_IRQHandler(void)
-// #elif defined (USB_INT_REMAP)
-// void USBWakeUp_RMP_IRQHandler(void)
-// #endif
-// {
-// }
-/**
-  * @brief  This function handles PPP interrupt request.
-  * @param  None
-  * @retval None
-  */
-/*void PPP_IRQHandler(void)
-{
-}*/
 
 /**
   * @}

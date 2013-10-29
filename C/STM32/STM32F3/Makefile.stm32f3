@@ -74,6 +74,10 @@ CINCLUDES += -I$(COMMON_INC)
 ##
 ELF_REQUIREMENTS = $(OBJECTS) $(COMMON_OBJECTS)
 
+##
+## Assembly startup code
+##
+STARTUP_FILE = startup_stm32f30x
 
 ##
 ## Tag files
@@ -83,7 +87,7 @@ TAG_FILES = $(SRC_DIR)/*.c $(INC_DIR)/*.h $(STD_PERIPHERAL_INCLUDE)/*.h $(STD_PE
 ##
 ## Files to link together
 ##
-LINK_OBJECTS = $(OBJECTS) $(OBJ_DIR)/system_stm32f30x.o $(OBJ_DIR)/startup_ARMCM4.o $(OBJ_DIR)/syscalls.o
+LINK_OBJECTS = $(OBJECTS) $(OBJ_DIR)/system_stm32f30x.o $(OBJ_DIR)/$(STARTUP_FILE).o $(OBJ_DIR)/syscalls.o
 
 ifeq ($(FREE_RTOS_USE),1)
 include ../Makefile.freertos
@@ -101,8 +105,8 @@ CFLAGS	+= -Os -g -Wall -Wextra  $(CINCLUDES)\
 ##
 ## Linker configuration
 ##
-#LDSCRIPT = $(LD_DIR)/stm32f3.ld
-LDSCRIPT = ../ldscripts/gcc.ld
+LDSCRIPT = $(LD_DIR)/stm32f3.ld
+#LDSCRIPT = ../ldscripts/gcc.ld
 LDFLAGS		+= --static -lc -L$(STD_PERIPHERAL_LIB_DIR) -l$(STD_PERIPHERAL_LIBRARY) \
 		   -T$(LDSCRIPT) -nostartfiles -Wl,--gc-sections \
 		   -mthumb -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16
@@ -128,7 +132,7 @@ $(LIST_FILE):$(ELF_FILE)
 
 $(ELF_FILE): $(ELF_REQUIREMENTS)
 	@echo "Building Startup Code"
-	@$(CC) $(CFLAGS) -o $(OBJ_DIR)/startup_ARMCM4.o -c $(COMMON_SRC)/startup_ARMCM4.S
+	@$(CC) $(CFLAGS) -o $(OBJ_DIR)/$(STARTUP_FILE).o -c $(COMMON_SRC)/$(STARTUP_FILE).s
 
 	@echo "Make sure libstm32fxx.a is built"
 	make -C ../Libraries/STM32F30x_StdPeriph_Driver

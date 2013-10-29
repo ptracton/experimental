@@ -12,6 +12,11 @@ FREE_RTOS_INC_DIR  = $(FREE_RTOS_PATH)/Source/include
 FREE_RTOS_PORT_DIR = $(FREE_RTOS_SRC_DIR)/portable/GCC/ARM_CM4F
 FREE_RTOS_MEM_DIR  = $(FREE_RTOS_SRC_DIR)/portable/MemMang
 
+VPATH += $(FREE_RTOS_SRC_DIR)
+VPATH += $(FREE_RTOS_PORT_DIR)
+VPATH += $(FREE_RTOS_MEM_DIR)
+
+
 ##
 ## All objects end up together
 ##
@@ -55,14 +60,3 @@ LINK_OBJECTS += $(FREE_RTOS_OBJECTS) $(FREE_RTOS_PORT_OBJECTS) $(OBJ_DIR)/heap_2
 ##
 TAG_FILES += $(FREE_RTOS_SRC_DIR)/*.c $(FREE_RTOS_INC_DIR)/*h $(FREE_RTOS_PORT_DIR)/*
 
-$(FREE_RTOS_OBJ_DIR)/%.o: $(FREE_RTOS_SRC_DIR)/%.c 
-	@echo "Building FreeRTOS $<"
-	@$(CC) $(CFLAGS) -o $@ -c $< 
-
-$(FREE_RTOS_PORT_OBJ_DIR)/%.o: $(FREE_RTOS_PORT_DIR)/%.c 
-	@echo "Building Port $<"
-	@$(CC) $(CFLAGS) -o $@ -c $< 
-
-$(FREE_RTOS_MEM_OBJ_DIR)/%.o: $(FREE_RTOS_MEM_DIR)/%.c 
-	@echo "Building Mem $<"
-	@$(CC) $(CFLAGS) -o $@ -c $< 

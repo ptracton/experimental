@@ -75,7 +75,7 @@ LINK_OBJECTS += $(OBJ_DIR)/system_stm32f4xx.o $(OBJ_DIR)/$(STARTUP_FILE).o
 
 BUILD_LIST += $(LIST_FILE) $(HEX_FILE) $(SREC_FILE) $(BIN_FILE)
 VPATH += $(COMMON_SRC)
-CFLAGS += -Werror
+#CFLAGS += -Werror
 
 ##
 ## We are building a LIBRARY
@@ -197,7 +197,7 @@ endif
 ##
 $(OBJ_DIR)/%.o:%.c
 	@echo "Building $<"
-	@$(CC) $(CFLAGS) -o $@ -c $< 
+	$(CC) $(CFLAGS) -o $@ -c $< 
 
 tags:
 	etags $(TAG_FILES)

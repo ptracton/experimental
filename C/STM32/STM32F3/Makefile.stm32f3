@@ -75,7 +75,7 @@ LINK_OBJECTS += $(OBJ_DIR)/system_stm32f30x.o $(OBJ_DIR)/$(STARTUP_FILE).o $(OBJ
 
 BUILD_LIST += $(LIST_FILE) $(HEX_FILE) $(SREC_FILE) $(BIN_FILE)
 VPATH += $(COMMON_SRC)
-CFLAGS += -Werror
+#CFLAGS += -Werror
 
 ##
 ## We are building a LIBRARY

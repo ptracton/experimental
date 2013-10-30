@@ -1,5 +1,5 @@
 
-
+#include "syscalls.h"
 
 void _exit(int __status) {
     UNUSED(__status);

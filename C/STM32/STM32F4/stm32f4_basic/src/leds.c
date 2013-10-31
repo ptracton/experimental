@@ -48,9 +48,9 @@ void LEDS_On(LEDS led)
 {
     if (IS_LED(led)){
 	if (led == GREEN2){
-	    GPIO_SetBits(GPIOD, led);	    
-	}else{
 	    GPIO_SetBits(GPIOA, led);	    
+	}else{
+	    GPIO_SetBits(GPIOD, led);	    
 	}    
     }    
     return;    
@@ -60,9 +60,9 @@ void LEDS_Off(LEDS led)
 {
     if (IS_LED(led)){
 	if (led == GREEN2){
-	    GPIO_ResetBits(GPIOD, led);	    
-	}else{
 	    GPIO_ResetBits(GPIOA, led);	    
+	}else{
+	    GPIO_ResetBits(GPIOD, led);	    
 	}    
     }    
     return;    
@@ -72,9 +72,9 @@ void LEDS_Toggle(LEDS led)
 {
     if (IS_LED(led)){
 	if (led == GREEN2){
-	    GPIO_ToggleBits(GPIOD, led);	    
-	}else{
 	    GPIO_ToggleBits(GPIOA, led);	    
+	}else{
+	    GPIO_ToggleBits(GPIOD, led);	    
 	}    
     }    
     return;    

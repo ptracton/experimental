@@ -1,6 +1,7 @@
 
 #include <stm32f4xx_conf.h>
 #include "includes.h"
+#include "task1.h"
 
 //
 // Mutexes for shared HW
@@ -9,11 +10,23 @@ OS_EVENT * USART2_Mutex;
 
 void APP_CreateTasks(void)
 {
+    INT8U retval;
+    
+    
+    retval = OSTaskCreate(&Task1_Task,      (void *) 0,             &task1_stack[TASK1_STACK_SIZE-1],     23);
+    if (retval != OS_ERR_NONE){
+	while(1);
+    }
+    OSTaskNameSet(23, "TASK1", &retval);
+    
+
     return;    
 }
 
 void APP_CreateMBoxes(void)
 {
+
+    task1_mbox = OSMboxCreate((TASK1_MBOX_TypeDef *)0);
     return;    
 }
 

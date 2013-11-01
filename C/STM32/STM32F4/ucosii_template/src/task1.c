@@ -19,7 +19,10 @@ void Task1_Task(void * ptr_args)
 	if (err == OS_ERR_NONE){
 	    if (mbox->action == 0x01){
 		LEDS_Toggle(ORANGE);		
-	    }	    
+	    }else{
+		LEDS_Toggle(GREEN);		
+	    }
+	    
 	}	
     }
     

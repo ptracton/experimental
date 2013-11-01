@@ -196,7 +196,7 @@ endif
 ## Turn out C code into objects in our $(OBJ_DIR)
 ##
 $(OBJ_DIR)/%.o:%.c
-	@echo "Building Object $@"
+	@echo "Building $<"
 	@$(CC) $(CFLAGS) -o $@ -c $< 
 
 tags:

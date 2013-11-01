@@ -1,7 +1,4 @@
 
-#ifndef UNUSED
-#define UNUSED(x) (void)x
-#endif
 
 
 void _exit(int __status) {

@@ -10,6 +10,7 @@ PREFIX	?= arm-none-eabi
 ##
 CC	= $(PREFIX)-gcc
 LD	= $(PREFIX)-gcc
+ASM     = $(PREFIX)-as
 OBJCOPY	= $(PREFIX)-objcopy
 OBJDUMP	= $(PREFIX)-objdump
 AR	= $(PREFIX)-ar
@@ -125,12 +126,18 @@ ifeq ($(FREE_RTOS_USE),1)
 include ../Makefile.freertos
 endif 
 
+ifeq ($(UCOS_II_RTOS_USE),1)
+include ../Makefile.ucosii
+endif 
+
 ##
 ## Options passed to the C compiler
 ##
 CFLAGS	+= -Os -g -Wall -Wextra  $(CINCLUDES)\
 	   -fno-common -mcpu=cortex-m4 -mthumb \
 	   -mfloat-abi=hard -mfpu=fpv4-sp-d16 -MD -DSTM32F4
+
+ASMFLAGS += -mcpu=cortex-m4 -mthumb 
 
 ##
 ## Linker configuration
@@ -160,7 +167,9 @@ BUILD_DIRS += ../STM32F4xx_StdPeriph_Driver/
 
 all: $(BUILD_LIST) 
 
-dirs:
+dirs:	
+	@echo $(UCOS_II_PORT_ASM_SOURCES)
+	@echo $(UCOS_II_PORT_ASM_OBJECTS)
 	@echo "Making directories $(MAKE_DIRS)"
 	@$(MKDIR) -p $(MAKE_DIRS)
 
@@ -197,7 +206,14 @@ endif
 ##
 $(OBJ_DIR)/%.o:%.c
 	@echo "Building $<"
-	$(CC) $(CFLAGS) -o $@ -c $< 
+	@$(CC) $(CFLAGS) -o $@ -c $< 
+
+##
+## Turn out C code into objects in our $(OBJ_DIR)
+##
+$(OBJ_DIR)/%.o:%.asm
+	@echo "Building $<"
+	@$(ASM) $(ASMFLAGS)  -o $@ -c $< 
 
 tags:
 	etags $(TAG_FILES)

@@ -23,6 +23,8 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_it.h"
+#include "includes.h"
+#include "leds.h"
 // #include "main.h"
 // #include "usb_core.h"
 // #include "usbd_core.h"
@@ -146,6 +148,31 @@ void SysTick_Handler(void)
 /*  available peripheral interrupt handler's name please refer to the startup */
 /*  file (startup_stm32fxxx.s).                                               */
 /******************************************************************************/
+
+/**
+  * @brief  This function handles TIM3 interrupt request.
+  * @param  None
+  * @retval None
+  */
+void TIM2_IRQHandler(void)
+{
+    LEDS_Toggle(BLUE);
+
+    //
+    // Clear the timer.  Failure to do so and you will just 
+    // stay here since the timer will keep the IRQ asserted
+    //
+    //TIM2->SR &= ~TIM_SR_UIF;
+    TIM_ClearFlag(TIM2, TIM_SR_UIF);
+    
+    
+    //
+    // Clear the interrupt at the NVIC level
+    //
+    NVIC_ClearPendingIRQ(TIM2_IRQn);
+
+    return;    
+}
 
 
 /******************* (C) COPYRIGHT 2011 STMicroelectronics *****END OF FILE****/

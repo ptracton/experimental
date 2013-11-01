@@ -44,7 +44,7 @@
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
           <OutputDirectory>..\objects\</OutputDirectory>
-          <OutputName>stm32f4_basic</OutputName>
+          <OutputName>timer</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
           <CreateHexFile>1</CreateHexFile>
@@ -165,7 +165,7 @@
             <Capability>1</Capability>
             <DriverSelection>4103</DriverSelection>
           </Flash1>
-          <bUseTDR>0</bUseTDR>
+          <bUseTDR>1</bUseTDR>
           <Flash2>STLink\ST-LINKIII-KEIL_SWO.dll</Flash2>
           <Flash3>"" ()</Flash3>
           <Flash4></Flash4>
@@ -390,38 +390,8 @@
       </TargetOption>
       <Groups>
         <Group>
-          <GroupName>Common</GroupName>
-          <Files>
-            <File>
-              <FileName>stm32f4_discovery.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\common\src\stm32f4_discovery.c</FilePath>
-            </File>
-            <File>
-              <FileName>syscalls.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\common\src\syscalls.c</FilePath>
-            </File>
-            <File>
-              <FileName>system_stm32f4xx.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\common\src\system_stm32f4xx.c</FilePath>
-            </File>
-            <File>
-              <FileName>startup_stm32f40xx.s</FileName>
-              <FileType>2</FileType>
-              <FilePath>..\..\common\src\startup_stm32f40xx.s</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>Application</GroupName>
           <Files>
-            <File>
-              <FileName>stm32f4xx_it.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\stm32f4xx_it.c</FilePath>
-            </File>
             <File>
               <FileName>leds.c</FileName>
               <FileType>1</FileType>
@@ -431,6 +401,26 @@
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\main.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_it.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\stm32f4xx_it.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Common</GroupName>
+          <Files>
+            <File>
+              <FileName>startup_stm32f40xx.s</FileName>
+              <FileType>2</FileType>
+              <FilePath>..\..\common\src\startup_stm32f40xx.s</FilePath>
+            </File>
+            <File>
+              <FileName>system_stm32f4xx.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\common\src\system_stm32f4xx.c</FilePath>
             </File>
           </Files>
         </Group>

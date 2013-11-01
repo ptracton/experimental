@@ -17,7 +17,7 @@ int main(void)
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
     
     TIM_TimeBaseStructInit(&timer);  
-    timer.TIM_Period = 168000000;
+    timer.TIM_Period = 16800000;
     timer.TIM_Prescaler = TIM_ICPSC_DIV1;
     timer.TIM_ClockDivision = TIM_CKD_DIV1;
     timer.TIM_CounterMode = TIM_CounterMode_Down;  

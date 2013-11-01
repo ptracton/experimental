@@ -96,7 +96,7 @@
 */
 
                                                                 /* Configure CPU timestamp features (see Note #1) :     */
-#define  CPU_CFG_TS_32_EN                       DEF_ENABLED
+#define  CPU_CFG_TS_32_EN                       DEF_DISABLED
 #define  CPU_CFG_TS_64_EN                       DEF_DISABLED
                                                                 /*   DEF_DISABLED  CPU timestamps DISABLED              */
                                                                 /*   DEF_ENABLED   CPU timestamps ENABLED               */

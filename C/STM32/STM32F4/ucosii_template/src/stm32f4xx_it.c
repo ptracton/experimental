@@ -24,7 +24,9 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_it.h"
 #include "includes.h"
+#include "task1.h"
 #include "leds.h"
+
 // #include "main.h"
 // #include "usb_core.h"
 // #include "usbd_core.h"
@@ -156,8 +158,14 @@ void SysTick_Handler(void)
   */
 void TIM2_IRQHandler(void)
 {
+    uint8_t retval;    
+    static TASK1_MBOX_TypeDef * mbox;
+    
+    OSIntEnter();
+    
     LEDS_Toggle(BLUE);
-
+    
+    
     //
     // Clear the timer.  Failure to do so and you will just 
     // stay here since the timer will keep the IRQ asserted
@@ -170,6 +178,18 @@ void TIM2_IRQHandler(void)
     // Clear the interrupt at the NVIC level
     //
     NVIC_ClearPendingIRQ(TIM2_IRQn);
+    
+    //
+    // Wake up task 1
+    //
+    mbox->action = 0x01;    
+    retval = OSMboxPost(task1_mbox, (void *) &mbox);
+    if (retval != OS_ERR_NONE){
+	// Uh oh....??????
+    }
+    
+
+    OSIntExit();
 
     return;    
 }

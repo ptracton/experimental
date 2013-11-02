@@ -4,13 +4,18 @@
 #include "task1.h"
 
 OS_STK   task1_stack[TASK1_STACK_SIZE]; 
-OS_EVENT *task1_mbox;
+OS_EVENT * task1_mbox;
 
 void Task1_Task(void * ptr_args)
 {
     INT8U err;
     TASK1_MBOX_TypeDef * mbox;
     
+		//
+		// The first task to run must call this function
+		//
+		OS_CPU_SysTickInit(1000);
+	
     LEDS_Off(BLUE);
     LEDS_Off(ORANGE);
     
@@ -24,7 +29,5 @@ void Task1_Task(void * ptr_args)
 	    }
 	    
 	}	
-    }
-    
-    return;    
+    }    
 }

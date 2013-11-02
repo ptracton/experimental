@@ -13,11 +13,11 @@ void APP_CreateTasks(void)
     INT8U retval;
     
     
-    retval = OSTaskCreate(&Task1_Task,      (void *) 0,             &task1_stack[TASK1_STACK_SIZE-1],     23);
+    retval = OSTaskCreate(&Task1_Task,      (void *) 0,             &task1_stack[TASK1_STACK_SIZE-1],     4);
     if (retval != OS_ERR_NONE){
 	while(1);
     }
-    OSTaskNameSet(23, "TASK1", &retval);
+    OSTaskNameSet(4, "TASK1", &retval);
     
 
     return;    

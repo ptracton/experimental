@@ -2,7 +2,7 @@
 #ifndef __TASK1_H__
 #define __TASK1_H__
 
-#define TASK1_STACK_SIZE 32
+#define TASK1_STACK_SIZE 128
 #define OS_MBOX_TIMEOUT_MAX (0xFFFF)
    
 extern OS_STK   task1_stack[TASK1_STACK_SIZE]; 

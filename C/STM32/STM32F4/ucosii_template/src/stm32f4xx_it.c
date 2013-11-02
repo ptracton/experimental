@@ -61,6 +61,13 @@ void NMI_Handler(void)
   */
 void HardFault_Handler(void)
 {
+		LEDS_On(BLUE);
+		LEDS_On(RED);
+		LEDS_On(RED2);
+		LEDS_On(GREEN);
+		LEDS_On(GREEN2);
+		LEDS_On(ORANGE);
+	
   /* Go to infinite loop when Hard Fault exception occurs */
   while (1)
   {
@@ -158,8 +165,8 @@ void SysTick_Handler(void)
   */
 void TIM2_IRQHandler(void)
 {
-    uint8_t retval;    
-    static TASK1_MBOX_TypeDef * mbox;
+    uint8_t retval = OS_ERR_NONE;    
+    static TASK1_MBOX_TypeDef mbox;
     
     OSIntEnter();
     
@@ -182,11 +189,12 @@ void TIM2_IRQHandler(void)
     //
     // Wake up task 1
     //
-    mbox->action = 0x01;    
+		mbox.action = 0x01;    
     retval = OSMboxPost(task1_mbox, (void *) &mbox);
-    if (retval != OS_ERR_NONE){
-	// Uh oh....??????
-    }
+		if (retval != OS_ERR_NONE){
+				//Uh oh....??????
+				while(1);
+		}
     
 
     OSIntExit();

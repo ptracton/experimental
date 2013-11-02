@@ -31,9 +31,9 @@
 #define OS_ARG_CHK_EN             0u   /* Enable (1) or Disable (0) argument checking                  */
 #define OS_CPU_HOOKS_EN           1u   /* uC/OS-II hooks are found in the processor port files         */
 
-#define OS_DEBUG_EN               1u   /* Enable(1) debug variables                                    */
+#define OS_DEBUG_EN               0u   /* Enable(1) debug variables                                    */
 
-#define OS_EVENT_MULTI_EN         1u   /* Include code for OSEventPendMulti()                          */
+#define OS_EVENT_MULTI_EN         0u   /* Include code for OSEventPendMulti()                          */
 #define OS_EVENT_NAME_EN          1u   /* Enable names for Sem, Mutex, Mbox and Q                      */
 
 #define OS_LOWEST_PRIO           63u   /* Defines the lowest priority that can be assigned ...         */
@@ -106,7 +106,7 @@
 
 
                                        /* ---------------------- MESSAGE QUEUES ---------------------- */
-#define OS_Q_EN                   1u   /* Enable (1) or Disable (0) code generation for QUEUES         */
+#define OS_Q_EN                   0u   /* Enable (1) or Disable (0) code generation for QUEUES         */
 #define OS_Q_ACCEPT_EN            1u   /*     Include code for OSQAccept()                             */
 #define OS_Q_DEL_EN               1u   /*     Include code for OSQDel()                                */
 #define OS_Q_FLUSH_EN             1u   /*     Include code for OSQFlush()                              */
@@ -118,7 +118,7 @@
 
 
                                        /* ------------------------ SEMAPHORES ------------------------ */
-#define OS_SEM_EN                 1u   /* Enable (1) or Disable (0) code generation for SEMAPHORES     */
+#define OS_SEM_EN                 0u   /* Enable (1) or Disable (0) code generation for SEMAPHORES     */
 #define OS_SEM_ACCEPT_EN          1u   /*    Include code for OSSemAccept()                            */
 #define OS_SEM_DEL_EN             1u   /*    Include code for OSSemDel()                               */
 #define OS_SEM_PEND_ABORT_EN      1u   /*    Include code for OSSemPendAbort()                         */
@@ -127,14 +127,14 @@
 
 
                                        /* --------------------- TIME MANAGEMENT ---------------------- */
-#define OS_TIME_DLY_HMSM_EN       1u   /*     Include code for OSTimeDlyHMSM()                         */
-#define OS_TIME_DLY_RESUME_EN     1u   /*     Include code for OSTimeDlyResume()                       */
-#define OS_TIME_GET_SET_EN        1u   /*     Include code for OSTimeGet() and OSTimeSet()             */
-#define OS_TIME_TICK_HOOK_EN      1u   /*     Include code for OSTimeTickHook()                        */
+#define OS_TIME_DLY_HMSM_EN       0u   /*     Include code for OSTimeDlyHMSM()                         */
+#define OS_TIME_DLY_RESUME_EN     0u   /*     Include code for OSTimeDlyResume()                       */
+#define OS_TIME_GET_SET_EN        0u   /*     Include code for OSTimeGet() and OSTimeSet()             */
+#define OS_TIME_TICK_HOOK_EN      0u   /*     Include code for OSTimeTickHook()                        */
 
 
                                        /* --------------------- TIMER MANAGEMENT --------------------- */
-#define OS_TMR_EN                 1u   /* Enable (1) or Disable (0) code generation for TIMERS         */
+#define OS_TMR_EN                 0u   /* Enable (1) or Disable (0) code generation for TIMERS         */
 #define OS_TMR_CFG_MAX           16u   /*     Maximum number of timers                                 */
 #define OS_TMR_CFG_NAME_EN        1u   /*     Determine timer names                                    */
 #define OS_TMR_CFG_WHEEL_SIZE     8u   /*     Size of timer wheel (#Spokes)                            */

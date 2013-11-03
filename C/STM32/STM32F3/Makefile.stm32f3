@@ -45,15 +45,8 @@ BIN_FILE  = $(EXEC_DIR)/$(TARGET).bin
 ##
 ## Project sources converted to objects
 ##
-SOURCES     = $(wildcard $(SRC_DIR)/*.c)
-OBJECTS     = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SOURCES))
-
-##
-## Files to link together
-##
-LINK_OBJECTS += $(OBJECTS) 
-
-BUILD_LIST = dirs $(ELF_FILE)
+SOURCES     += $(wildcard $(SRC_DIR)/*.c)
+OBJECTS     += $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SOURCES))
 
 ##
 ## If we are building an application, then LIBRARY is 0 and we need other files
@@ -103,11 +96,6 @@ STD_PERIPHERAL_LIB_DIR = ../STM32F30x_StdPeriph_Driver/lib
 STD_PERIPHERAL_LIBRARY = stm32f3xx
 
 ##
-## ELF Target
-##
-ELF_REQUIREMENTS = $(OBJECTS) $(COMMON_OBJECTS)
-
-##
 ## Assembly startup code
 ##
 
@@ -118,12 +106,24 @@ COMMON_SOURCES += $(COMMON_SRC)/startup_stm32f30x.s
 COMMON_OBJECTS += $(patsubst $(COMMON_SRC)/%.s,$(OBJ_DIR)/%.o,$(COMMON_SOURCES))
 LINK_OBJECTS   += $(OBJ_DIR)/startup_stm32f30x.o
 else
-COMMON_SOURCES += $(STARTUP_FILE).s
-COMMON_OBJECTS += $(OBJ_DIR)/$(STARTUP_FILE).o
-LINK_OBJECTS   += $(OBJ_DIR)/$(STARTUP_FILE).o
+ASM_SOURCES += $(STARTUP_FILE).s
+ASM_OBJECTS += $(patsubst %.s,%.o, $(ASM_SOURCES))
+OBJECTS   += $(OBJ_DIR)/$(STARTUP_FILE).o
 endif
 
 endif
+
+##
+## Files to link together
+##
+LINK_OBJECTS += $(OBJECTS) 
+
+BUILD_LIST = dirs $(ELF_FILE)
+
+##
+## ELF Target
+##
+ELF_REQUIREMENTS = $(OBJECTS) $(COMMON_OBJECTS)
 
 ##
 ## Tag files
@@ -146,7 +146,7 @@ CFLAGS	+= -Os -g -Wall -Wextra  $(CINCLUDES)\
 	   -fno-common -mcpu=cortex-m4 -mthumb \
 	   -mfloat-abi=hard -mfpu=fpv4-sp-d16 -MD -DSTM32F3
 
-ASMFLAGS += -mcpu=cortex-m4 -mthumb 
+ASMFLAGS += -mcpu=cortex-m4 -mthumb -warn --fatal-warnings
 
 ##
 ## Linker configuration

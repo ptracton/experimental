@@ -192,7 +192,7 @@ void TIM2_IRQHandler(void)
     retval = OSMboxPost(task1_mbox, (void *) &mbox);
     if (retval != OS_ERR_NONE){
 	//Uh oh....??????
-	while(1);
+//	while(1);
     }
     
     OSIntExit();

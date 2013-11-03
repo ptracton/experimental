@@ -6,6 +6,6 @@ TARGET = ucosii_template
 TARGET_DIR = executable
 LIBRARY = 0
 UCOS_II_RTOS_USE = 1
-STARTUP_FILE = startup_stm32f30x
+STARTUP_FILE = startup_stm32f30x_ucos_ii
 include ../Makefile.stm32f3
 

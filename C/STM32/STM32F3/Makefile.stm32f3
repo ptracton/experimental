@@ -1,5 +1,3 @@
-
-
 ##
 ## Prefix of the GCC ARM Cross Compiler
 ##
@@ -10,6 +8,7 @@ PREFIX	?= arm-none-eabi
 ##
 CC	= $(PREFIX)-gcc
 LD	= $(PREFIX)-gcc
+ASM     = $(PREFIX)-as
 OBJCOPY	= $(PREFIX)-objcopy
 OBJDUMP	= $(PREFIX)-objdump
 AR	= $(PREFIX)-ar
@@ -52,7 +51,7 @@ OBJECTS     = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SOURCES))
 ##
 ## Files to link together
 ##
-LINK_OBJECTS = $(OBJECTS) 
+LINK_OBJECTS += $(OBJECTS) 
 
 BUILD_LIST = dirs $(ELF_FILE)
 
@@ -71,7 +70,7 @@ TAG_FILES += $(COMMON_INC)/*.h $(COMMON_SRC)/*.c
 CINCLUDES += -I$(STD_PERIPHERAL_INCLUDE)
 CINCLUDES += -I$(INC_DIR)
 
-LINK_OBJECTS += $(OBJ_DIR)/system_stm32f30x.o $(OBJ_DIR)/$(STARTUP_FILE).o $(OBJ_DIR)/syscalls.o
+LINK_OBJECTS += $(OBJ_DIR)/system_stm32f30x.o $(OBJ_DIR)/syscalls.o
 
 BUILD_LIST += $(LIST_FILE) $(HEX_FILE) $(SREC_FILE) $(BIN_FILE)
 VPATH += $(COMMON_SRC)
@@ -103,7 +102,6 @@ DEVICE_INCLUDES = $(CMSIS_DIR)/Device/ST/STM32F30x/Include
 STD_PERIPHERAL_LIB_DIR = ../STM32F30x_StdPeriph_Driver/lib
 STD_PERIPHERAL_LIBRARY = stm32f3xx
 
-
 ##
 ## ELF Target
 ##
@@ -112,18 +110,34 @@ ELF_REQUIREMENTS = $(OBJECTS) $(COMMON_OBJECTS)
 ##
 ## Assembly startup code
 ##
-STARTUP_FILE = startup_stm32f30x
+
+ifeq ($(LIBRARY),0)
+
+ifndef STARTUP_FILE
+COMMON_SOURCES += $(COMMON_SRC)/startup_stm32f30x.s
+COMMON_OBJECTS += $(patsubst $(COMMON_SRC)/%.s,$(OBJ_DIR)/%.o,$(COMMON_SOURCES))
+LINK_OBJECTS   += $(OBJ_DIR)/startup_stm32f30x.o
+else
+COMMON_SOURCES += $(STARTUP_FILE).s
+COMMON_OBJECTS += $(OBJ_DIR)/$(STARTUP_FILE).o
+LINK_OBJECTS   += $(OBJ_DIR)/$(STARTUP_FILE).o
+endif
+
+endif
 
 ##
 ## Tag files
 ##
 TAG_FILES += $(SRC_DIR)/*.c $(INC_DIR)/*.h $(STD_PERIPHERAL_INCLUDE)/*.h $(STD_PERIPHERAL_DIR)/src/*.c $(CMSIS_INCLUDES)/*.h
 
-
-
 ifeq ($(FREE_RTOS_USE),1)
 include ../Makefile.freertos
 endif 
+
+ifeq ($(UCOS_II_RTOS_USE),1)
+include ../Makefile.ucosii
+endif 
+
 
 ##
 ## Options passed to the C compiler
@@ -132,11 +146,12 @@ CFLAGS	+= -Os -g -Wall -Wextra  $(CINCLUDES)\
 	   -fno-common -mcpu=cortex-m4 -mthumb \
 	   -mfloat-abi=hard -mfpu=fpv4-sp-d16 -MD -DSTM32F3
 
+ASMFLAGS += -mcpu=cortex-m4 -mthumb 
+
 ##
 ## Linker configuration
 ##
 LDSCRIPT = $(LD_DIR)/stm32f3.ld
-#LDSCRIPT = ../ldscripts/gcc.ld
 LDFLAGS		+= --static -lc -L$(STD_PERIPHERAL_LIB_DIR) -l$(STD_PERIPHERAL_LIBRARY) \
 		   -T$(LDSCRIPT) -nostartfiles -Wl,--gc-sections \
 		   -mthumb -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16
@@ -177,19 +192,16 @@ $(LIST_FILE):$(ELF_FILE)
 	$(OBJDUMP) -S $(ELF_FILE) >  $(LIST_FILE)
 
 $(ELF_FILE): $(ELF_REQUIREMENTS)
-
+	@echo "ELF "
 ifeq ($(LIBRARY),1)
 	@echo "Building Library $(TARGET_DIR)/$(TARGET)"
 	$(AR) rcs $(TARGET_DIR)/$(TARGET) $(OBJECTS)
 else
-	@echo "Building Startup Code"
-	@$(CC) $(CFLAGS) -o $(OBJ_DIR)/$(STARTUP_FILE).o -c $(COMMON_SRC)/$(STARTUP_FILE).s
-
 	@echo "Build Libraries"
 	$(foreach c,$(BUILD_DIRS),$(MAKE) -C $(c) && ) true
 
 	@echo "Linking $(ELF_FILE)"
-	@$(LD) -o $(ELF_FILE) $(LINK_OBJECTS) $(LDFLAGS)
+	$(LD) -o $(ELF_FILE) $(LINK_OBJECTS) $(LDFLAGS)
 endif
 
 ##
@@ -198,6 +210,20 @@ endif
 $(OBJ_DIR)/%.o:%.c
 	@echo "Building $<"
 	@$(CC) $(CFLAGS) -o $@ -c $< 
+
+##
+## Turn out C code into objects in our $(OBJ_DIR)
+##
+$(OBJ_DIR)/%.o:%.asm
+	@echo "Assembling $<"
+	@$(ASM) $(ASMFLAGS)  -o $@ -c $< 
+
+##
+## Turn out C code into objects in our $(OBJ_DIR)
+##
+$(OBJ_DIR)/%.o:%.s
+	@echo "Assembling $<"
+	@$(ASM) $(ASMFLAGS)  -o $@ -c $< 
 
 tags:
 	etags $(TAG_FILES)

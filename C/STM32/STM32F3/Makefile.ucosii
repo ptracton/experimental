@@ -1,0 +1,83 @@
+
+
+
+##
+## UCOS - II
+##
+UCOS_II_RTOS_PATH = ../../RTOS/Micrium/Software/uCOS-II
+UC_LIB_PATH       = ../../RTOS/Micrium/Software/uC-LIB
+UC_CPU_PATH       = ../../RTOS/Micrium/Software/uC-CPU
+
+##
+## Paths to C and H files
+##
+UCOS_II_SRC_DIR       = $(UCOS_II_RTOS_PATH)/Source
+UCOS_II_PORT_SRC_DIR  = $(UCOS_II_RTOS_PATH)/Ports/ARM-Cortex-M4/Generic/GNU
+UC_LIB_SRC_DIR        = $(UC_LIB_PATH)
+UC_CPU_SRC_DIR        = $(UC_CPU_PATH)
+UC_CPU_PORT_SRC_DIR   = $(UC_CPU_PATH)/ARM-Cortex-M4/GNU
+
+
+VPATH += $(UCOS_II_SRC_DIR)
+VPATH += $(UCOS_II_PORT_SRC_DIR)
+VPATH += $(UC_LIB_SRC_DIR)
+VPATH += $(UC_CPU_SRC_DIR)
+VPATH += $(UC_CPU_PORT_SRC_DIR)
+
+##
+## Sources to objects
+##
+
+## ucos_ii.c includes all the other needed C files to build the OS
+UCOS_II_SOURCES  = $(UCOS_II_SRC_DIR)/ucos_ii.c
+UCOS_II_OBJECTS  = $(patsubst $(UCOS_II_SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(UCOS_II_SOURCES))
+
+UCOS_II_PORT_SOURCES  = $(wildcard $(UCOS_II_PORT_SRC_DIR)/*.c)
+UCOS_II_PORT_OBJECTS  = $(patsubst $(UCOS_II_PORT_SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(UCOS_II_PORT_SOURCES))
+
+UCOS_II_PORT_ASM_SOURCES  = $(wildcard $(UCOS_II_PORT_SRC_DIR)/*.asm)
+UCOS_II_PORT_ASM_OBJECTS  = $(patsubst $(UCOS_II_PORT_SRC_DIR)/%.asm,$(OBJ_DIR)/%.o,$(UCOS_II_PORT_ASM_SOURCES))
+
+UC_LIB_SOURCES  = $(wildcard $(UC_LIB_SRC_DIR)/*.c)
+UC_LIB_OBJECTS  = $(patsubst $(UC_LIB_SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(UC_LIB_SOURCES))
+
+UC_CPU_SOURCES  = $(wildcard $(UC_CPU_SRC_DIR)/*.c)
+UC_CPU_OBJECTS  = $(patsubst $(UC_CPU_SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(UC_CPU_SOURCES))
+
+UC_CPU_PORT_SOURCES  = $(wildcard $(UC_CPU_PORT_SRC_DIR)/*.c)
+UC_CPU_PORT_OBJECTS  = $(patsubst $(UC_CPU_PORT_SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(UC_CPU_PORT_SOURCES))
+
+UC_CPU_PORT_ASM_SOURCES  = $(wildcard $(UC_CPU_PORT_SRC_DIR)/*.asm)
+UC_CPU_PORT_ASM_OBJECTS  = $(patsubst $(UC_CPU_PORT_SRC_DIR)/%.asm,$(OBJ_DIR)/%.o,$(UC_CPU_PORT_ASM_SOURCES))
+
+
+##
+## Header file search paths
+##
+CINCLUDES += -I$(UCOS_II_SRC_DIR)
+CINCLUDES += -I$(UCOS_II_PORT_SRC_DIR)
+CINCLUDES += -I$(UC_LIB_SRC_DIR)
+CINCLUDES += -I$(UC_CPU_SRC_DIR)
+CINCLUDES += -I$(UC_CPU_PORT_SRC_DIR)
+
+##
+## Objects needed to make ELF file
+##
+ELF_REQUIREMENTS += $(UCOS_II_OBJECTS)
+ELF_REQUIREMENTS += $(UCOS_II_PORT_OBJECTS)
+ELF_REQUIREMENTS += $(UCOS_II_PORT_ASM_OBJECTS)
+ELF_REQUIREMENTS += $(UC_LIB_OBJECTS)
+ELF_REQUIREMENTS += $(UC_CPU_OBJECTS)
+ELF_REQUIREMENTS += $(UC_CPU_PORT_OBJECTS)
+ELF_REQUIREMENTS += $(UC_CPU_PORT_ASM_OBJECTS)
+
+##
+## List of objects to link together
+##
+LINK_OBJECTS += $(UCOS_II_OBJECTS) $(UCOS_II_PORT_OBJECTS) $(UC_LIB_OBJECTS) $(UC_CPU_OBJECTS) $(UC_CPU_PORT_OBJECTS) $(UCOS_II_PORT_ASM_OBJECTS) $(UC_CPU_PORT_ASM_OBJECTS)
+
+##
+## Files to include when making the tags
+##
+TAG_FILES += $(UCOS_II_SRC_DIR)/* $(UCOS_II_PORT_SRC_DIR)/* $(UC_LIB_SRC_DIR)/*[ch] $(UC_CPU_SRC_DIR)/*[ch] $(UC_CPU_PORT_SRC_DIR)/*[ch]
+

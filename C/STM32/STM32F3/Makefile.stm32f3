@@ -151,7 +151,10 @@ ASMFLAGS += -mcpu=cortex-m4 -mthumb -warn --fatal-warnings
 ##
 ## Linker configuration
 ##
+ifndef LDSCRIPT
 LDSCRIPT = $(LD_DIR)/stm32f3.ld
+endif
+
 LDFLAGS		+= --static -lc -L$(STD_PERIPHERAL_LIB_DIR) -l$(STD_PERIPHERAL_LIBRARY) \
 		   -T$(LDSCRIPT) -nostartfiles -Wl,--gc-sections \
 		   -mthumb -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16

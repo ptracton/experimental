@@ -19,6 +19,7 @@ void Timer2_Init(void)
     NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;
     NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
     NVIC_Init(&NVIC_InitStructure);
+    __disable_irq();
     
     /* Compute the prescaler value */
     PrescalerValue = 0;//(uint16_t) ((SystemCoreClock) / 72000000) - 1;

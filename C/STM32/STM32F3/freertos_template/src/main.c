@@ -57,7 +57,8 @@ int main(void)
     queueCreation();
     
     taskCreation();
-        
+            
+    __enable_irq();
     vTaskStartScheduler();
     return 0;    
 }

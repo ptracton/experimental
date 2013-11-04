@@ -183,7 +183,7 @@ void TIM2_IRQHandler(void)
 
     
     xMessage.character = 0xA;
-//    retval = xQueueSendFromISR( xTask1_Queue, &xMessage, &xHigherPriorityTaskWoken );
+    retval = xQueueSendFromISR( xTask1_Queue, &xMessage, &xHigherPriorityTaskWoken );
     if (retval != pdTRUE){
 	LEDS_On(LED_6);	    
     }

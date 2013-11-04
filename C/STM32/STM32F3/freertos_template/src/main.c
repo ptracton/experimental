@@ -6,8 +6,6 @@
 #include "leds.h"
 #include "usart2.h"
 #include "task1.h"
-#include "task2.h"
-
 
 /*
  * Configure the clocks, GPIO and other peripherals as required by the demo.
@@ -18,19 +16,36 @@ static void prvSetupHardware( void )
 {
     
     LEDS_Init();
-    USART2_Init();
+    LEDS_Off(LED_5);
+    LEDS_Off(LED_4);
+
+    Timer2_Init();
+    
     return;    
 }
 
 void taskCreation(void)
 {
-    xTaskCreate( Task1_Task, ( signed portCHAR * ) "TASK1",  Task1_STACK_SIZE, NULL, tskIDLE_PRIORITY+1, NULL );
-    xTaskCreate( Task2_Task, ( signed portCHAR * ) "TASK1",  Task2_STACK_SIZE, NULL, tskIDLE_PRIORITY+2, NULL );
+    portBASE_TYPE retval;
+    
+    retval = xTaskCreate( Task1_Task, ( signed portCHAR * ) "TASK1",  Task1_STACK_SIZE, NULL, tskIDLE_PRIORITY+1, NULL );
+    if (retval != pdPASS){
+	LEDS_On(LED_0);
+	LEDS_On(LED_1);
+//	while(1);	
+    }
+    return;    
 }
 
 void queueCreation(void)
 {
     xTask1_Queue = xQueueCreate( Task1_QUEUE_SIZE, sizeof( xTask1_Message ) );
+    if ( xTask1_Queue == 0 ){
+	LEDS_On(LED_2);
+	LEDS_On(LED_3);
+//	while(1);	
+    }
+    return;    
 }
 
 
@@ -39,9 +54,10 @@ int main(void)
 {
     prvSetupHardware();
     
+    queueCreation();
+    
     taskCreation();
         
-
     vTaskStartScheduler();
     return 0;    
 }

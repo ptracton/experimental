@@ -29,6 +29,12 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f30x_it.h"
+#include <stm32f30x_tim.h>
+#include "FreeRTOS.h"
+#include "task.h"
+#include "queue.h"
+#include "leds.h"
+#include "task1.h"
 
 /** @addtogroup STM32F3-Discovery_Demo
   * @{
@@ -156,20 +162,34 @@ void SysTick_Handler(void)
   * @param  None
   * @retval None
   */
-void USART2_IRQHandler(void)
+void TIM2_IRQHandler(void)
 {
     uint16_t data;
-  
-    if (USART_GetITStatus(USART2, USART_IT_RXNE) == SET){
-	
-	data = USART_ReceiveData(USART2);
-	USART_SendData(USART2, data);	
-    }
+    xTask1_Message xMessage;
+    portBASE_TYPE xHigherPriorityTaskWoken = pdFALSE;
+    portBASE_TYPE retval;
     
+    LEDS_Toggle(LED_5);
+      
+    //
+    // Clear the timer
+    //
+    TIM_ClearFlag(TIM2, TIM_SR_UIF);
+
     //
     // Clear the interrupt at the NVIC level
     //
-    NVIC_ClearPendingIRQ(USART2_IRQn);
+    NVIC_ClearPendingIRQ(TIM2_IRQn);
+
+    
+    xMessage.character = 0xA;
+//    retval = xQueueSendFromISR( xTask1_Queue, &xMessage, &xHigherPriorityTaskWoken );
+    if (retval != pdTRUE){
+	LEDS_On(LED_6);	    
+    }
+	
+    
+
 }
 
 

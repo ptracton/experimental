@@ -71,7 +71,7 @@ TAG_FILES += $(COMMON_INC)/*.h $(COMMON_SRC)/*.c
 CINCLUDES += -I$(STD_PERIPHERAL_INCLUDE)
 CINCLUDES += -I$(INC_DIR)
 
-LINK_OBJECTS += $(OBJ_DIR)/system_stm32f4xx.o 
+LINK_OBJECTS += $(COMMON_OBJECTS)
 
 BUILD_LIST += $(LIST_FILE) $(HEX_FILE) $(SREC_FILE) $(BIN_FILE)
 VPATH += $(COMMON_SRC)
@@ -111,9 +111,9 @@ STD_PERIPHERAL_LIBRARY = stm32f4xx
 ifeq ($(LIBRARY),0)
 
 ifndef STARTUP_FILE
-COMMON_SOURCES += $(COMMON_SRC)/startup_stm32f4xx.s
-COMMON_OBJECTS += $(patsubst $(COMMON_SRC)/%.s,$(OBJ_DIR)/%.o,$(COMMON_SOURCES))
-LINK_OBJECTS   += $(OBJ_DIR)/startup_stm32f4xx.o
+COMMON_ASM_SOURCES += $(COMMON_SRC)/startup_stm32f4xx.s
+COMMON_OBJECTS += $(patsubst $(COMMON_SRC)/%.s,$(OBJ_DIR)/%.o,$(COMMON_ASM_SOURCES))
+#LINK_OBJECTS   += $(OBJ_DIR)/startup_stm32f4xx.o
 else
 ASM_SOURCES += $(STARTUP_FILE).s
 ASM_OBJECTS += $(patsubst %.s,%.o, $(ASM_SOURCES))
@@ -122,19 +122,15 @@ endif
 
 endif
 
-
 ##
 ## ELF Target
 ##
 ELF_REQUIREMENTS = $(OBJECTS) $(COMMON_OBJECTS)
 
-
 ##
 ## Tag files
 ##
 TAG_FILES += $(SRC_DIR)/*.c $(INC_DIR)/*.h $(STD_PERIPHERAL_INCLUDE)/*.h $(STD_PERIPHERAL_DIR)/src/*.c $(CMSIS_INCLUDES)/*.h
-
-
 
 ifeq ($(FREE_RTOS_USE),1)
 include ../Makefile.freertos
@@ -182,8 +178,8 @@ BUILD_DIRS += ../STM32F4xx_StdPeriph_Driver/
 all: $(BUILD_LIST) 
 
 dirs:	
-	@echo $(COMMON_OBJECTS)
-	@echo $(LINK_OBJECTS)
+	@echo "Common Source: $(COMMON_SOURCES)\n"
+	@echo "Common Objects: $(COMMON_OBJECTS)\n"
 	@echo "Making directories $(MAKE_DIRS)"
 	@$(MKDIR) -p $(MAKE_DIRS)
 
@@ -203,13 +199,13 @@ $(ELF_FILE): $(ELF_REQUIREMENTS)
 
 ifeq ($(LIBRARY),1)
 	@echo "Building Library $(TARGET_DIR)/$(TARGET)"
-	$(AR) rcs $(TARGET_DIR)/$(TARGET) $(OBJECTS)
+	@$(AR) rcs $(TARGET_DIR)/$(TARGET) $(OBJECTS)
 else
 	@echo "Build Libraries"
 	$(foreach c,$(BUILD_DIRS),$(MAKE) -C $(c)  ) 
 
 	@echo "Linking $(ELF_FILE)"
-	@$(LD) -o $(ELF_FILE) $(LINK_OBJECTS) $(LDFLAGS)
+	$(LD) -o $(ELF_FILE) $(LINK_OBJECTS) $(LDFLAGS)
 endif
 
 ##

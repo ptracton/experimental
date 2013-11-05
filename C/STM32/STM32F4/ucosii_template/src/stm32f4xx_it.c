@@ -23,6 +23,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_it.h"
+#include "stm32f4xx_tim.h"
 #include "includes.h"
 #include "task1.h"
 #include "leds.h"

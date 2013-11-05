@@ -9,7 +9,7 @@ void BSP_Init(void)
     
     LEDS_Init();    
 	
-		DBGMCU_APB1PeriphConfig(DBGMCU_TIM2_STOP, ENABLE);
+    DBGMCU_APB1PeriphConfig(DBGMCU_TIM2_STOP, ENABLE);
 
     //
     // Turn on Timer 2
@@ -31,7 +31,7 @@ void BSP_Init(void)
     NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;
     NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
     NVIC_Init(&NVIC_InitStructure);
-		__disable_irq();
+    __disable_irq();
 		
     /* Prescaler configuration */
     TIM_PrescalerConfig(TIM2, 0, TIM_PSCReloadMode_Immediate);
@@ -42,8 +42,8 @@ void BSP_Init(void)
     /* TIM3 enable counter */
     TIM_Cmd(TIM2, ENABLE);
 
-		SCB->SHCSR |= (SCB_SHCSR_USGFAULTENA_Msk | SCB_SHCSR_BUSFAULTENA_Msk | SCB_SHCSR_MEMFAULTENA_Msk);
-		SCB->CCR = SCB_CCR_UNALIGN_TRP_Msk;
+    SCB->SHCSR |= (SCB_SHCSR_USGFAULTENA_Msk | SCB_SHCSR_BUSFAULTENA_Msk | SCB_SHCSR_MEMFAULTENA_Msk);
+    SCB->CCR = SCB_CCR_UNALIGN_TRP_Msk;
 
 		
     return;    

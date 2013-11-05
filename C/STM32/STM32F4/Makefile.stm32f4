@@ -1,5 +1,4 @@
 
-
 ##
 ## Prefix of the GCC ARM Cross Compiler
 ##
@@ -72,7 +71,7 @@ TAG_FILES += $(COMMON_INC)/*.h $(COMMON_SRC)/*.c
 CINCLUDES += -I$(STD_PERIPHERAL_INCLUDE)
 CINCLUDES += -I$(INC_DIR)
 
-LINK_OBJECTS += $(OBJ_DIR)/system_stm32f4xx.o $(OBJ_DIR)/$(STARTUP_FILE).o 
+LINK_OBJECTS += $(OBJ_DIR)/system_stm32f4xx.o 
 
 BUILD_LIST += $(LIST_FILE) $(HEX_FILE) $(SREC_FILE) $(BIN_FILE)
 VPATH += $(COMMON_SRC)
@@ -104,16 +103,31 @@ DEVICE_INCLUDES = $(CMSIS_DIR)/ST/STM32F4xx/Include/
 STD_PERIPHERAL_LIB_DIR = ../STM32F4xx_StdPeriph_Driver/lib
 STD_PERIPHERAL_LIBRARY = stm32f4xx
 
+##
+## Assembly startup code
+##
+#STARTUP_FILE =  startup_stm32f4xx
+
+ifeq ($(LIBRARY),0)
+
+ifndef STARTUP_FILE
+COMMON_SOURCES += $(COMMON_SRC)/startup_stm32f4xx.s
+COMMON_OBJECTS += $(patsubst $(COMMON_SRC)/%.s,$(OBJ_DIR)/%.o,$(COMMON_SOURCES))
+LINK_OBJECTS   += $(OBJ_DIR)/startup_stm32f4xx.o
+else
+ASM_SOURCES += $(STARTUP_FILE).s
+ASM_OBJECTS += $(patsubst %.s,%.o, $(ASM_SOURCES))
+OBJECTS   += $(OBJ_DIR)/$(STARTUP_FILE).o
+endif
+
+endif
+
 
 ##
 ## ELF Target
 ##
 ELF_REQUIREMENTS = $(OBJECTS) $(COMMON_OBJECTS)
 
-##
-## Assembly startup code
-##
-STARTUP_FILE =  startup_stm32f4xx
 
 ##
 ## Tag files
@@ -168,8 +182,8 @@ BUILD_DIRS += ../STM32F4xx_StdPeriph_Driver/
 all: $(BUILD_LIST) 
 
 dirs:	
-	@echo $(UCOS_II_PORT_ASM_SOURCES)
-	@echo $(UCOS_II_PORT_ASM_OBJECTS)
+	@echo $(COMMON_OBJECTS)
+	@echo $(LINK_OBJECTS)
 	@echo "Making directories $(MAKE_DIRS)"
 	@$(MKDIR) -p $(MAKE_DIRS)
 
@@ -191,11 +205,8 @@ ifeq ($(LIBRARY),1)
 	@echo "Building Library $(TARGET_DIR)/$(TARGET)"
 	$(AR) rcs $(TARGET_DIR)/$(TARGET) $(OBJECTS)
 else
-	@echo "Building Startup Code"
-	@$(CC) $(CFLAGS) -o $(OBJ_DIR)/$(STARTUP_FILE).o -c $(COMMON_SRC)/$(STARTUP_FILE).s
-
 	@echo "Build Libraries"
-	$(foreach c,$(BUILD_DIRS),$(MAKE) -C $(c) && ) true
+	$(foreach c,$(BUILD_DIRS),$(MAKE) -C $(c)  ) 
 
 	@echo "Linking $(ELF_FILE)"
 	@$(LD) -o $(ELF_FILE) $(LINK_OBJECTS) $(LDFLAGS)
@@ -212,7 +223,14 @@ $(OBJ_DIR)/%.o:%.c
 ## Turn out C code into objects in our $(OBJ_DIR)
 ##
 $(OBJ_DIR)/%.o:%.asm
-	@echo "Building $<"
+	@echo "Assembling $<"
+	@$(ASM) $(ASMFLAGS)  -o $@ -c $< 
+
+##
+## Turn out C code into objects in our $(OBJ_DIR)
+##
+$(OBJ_DIR)/%.o:%.s
+	@echo "Assembling $<"
 	@$(ASM) $(ASMFLAGS)  -o $@ -c $< 
 
 tags:
@@ -232,7 +250,7 @@ clean:
 	rm -f TAGS
 
 all_clean: clean
-	$(foreach c,$(BUILD_DIRS),$(MAKE) -C $(c) clean && ) true
+	$(foreach c,$(BUILD_DIRS),$(MAKE) -C $(c) clean  ) #true
 
 .PHONY: images clean
 

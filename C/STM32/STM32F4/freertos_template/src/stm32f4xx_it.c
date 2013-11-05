@@ -23,6 +23,12 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_it.h"
+#include <stm32f4xx_tim.h>
+#include "FreeRTOS.h"
+#include "task.h"
+#include "queue.h"
+#include "leds.h"
+#include "task1.h"
 // #include "main.h"
 // #include "usb_core.h"
 // #include "usbd_core.h"
@@ -57,6 +63,13 @@ void NMI_Handler(void)
   */
 void HardFault_Handler(void)
 {
+    LEDS_On(RED);
+    LEDS_On(BLUE);
+    LEDS_On(ORANGE);
+    LEDS_On(GREEN);
+    LEDS_On(RED2);
+    LEDS_On(GREEN2);
+
   /* Go to infinite loop when Hard Fault exception occurs */
   while (1)
   {
@@ -147,5 +160,39 @@ void SysTick_Handler(void)
 /*  file (startup_stm32fxxx.s).                                               */
 /******************************************************************************/
 
+/**
+  * @brief  This function handles TIM2_IRQ Handler.  Toggle LED and send OS message
+  * @param  None
+  * @retval None
+  */
+void TIM2_IRQHandler(void)
+{
+    uint16_t data;
+    xTask1_Message xMessage;
+    portBASE_TYPE xHigherPriorityTaskWoken = pdFALSE;
+    portBASE_TYPE retval;
+    
+    LEDS_Toggle(ORANGE);
+      
+    //
+    // Clear the timer
+    //
+    TIM_ClearFlag(TIM2, TIM_SR_UIF);
+
+    //
+    // Clear the interrupt at the NVIC level
+    //
+    NVIC_ClearPendingIRQ(TIM2_IRQn);
+
+    
+    xMessage.character = 0xA;
+    retval = xQueueSendFromISR( xTask1_Queue, &xMessage, &xHigherPriorityTaskWoken );
+    if (retval != pdTRUE){
+	LEDS_On(RED);	    
+    }
+	
+    
+
+}
 
 /******************* (C) COPYRIGHT 2011 STMicroelectronics *****END OF FILE****/

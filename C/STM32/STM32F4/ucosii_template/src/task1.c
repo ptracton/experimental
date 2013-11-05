@@ -11,10 +11,10 @@ void Task1_Task(void * ptr_args)
     INT8U err;
     TASK1_MBOX_TypeDef * mbox;
     
-		//
-		// The first task to run must call this function
-		//
-		OS_CPU_SysTickInit(1000);
+    //
+    // The first task to run must call this function
+    //
+    OS_CPU_SysTickInit(1000);
 	
     LEDS_Off(BLUE);
     LEDS_Off(ORANGE);

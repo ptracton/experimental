@@ -1,3 +1,4 @@
+
 ##
 ## Prefix of the GCC ARM Cross Compiler
 ##
@@ -63,7 +64,7 @@ TAG_FILES += $(COMMON_INC)/*.h $(COMMON_SRC)/*.c
 CINCLUDES += -I$(STD_PERIPHERAL_INCLUDE)
 CINCLUDES += -I$(INC_DIR)
 
-LINK_OBJECTS += $(OBJ_DIR)/system_stm32f30x.o $(OBJ_DIR)/syscalls.o
+LINK_OBJECTS += $(COMMON_OBJECTS)
 
 BUILD_LIST += $(LIST_FILE) $(HEX_FILE) $(SREC_FILE) $(BIN_FILE)
 VPATH += $(COMMON_SRC)
@@ -102,9 +103,9 @@ STD_PERIPHERAL_LIBRARY = stm32f3xx
 ifeq ($(LIBRARY),0)
 
 ifndef STARTUP_FILE
-COMMON_SOURCES += $(COMMON_SRC)/startup_stm32f30x.s
-COMMON_OBJECTS += $(patsubst $(COMMON_SRC)/%.s,$(OBJ_DIR)/%.o,$(COMMON_SOURCES))
-LINK_OBJECTS   += $(OBJ_DIR)/startup_stm32f30x.o
+COMMON_ASM_SOURCES += $(COMMON_SRC)/startup_stm32f30x.s
+COMMON_ASM_OBJECTS += $(patsubst $(COMMON_SRC)/%.s,$(OBJ_DIR)/%.o,$(COMMON_ASM_SOURCES))
+#LINK_OBJECTS   += $(OBJ_DIR)/startup_stm32f30x.o
 else
 ASM_SOURCES += $(STARTUP_FILE).s
 ASM_OBJECTS += $(patsubst %.s,%.o, $(ASM_SOURCES))
@@ -136,6 +137,10 @@ endif
 
 ifeq ($(UCOS_II_RTOS_USE),1)
 include ../Makefile.ucosii
+endif 
+
+ifeq ($(TNKERNEL_RTOS_USE),1)
+include ../Makefile.tnkernel
 endif 
 
 
@@ -179,6 +184,7 @@ BUILD_DIRS += ../STM32F30x_StdPeriph_Driver/
 all: $(BUILD_LIST) 
 
 dirs:
+	@echo "$(TNKERNEL_PORT_ASM_OBJECTS)"
 	@echo "Making directories $(MAKE_DIRS)"
 	@$(MKDIR) -p $(MAKE_DIRS)
 
@@ -195,7 +201,6 @@ $(LIST_FILE):$(ELF_FILE)
 	$(OBJDUMP) -S $(ELF_FILE) >  $(LIST_FILE)
 
 $(ELF_FILE): $(ELF_REQUIREMENTS)
-	@echo "ELF "
 ifeq ($(LIBRARY),1)
 	@echo "Building Library $(TARGET_DIR)/$(TARGET)"
 	$(AR) rcs $(TARGET_DIR)/$(TARGET) $(OBJECTS)
@@ -211,7 +216,7 @@ endif
 ## Turn out C code into objects in our $(OBJ_DIR)
 ##
 $(OBJ_DIR)/%.o:%.c
-	@echo "Building $<"
+	@echo "Compiling  $<"
 	@$(CC) $(CFLAGS) -o $@ -c $< 
 
 ##
@@ -226,7 +231,8 @@ $(OBJ_DIR)/%.o:%.asm
 ##
 $(OBJ_DIR)/%.o:%.s
 	@echo "Assembling $<"
-	@$(ASM) $(ASMFLAGS)  -o $@ -c $< 
+#	$(ASM) $(ASMFLAGS)  -o $@ -c $< 
+	@$(CC) $(CFLAGS) -o $@ -c $< 
 
 tags:
 	etags $(TAG_FILES)

@@ -264,7 +264,7 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>176</TopLine>
+      <TopLine>177</TopLine>
       <CurrentLine>181</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\startup_stm32f30x.s</PathWithFileName>
@@ -296,7 +296,7 @@
       <Focus>0</Focus>
       <ColumnNumber>19</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>39</TopLine>
+      <TopLine>40</TopLine>
       <CurrentLine>61</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\main.c</PathWithFileName>
@@ -328,7 +328,7 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>4</TopLine>
+      <TopLine>5</TopLine>
       <CurrentLine>21</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\task1.c</PathWithFileName>
@@ -800,7 +800,7 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>1419</TopLine>
+      <TopLine>1420</TopLine>
       <CurrentLine>1425</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\RTOS\FreeRTOSV7.5.3\FreeRTOS\Source\queue.c</PathWithFileName>
@@ -816,7 +816,7 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>1341</TopLine>
+      <TopLine>1342</TopLine>
       <CurrentLine>1347</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\RTOS\FreeRTOSV7.5.3\FreeRTOS\Source\tasks.c</PathWithFileName>
@@ -848,7 +848,7 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>190</TopLine>
+      <TopLine>191</TopLine>
       <CurrentLine>204</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\RTOS\FreeRTOSV7.5.3\FreeRTOS\Source\portable\MemMang\heap_2.c</PathWithFileName>

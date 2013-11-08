@@ -140,6 +140,10 @@ ifeq ($(UCOS_II_RTOS_USE),1)
 include ../Makefile.ucosii
 endif 
 
+ifeq ($(CHIBIOS_RTOS_USE),1)
+include ../Makefile.chibios
+endif 
+
 ##
 ## Options passed to the C compiler
 ##
@@ -152,7 +156,10 @@ ASMFLAGS += -mcpu=cortex-m4 -mthumb
 ##
 ## Linker configuration
 ##
+ifndef LDSCRIPT
 LDSCRIPT = $(LD_DIR)/stm32f4.ld
+endif
+
 #LDSCRIPT = ../ldscripts/gcc.ld
 LDFLAGS		+= --static -lc -L$(STD_PERIPHERAL_LIB_DIR) -l$(STD_PERIPHERAL_LIBRARY) \
 		   -T$(LDSCRIPT) -nostartfiles -Wl,--gc-sections \

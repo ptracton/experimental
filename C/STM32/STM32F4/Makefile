@@ -1,6 +1,7 @@
 
 DIRS = STM32F4xx_StdPeriph_Driver
 DIRS += freertos_template
+DIRS += chibios_template
 DIRS += ucosii_template
 DIRS += stm32f4_basic
 DIRS += timer

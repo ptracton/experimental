@@ -185,8 +185,6 @@ BUILD_DIRS += ../STM32F4xx_StdPeriph_Driver/
 all: $(BUILD_LIST) 
 
 dirs:	
-	@echo "Common Source: $(COMMON_SOURCES)\n"
-	@echo "Common Objects: $(COMMON_OBJECTS)\n"
 	@echo "Making directories $(MAKE_DIRS)"
 	@$(MKDIR) -p $(MAKE_DIRS)
 

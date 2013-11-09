@@ -6,6 +6,7 @@ DIRS += ucosii_template
 DIRS += stm32f4_basic
 DIRS += timer
 DIRS += template
+DIRS += uart_echo
 
 all:
 	$(foreach c,$(DIRS),$(MAKE) -C $(c) && ) true

@@ -24,7 +24,9 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_it.h"
 #include <stm32f4xx_tim.h>
+#include "ch.h"
 #include "leds.h"
+extern Thread * Thread1_ptr;
 
 // #include "main.h"
 // #include "usb_core.h"
@@ -164,6 +166,8 @@ void SysTick_Handler(void)
   */
 void TIM2_IRQHandler(void)
 {
+    CH_IRQ_PROLOGUE();
+
     LEDS_Toggle(ORANGE);
       
     //
@@ -175,6 +179,17 @@ void TIM2_IRQHandler(void)
     // Clear the interrupt at the NVIC level
     //
     NVIC_ClearPendingIRQ(TIM2_IRQn);
+
+    chSysLockFromIsr();
+    /* Invocation of some I-Class system APIs, never preemptable.*/
+
+    Thread1_ptr->p_u.rdymsg = (msg_t)55;     /* Sending the message, optional.*/
+    chSchReadyI(Thread1_ptr);
+    Thread1_ptr = NULL;
+
+    chSysUnlockFromIsr();
+
+    CH_IRQ_EPILOGUE();
 
 }
 

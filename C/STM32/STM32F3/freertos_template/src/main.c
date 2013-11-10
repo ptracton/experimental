@@ -2,9 +2,10 @@
 #include <FreeRTOS.h>
 #include <task.h>
 #include "queue.h"
-
+#include "FreeRTOS_CLI.h"
 #include "leds.h"
 #include "usart2.h"
+#include "timer2.h"
 #include "task1.h"
 
 /*

@@ -1,12 +1,31 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
+#include <stm32f30x.h>
 #include <stm32f30x_rcc.h>
 #include <stm32f30x_gpio.h>
 #include <stm32f30x_usart.h>
 #include "usart2.h"
-#include "syscalls.h"
+
+int uartPutch(int ch)
+{
+    static int last;
+
+    if ((ch == (int)'\n') && (last != (int)'\r'))
+    {
+	last = (int)'\r';
+
+	while(USART_GetFlagStatus(USART2, USART_FLAG_TXE) == RESET);
+
+	USART_SendData(USART2, last);
+    }
+    else
+	last = ch;
+
+    while(USART_GetFlagStatus(USART2, USART_FLAG_TXE) == RESET);
+
+    USART_SendData(USART2, ch);
+
+    return(ch);
+}
+
 
 void USART2_Init(void)
 {
@@ -65,97 +84,7 @@ void USART2_Init(void)
     // Enable the USART block
     //
     USART_Cmd(USART2, ENABLE);    
+
     
-    return;    
+    return ;    
 }
-
-// void sbrk(void)
-// {
-//     return;    
-// }
-
-// void write(void)
-// {
-//     return;    
-// }
-
-// void close(void)
-// {
-//     return;    
-// }
-
-// void fstat(void)
-// {
-//     return;    
-// }
-
-// void isatty(void)
-// {
-//     return;    
-// }
-
-// void lseek(void)
-// {
-//     return;    
-// }
-
-// void read(void)
-// {
-//     return;    
-// }
-
-// void uartPutch(uint16_t ch)
-// {
-//     return;    
-// }
-
-
-//******************************************************************************
-// Hosting of stdio functionality through USART2
-//******************************************************************************
-
-//#include <rt_misc.h>
-
-//#pragma import(__use_no_semihosting_swi)
-
-struct __FILE { 
-    int handle; /* Add whatever you need here */ 
-};
-
-FILE __stdout;
-FILE __stdin;
-
-int fputc(int ch, FILE *f)
-{
-    static int last;
-    UNUSED(f);
-    
-    if ((ch == (int)'\n') && (last != (int)'\r'))
-    {
-	last = (int)'\r';
-
-	while(USART_GetFlagStatus(USART2, USART_FLAG_TXE) == RESET);
-
-	USART_SendData(USART2, last);
-    }
-    else
-	last = ch;
-
-    while(USART_GetFlagStatus(USART2, USART_FLAG_TXE) == RESET);
-
-    USART_SendData(USART2, ch);
-
-    return(ch);
-}
-
-int fgetc(FILE *f)
-{
-    char ch;
-    UNUSED(f);
-    while(USART_GetFlagStatus(USART2, USART_FLAG_RXNE) == RESET);
-
-    ch = USART_ReceiveData(USART2);
-
-    return((int)ch);
-}
-

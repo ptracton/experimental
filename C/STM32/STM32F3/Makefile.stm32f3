@@ -203,13 +203,13 @@ $(LIST_FILE):$(ELF_FILE)
 $(ELF_FILE): $(ELF_REQUIREMENTS)
 ifeq ($(LIBRARY),1)
 	@echo "Building Library $(TARGET_DIR)/$(TARGET)"
-	$(AR) rcs $(TARGET_DIR)/$(TARGET) $(OBJECTS)
+	@$(AR) rcs $(TARGET_DIR)/$(TARGET) $(OBJECTS)
 else
 	@echo "Build Libraries"
-	$(foreach c,$(BUILD_DIRS),$(MAKE) -C $(c) && ) true
+	@$(foreach c,$(BUILD_DIRS),$(MAKE) -C $(c) && ) true
 
 	@echo "Linking $(ELF_FILE)"
-	$(LD) -o $(ELF_FILE) $(LINK_OBJECTS) $(LDFLAGS)
+	@$(LD) -o $(ELF_FILE) $(LINK_OBJECTS) $(LDFLAGS)
 endif
 
 ##

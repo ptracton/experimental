@@ -105,7 +105,7 @@ ifeq ($(LIBRARY),0)
 ifndef STARTUP_FILE
 COMMON_ASM_SOURCES += $(COMMON_SRC)/startup_stm32f30x.s
 COMMON_ASM_OBJECTS += $(patsubst $(COMMON_SRC)/%.s,$(OBJ_DIR)/%.o,$(COMMON_ASM_SOURCES))
-#LINK_OBJECTS   += $(OBJ_DIR)/startup_stm32f30x.o
+OBJECTS   += $(COMMON_ASM_OBJECTS)
 else
 ASM_SOURCES += $(STARTUP_FILE).s
 ASM_OBJECTS += $(patsubst %.s,%.o, $(ASM_SOURCES))

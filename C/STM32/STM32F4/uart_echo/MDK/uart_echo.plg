@@ -1,0 +1,355 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Project:</h2>
+C:\Users\tractp1\src\software\experimental\C\STM32\STM32F4\uart_echo\MDK\uart_echo.uvproj
+Project File Date:  11/14/2013
+
+<h2>Output:</h2>
+Build target 'Target 1'
+compiling main.c...
+..\src\main.c(103): warning:  #111-D: statement is unreachable
+..\src\main.c(36): warning:  #550-D: variable "i" was set but never used
+compiling stm32f4xx_it.c...
+compiling leds.c...
+assembling startup_stm32f4xx.s...
+..\..\common\src\startup_stm32f4xx.s(1): error: A1167E: Invalid line start 
+..\..\common\src\startup_stm32f4xx.s(2): error: A1137E: Unexpected characters at end of line
+..\..\common\src\startup_stm32f4xx.s(3): error: A1159E: Label missing from line start
+..\..\common\src\startup_stm32f4xx.s(4): error: A1159E: Label missing from line start
+..\..\common\src\startup_stm32f4xx.s(5): error: A1159E: Label missing from line start
+..\..\common\src\startup_stm32f4xx.s(6): error: A1159E: Label missing from line start
+..\..\common\src\startup_stm32f4xx.s(7): error: A1159E: Label missing from line start
+..\..\common\src\startup_stm32f4xx.s(8): error: A1159E: Label missing from line start
+..\..\common\src\startup_stm32f4xx.s(9): error: A1159E: Label missing from line start
+..\..\common\src\startup_stm32f4xx.s(10): error: A1159E: Label missing from line start
+..\..\common\src\startup_stm32f4xx.s(11): error: A1159E: Label missing from line start
+..\..\common\src\startup_stm32f4xx.s(12): error: A1159E: Label missing from line start
+..\..\common\src\startup_stm32f4xx.s(13): error: A1159E: Label missing from line start
+..\..\common\src\startup_stm32f4xx.s(14): error: A1159E: Label missing from line start
+..\..\common\src\startup_stm32f4xx.s(15): error: A1159E: Label missing from line start
+..\..\common\src\startup_stm32f4xx.s(16): error: A1159E: Label missing from line start
+..\..\common\src\startup_stm32f4xx.s(17): error: A1159E: Label missing from line start
+..\..\common\src\startup_stm32f4xx.s(18): error: A1159E: Label missing from line start
+..\..\common\src\startup_stm32f4xx.s(19): error: A1137E: Unexpected characters at end of line
+..\..\common\src\startup_stm32f4xx.s(20): error: A1159E: Label missing from line start
+..\..\common\src\startup_stm32f4xx.s(21): error: A1159E: Label missing from line start
+..\..\common\src\startup_stm32f4xx.s(22): error: A1159E: Label missing from line start
+..\..\common\src\startup_stm32f4xx.s(23): error: A1159E: Label missing from line start
+..\..\common\src\startup_stm32f4xx.s(24): error: A1159E: Label missing from line start
+..\..\common\src\startup_stm32f4xx.s(25): error: A1159E: Label missing from line start
+..\..\common\src\startup_stm32f4xx.s(26): error: A1159E: Label missing from line start
+..\..\common\src\startup_stm32f4xx.s(27): error: A1159E: Label missing from line start
+..\..\common\src\startup_stm32f4xx.s(28): error: A1159E: Label missing from line start
+..\..\common\src\startup_stm32f4xx.s(29): error: A1159E: Label missing from line start
+..\..\common\src\startup_stm32f4xx.s(30): error: A1137E: Unexpected characters at end of line
+..\..\common\src\startup_stm32f4xx.s(31): error: A1137E: Unexpected characters at end of line
+..\..\common\src\startup_stm32f4xx.s(33): error: A1137E: Unexpected characters at end of line
+..\..\common\src\startup_stm32f4xx.s(34): error: A1137E: Unexpected characters at end of line
+..\..\common\src\startup_stm32f4xx.s(35): error: A1137E: Unexpected characters at end of line
+..\..\common\src\startup_stm32f4xx.s(36): error: A1137E: Unexpected characters at end of line
+..\..\common\src\startup_stm32f4xx.s(38): error: A1163E: Unknown opcode g_pfnVectors , expecting opcode or Macro
+..\..\common\src\startup_stm32f4xx.s(39): error: A1163E: Unknown opcode Default_Handler , expecting opcode or Macro
+..\..\common\src\startup_stm32f4xx.s(41): error: A1163E: Unknown opcode start , expecting opcode or Macro
+..\..\common\src\startup_stm32f4xx.s(42): error: A1163E: Unknown opcode in , expecting opcode or Macro
+..\..\common\src\startup_stm32f4xx.s(43): error: A1163E: Unknown opcode _sidata , expecting opcode or Macro
+..\..\common\src\startup_stm32f4xx.s(44): error: A1163E: Unknown opcode start , expecting opcode or Macro
+..\..\common\src\startup_stm32f4xx.s(45): error: A1163E: Unknown opcode _sdata , expecting opcode or Macro
+..\..\common\src\startup_stm32f4xx.s(46): error: A1167E: Invalid line start 
+..\..\common\src\startup_stm32f4xx.s(47): error: A1163E: Unknown opcode _edata , expecting opcode or Macro
+..\..\common\src\startup_stm32f4xx.s(48): error: A1163E: Unknown opcode start , expecting opcode or Macro
+..\..\common\src\startup_stm32f4xx.s(49): error: A1163E: Unknown opcode _sbss , expecting opcode or Macro
+..\..\common\src\startup_stm32f4xx.s(50): error: A1167E: Invalid line start 
+..\..\common\src\startup_stm32f4xx.s(51): error: A1163E: Unknown opcode _ebss , expecting opcode or Macro
+..\..\common\src\startup_stm32f4xx.s(52): error: A1163E: Unknown opcode stack , expecting opcode or Macro
+..\..\common\src\startup_stm32f4xx.s(54): error: A1167E: Invalid line start 
+compiling syscalls.c...
+compiling system_stm32f4xx.c...
+compiling misc.c...
+..\..\STM32F4xx_StdPeriph_Driver\src\misc.c(115): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\misc.c(135): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\misc.c(177): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\misc.c(196): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\misc.c(220): warning:  #223-D: function "assert_param" declared implicitly
+compiling stm32f4xx_exti.c...
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_exti.c(124): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_exti.c(193): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_exti.c(224): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_exti.c(246): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_exti.c(262): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_exti.c(285): warning:  #223-D: function "assert_param" declared implicitly
+compiling stm32f4xx_gpio.c...
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_gpio.c(123): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_gpio.c(187): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_gpio.c(260): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_gpio.c(304): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_gpio.c(326): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_gpio.c(343): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_gpio.c(365): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_gpio.c(383): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_gpio.c(402): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_gpio.c(422): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_gpio.c(445): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_gpio.c(459): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_gpio.c(535): warning:  #223-D: function "assert_param" declared implicitly
+compiling stm32f4xx_rcc.c...
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rcc.c(240): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rcc.c(296): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rcc.c(331): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rcc.c(356): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rcc.c(396): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rcc.c(439): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rcc.c(462): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rcc.c(488): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rcc.c(503): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rcc.c(521): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rcc.c(548): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rcc.c(586): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rcc.c(692): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rcc.c(745): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rcc.c(777): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rcc.c(808): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rcc.c(985): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rcc.c(1015): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rcc.c(1032): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rcc.c(1049): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rcc.c(1088): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rcc.c(1120): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rcc.c(1147): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rcc.c(1197): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rcc.c(1237): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rcc.c(1276): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rcc.c(1305): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rcc.c(1329): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rcc.c(1376): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rcc.c(1412): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rcc.c(1458): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rcc.c(1490): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rcc.c(1517): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rcc.c(1567): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rcc.c(1607): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rcc.c(1652): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rcc.c(1692): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rcc.c(1754): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rcc.c(1785): warning:  #223-D: function "assert_param" declared implicitly
+compiling stm32f4xx_syscfg.c...
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_syscfg.c(105): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_syscfg.c(124): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_syscfg.c(142): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_syscfg.c(160): warning:  #223-D: function "assert_param" declared implicitly
+compiling stm32f4xx_tim.c...
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(197): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(287): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(357): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(382): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(406): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(421): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(435): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(449): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(465): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(494): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(519): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(546): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(569): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(589): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(670): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(751): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(832): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(912): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(1012): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(1055): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(1071): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(1086): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(1101): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(1121): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(1150): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(1178): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(1207): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(1235): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(1265): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(1294): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(1323): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(1352): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(1383): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(1413): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(1443): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(1473): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(1503): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(1532): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(1561): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(1590): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(1616): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(1644): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(1671): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(1698): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(1725): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(1752): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(1783): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(1813): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(1893): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(1971): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(2025): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(2040): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(2054): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(2068): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(2088): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(2113): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(2137): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(2161): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(2214): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(2258): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(2283): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(2308): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(2365): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(2403): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(2437): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(2478): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(2508): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(2547): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(2584): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(2611): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(2637): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(2676): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(2697): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(2728): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(2770): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(2815): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(2884): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(2925): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(2949): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(2972): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(3005): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(3065): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(3112): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c(3163): warning:  #223-D: function "assert_param" declared implicitly
+compiling stm32f4xx_usart.c...
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_usart.c(181): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_usart.c(235): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_usart.c(364): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_usart.c(411): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_usart.c(437): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_usart.c(458): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_usart.c(484): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_usart.c(541): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_usart.c(557): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_usart.c(608): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_usart.c(628): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_usart.c(655): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_usart.c(724): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_usart.c(742): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_usart.c(766): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_usart.c(819): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_usart.c(904): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_usart.c(923): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_usart.c(948): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_usart.c(1019): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_usart.c(1037): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_usart.c(1083): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_usart.c(1213): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_usart.c(1276): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_usart.c(1324): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_usart.c(1360): warning:  #223-D: function "assert_param" declared implicitly
+..\..\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_usart.c(1433): warning:  #223-D: function "assert_param" declared implicitly
+"..\objects\uart_echo.axf" - 50 Errors, 180 Warning(s).
+Target not created
+Build target 'Target 1'
+compiling main.c...
+..\src\main.c(103): warning:  #111-D: statement is unreachable
+..\src\main.c(36): warning:  #550-D: variable "i" was set but never used
+compiling stm32f4xx_it.c...
+compiling leds.c...
+assembling startup_stm32f4xx.s...
+..\..\common\src\startup_stm32f4xx.s(1): error: A1167E: Invalid line start 
+..\..\common\src\startup_stm32f4xx.s(2): error: A1137E: Unexpected characters at end of line
+..\..\common\src\startup_stm32f4xx.s(3): error: A1159E: Label missing from line start
+..\..\common\src\startup_stm32f4xx.s(4): error: A1159E: Label missing from line start
+..\..\common\src\startup_stm32f4xx.s(5): error: A1159E: Label missing from line start
+..\..\common\src\startup_stm32f4xx.s(6): error: A1159E: Label missing from line start
+..\..\common\src\startup_stm32f4xx.s(7): error: A1159E: Label missing from line start
+..\..\common\src\startup_stm32f4xx.s(8): error: A1159E: Label missing from line start
+..\..\common\src\startup_stm32f4xx.s(9): error: A1159E: Label missing from line start
+..\..\common\src\startup_stm32f4xx.s(10): error: A1159E: Label missing from line start
+..\..\common\src\startup_stm32f4xx.s(11): error: A1159E: Label missing from line start
+..\..\common\src\startup_stm32f4xx.s(12): error: A1159E: Label missing from line start
+..\..\common\src\startup_stm32f4xx.s(13): error: A1159E: Label missing from line start
+..\..\common\src\startup_stm32f4xx.s(14): error: A1159E: Label missing from line start
+..\..\common\src\startup_stm32f4xx.s(15): error: A1159E: Label missing from line start
+..\..\common\src\startup_stm32f4xx.s(16): error: A1159E: Label missing from line start
+..\..\common\src\startup_stm32f4xx.s(17): error: A1159E: Label missing from line start
+..\..\common\src\startup_stm32f4xx.s(18): error: A1159E: Label missing from line start
+..\..\common\src\startup_stm32f4xx.s(19): error: A1137E: Unexpected characters at end of line
+..\..\common\src\startup_stm32f4xx.s(20): error: A1159E: Label missing from line start
+..\..\common\src\startup_stm32f4xx.s(21): error: A1159E: Label missing from line start
+..\..\common\src\startup_stm32f4xx.s(22): error: A1159E: Label missing from line start
+..\..\common\src\startup_stm32f4xx.s(23): error: A1159E: Label missing from line start
+..\..\common\src\startup_stm32f4xx.s(24): error: A1159E: Label missing from line start
+..\..\common\src\startup_stm32f4xx.s(25): error: A1159E: Label missing from line start
+..\..\common\src\startup_stm32f4xx.s(26): error: A1159E: Label missing from line start
+..\..\common\src\startup_stm32f4xx.s(27): error: A1159E: Label missing from line start
+..\..\common\src\startup_stm32f4xx.s(28): error: A1159E: Label missing from line start
+..\..\common\src\startup_stm32f4xx.s(29): error: A1159E: Label missing from line start
+..\..\common\src\startup_stm32f4xx.s(30): error: A1137E: Unexpected characters at end of line
+..\..\common\src\startup_stm32f4xx.s(31): error: A1137E: Unexpected characters at end of line
+..\..\common\src\startup_stm32f4xx.s(33): error: A1137E: Unexpected characters at end of line
+..\..\common\src\startup_stm32f4xx.s(34): error: A1137E: Unexpected characters at end of line
+..\..\common\src\startup_stm32f4xx.s(35): error: A1137E: Unexpected characters at end of line
+..\..\common\src\startup_stm32f4xx.s(36): error: A1137E: Unexpected characters at end of line
+..\..\common\src\startup_stm32f4xx.s(38): error: A1163E: Unknown opcode g_pfnVectors , expecting opcode or Macro
+..\..\common\src\startup_stm32f4xx.s(39): error: A1163E: Unknown opcode Default_Handler , expecting opcode or Macro
+..\..\common\src\startup_stm32f4xx.s(41): error: A1163E: Unknown opcode start , expecting opcode or Macro
+..\..\common\src\startup_stm32f4xx.s(42): error: A1163E: Unknown opcode in , expecting opcode or Macro
+..\..\common\src\startup_stm32f4xx.s(43): error: A1163E: Unknown opcode _sidata , expecting opcode or Macro
+..\..\common\src\startup_stm32f4xx.s(44): error: A1163E: Unknown opcode start , expecting opcode or Macro
+..\..\common\src\startup_stm32f4xx.s(45): error: A1163E: Unknown opcode _sdata , expecting opcode or Macro
+..\..\common\src\startup_stm32f4xx.s(46): error: A1167E: Invalid line start 
+..\..\common\src\startup_stm32f4xx.s(47): error: A1163E: Unknown opcode _edata , expecting opcode or Macro
+..\..\common\src\startup_stm32f4xx.s(48): error: A1163E: Unknown opcode start , expecting opcode or Macro
+..\..\common\src\startup_stm32f4xx.s(49): error: A1163E: Unknown opcode _sbss , expecting opcode or Macro
+..\..\common\src\startup_stm32f4xx.s(50): error: A1167E: Invalid line start 
+..\..\common\src\startup_stm32f4xx.s(51): error: A1163E: Unknown opcode _ebss , expecting opcode or Macro
+..\..\common\src\startup_stm32f4xx.s(52): error: A1163E: Unknown opcode stack , expecting opcode or Macro
+..\..\common\src\startup_stm32f4xx.s(54): error: A1167E: Invalid line start 
+compiling syscalls.c...
+compiling system_stm32f4xx.c...
+compiling misc.c...
+compiling stm32f4xx_exti.c...
+compiling stm32f4xx_gpio.c...
+compiling stm32f4xx_rcc.c...
+compiling stm32f4xx_syscfg.c...
+compiling stm32f4xx_tim.c...
+compiling stm32f4xx_usart.c...
+"..\objects\uart_echo.axf" - 50 Errors, 2 Warning(s).
+Target not created
+Build target 'Target 1'
+assembling startup_stm32f40xx.s...
+linking...
+..\objects\uart_echo.axf: Error: L6218E: Undefined symbol OS_CPU_PendSVHandler (referred from startup_stm32f40xx.o).
+..\objects\uart_echo.axf: Error: L6218E: Undefined symbol OS_CPU_SysTickHandler (referred from startup_stm32f40xx.o).
+"..\objects\uart_echo.axf" - 2 Errors, 0 Warning(s).
+Target not created
+Build target 'Target 1'
+assembling startup_stm32f40xx.s...
+linking...
+Program Size: Code=4344 RO-data=424 RW-data=40 ZI-data=1632  
+FromELF: creating hex file...
+"..\objects\uart_echo.axf" - 0 Errors, 0 Warning(s).
+Load "..\\objects\\uart_echo.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'Target 1'
+compiling main.c...
+..\src\main.c(103): warning:  #111-D: statement is unreachable
+..\src\main.c(36): warning:  #550-D: variable "i" was set but never used
+assembling startup_stm32f40xx.s...
+linking...
+Program Size: Code=4336 RO-data=424 RW-data=40 ZI-data=1632  
+FromELF: creating hex file...
+"..\objects\uart_echo.axf" - 0 Errors, 2 Warning(s).
+Load "..\\objects\\uart_echo.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Clean started: Project: 'uart_echo'
+   deleting intermediate output files for target 'Target 1'

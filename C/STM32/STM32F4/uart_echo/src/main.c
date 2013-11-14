@@ -94,7 +94,7 @@ int main(void)
     
     i=0;    
     while(1){
-//	USART_SendData(USART2, 'A');	
+//		USART_SendData(USART2, 'A');	
 //	i++;	
 //	printf("print %d\n", i);	
     }

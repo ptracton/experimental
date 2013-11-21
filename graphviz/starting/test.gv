@@ -1,4 +1,5 @@
 digraph G{
+	label = "Intro"
 	size = "1,1"
 	a_1 [texlbl="$\frac{\gamma}{2x^2+y^3}$"];
 	main [shape=box]; /* this is a comment */
@@ -7,6 +8,17 @@ digraph G{
 	parse -> init [style=dotted];
 	e [shape=polygon,sides=4,distortion=.7];
 	parse -> e
-	a [shape=polygon,sides=5,peripheries=3,color=blue,style=filled];
+	a [shape=polygon,sides=9,peripheries=3,color=blue,style=filled];
+	a -> a_1 -> a
+	subgraph cluster1 {
+		node [style=filled];
+		b0 -> b1 -> b2 -> b3;
+		label = "process #2";
+		color=blue
+		b0 -> c1
+		subgraph foo{
+			c1 -> c2
+	}
+	}
 }
 

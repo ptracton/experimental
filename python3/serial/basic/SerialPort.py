@@ -11,7 +11,7 @@ class SerialPort (serial.Serial):
         settings =self.getSettingsDict()
         self.applySettingsDict(settings)
         self.baudrate=115200    
-        self.port = "/dev/ttyUSB0"
+        self.port = "COM9"
              
         pass
     

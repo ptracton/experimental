@@ -224,8 +224,15 @@ void USART2_IRQHandler(void)
 	break;
     case 1:
 	xMessage.packet.size = data;
-	state = 2;
 	data_count = 0;	
+	
+	if (xMessage.packet.size){
+	    state = 2;
+	}else{
+	    state = 3;
+	}
+	
+	
 	break;
     case 2:
 	if (data_count < (xMessage.packet.size-1)){

@@ -9,7 +9,7 @@
 // HW Includes
 //
 #include "stm32f4xx.h"
-#include "stm32f4xx_usart.h"
+#include "stm32f4xx_conf.h"
 
 //
 // OS Includes
@@ -45,6 +45,7 @@ static vCommunicationFunctionPointer communication_packet_list[COMMUNICATION_MAX
 static void prvPingPacketHandler(xPacket_Type *pkt);
 static xCommunication_Error_Type prvAddCommunicationPacketHandler(vCommunicationFunctionPointer handler, uint8_t index);
 static void prvSendPacket(xPacket_Type *packet);
+static uint32_t prvCRC_Calculation(xPacket_Type *packet);
 
 /*******************************************************************************
  *******************************************************************************/
@@ -117,6 +118,8 @@ static void prvSendPacket(xPacket_Type *packet)
     return;    
 }
 
+/*******************************************************************************
+ *******************************************************************************/
 uint8_t charGetByte(void)
 {
     uint8_t retval;
@@ -132,6 +135,25 @@ uint8_t charGetByte(void)
     
 }
 
+/*******************************************************************************
+ *******************************************************************************/
+static uint32_t prvCRC_Calculation(xPacket_Type *packet)
+{
+    uint32_t i;
+    
+   
+    CRC_ResetDR();
+    
+    CRC->DR = packet->type;
+    CRC->DR = packet->size;
+    for (i=0; i< packet->size; i++){
+	CRC->DR = packet->data[i];	
+    }
+    
+
+    return CRC->DR;    
+}
+
 
 /*******************************************************************************
  *******************************************************************************/
@@ -142,7 +164,33 @@ void vCommunication_Task(void * pvParameters)
     xPacket_Type xPacket;
     xCommunication_Error_Type error;
     uint16_t data[8];
+    uint32_t crc;
+    uint32_t crc1;
+    uint32_t crc2;
+
+    
    
+    RCC_AHB1PeriphClockCmd( RCC_AHB1Periph_CRC, ENABLE);
+    CRC_ResetDR();
+    CRC->DR = 0x1a2b3c4d;
+    crc1 = CRC->DR;
+
+    CRC_ResetDR();
+    CRC->DR = 0x11223344;
+    crc1 = CRC->DR;
+
+    CRC_ResetDR();
+    CRC->DR = 192;
+    crc1 = CRC->DR;
+
+    CRC_ResetDR();
+    CRC->DR = 0x0000001a;
+    CRC->DR = 0x0000002b;
+    CRC->DR = 0x000000c3;
+    CRC->DR = 0x0000004d;
+    crc2 = CRC->DR;
+    RCC_AHB1PeriphClockCmd( RCC_AHB1Periph_CRC, DISABLE);	    	  
+    
     //
     // Get rid of compiler warnings
     //
@@ -165,39 +213,44 @@ void vCommunication_Task(void * pvParameters)
     //
     prvAddCommunicationPacketHandler(prvPingPacketHandler, COMMUNICATION_PACKET_PING);       
     
-//
-// Our main task loop
-//
+    //
+    // Our main task loop
+    //
     for (;;){
-//
-// Initialize our message packet for this loop
-//
+	//
+	// Initialize our message packet for this loop
+	//
 	vPacket_Init(&xMessage.packet);    
 
-//
-// Wait for the message to indicate we need to act
-//
+	//
+	// Wait for the message to indicate we need to act
+	// 
 	while( xQueueReceive( xCommunication_Queue, &xMessage, portMAX_DELAY ) != pdPASS );
 
 	if (xMessage.tx_or_rx == TRANSMIT_DATA){
-//
-// Transmit the packet
-//
+	    //
+	    // Transmit the packet
+	    // 
 	}else{
-//
-// Copy the buffer with the packet
-//  
+	    //
+	    // Copy the buffer with the packet
+	    // 
 	    ( void ) memcpy( ( void * ) &xPacket , ( void * ) &xMessage.packet, ( unsigned ) sizeof(xPacket) );
 
-//
-// TODO: Check the CRC
-//
-            
-//
-// Check if handler is installed and call it
-//
+	    //
+	    // Check the CRC
+	    // 
+	    RCC_AHB1PeriphClockCmd( RCC_AHB1Periph_CRC, ENABLE);
+	    crc = prvCRC_Calculation(&xPacket);
+	    RCC_AHB1PeriphClockCmd( RCC_AHB1Periph_CRC, DISABLE);	    	  
+	    
+	    //
+	    // Check if handler is installed and call it
+	    //
 	    if ((xPacket.type < COMMUNICATION_MAX_PACKET_TYPE)  &&
-		(communication_packet_list[xPacket.type] != (NULL)))
+		(communication_packet_list[xPacket.type] != (NULL)) && 
+		(crc == xPacket.crc)
+		)
 	    {
 
 		//

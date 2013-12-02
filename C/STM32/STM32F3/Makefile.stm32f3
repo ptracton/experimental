@@ -64,7 +64,6 @@ TAG_FILES += $(COMMON_INC)/*.h $(COMMON_SRC)/*.c
 CINCLUDES += -I$(STD_PERIPHERAL_INCLUDE)
 CINCLUDES += -I$(INC_DIR)
 
-LINK_OBJECTS += $(COMMON_OBJECTS)
 
 BUILD_LIST += $(LIST_FILE) $(HEX_FILE) $(SREC_FILE) $(BIN_FILE)
 VPATH += $(COMMON_SRC)
@@ -102,6 +101,10 @@ STD_PERIPHERAL_LIBRARY = stm32f3xx
 
 ifeq ($(LIBRARY),0)
 
+##
+## If startup_file is not defined, use the common one.
+## Else use the supplied .s file 
+##
 ifndef STARTUP_FILE
 COMMON_ASM_SOURCES += $(COMMON_SRC)/startup_stm32f30x.s
 COMMON_ASM_OBJECTS += $(patsubst $(COMMON_SRC)/%.s,$(OBJ_DIR)/%.o,$(COMMON_ASM_SOURCES))
@@ -115,10 +118,8 @@ endif
 endif
 
 ##
-## Files to link together
+## The list of steps to build the image
 ##
-LINK_OBJECTS += $(OBJECTS) 
-
 BUILD_LIST = dirs $(ELF_FILE)
 
 ##
@@ -209,7 +210,7 @@ else
 	@$(foreach c,$(BUILD_DIRS),$(MAKE) -C $(c) && ) true
 
 	@echo "Linking $(ELF_FILE)"
-	@$(LD) -o $(ELF_FILE) $(LINK_OBJECTS) $(LDFLAGS)
+	@$(LD) -o $(ELF_FILE) $(ELF_REQUIREMENTS) $(LDFLAGS)
 endif
 
 ##

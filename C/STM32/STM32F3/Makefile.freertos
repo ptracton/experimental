@@ -20,13 +20,6 @@ VPATH += $(FREE_RTOS_MEM_DIR)
 VPATH += $(FREE_RTOS_CLI_DIR)
 
 ##
-## All objects end up together
-##
-#FREE_RTOS_PORT_OBJ_DIR = $(OBJ_DIR)
-#FREE_RTOS_OBJ_DIR      = $(OBJ_DIR)
-#FREE_RTOS_MEM_OBJ_DIR  = $(OBJ_DIR)
-
-##
 ## Sources needed to make objects
 ##
 FREE_RTOS_SOURCES     = $(wildcard $(FREE_RTOS_SRC_DIR)/*.c)
@@ -56,11 +49,6 @@ ELF_REQUIREMENTS += $(FREE_RTOS_OBJECTS)
 ELF_REQUIREMENTS += $(FREE_RTOS_PORT_OBJECTS)
 ELF_REQUIREMENTS += $(OBJ_DIR)/heap_2.o
 ELF_REQUIREMENTS += $(FREE_RTOS_CLI_OBJECTS)
-
-##
-## List of objects to link together
-##
-LINK_OBJECTS += $(FREE_RTOS_OBJECTS) $(FREE_RTOS_PORT_OBJECTS) $(OBJ_DIR)/heap_2.o $(FREE_RTOS_CLI_OBJECTS)
 
 ##
 ## Files to include when making the tags

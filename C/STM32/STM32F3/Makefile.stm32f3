@@ -50,6 +50,11 @@ SOURCES     += $(wildcard $(SRC_DIR)/*.c)
 OBJECTS     += $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SOURCES))
 
 ##
+## The list of steps to build the image
+##
+BUILD_LIST += dirs $(ELF_FILE) 
+
+##
 ## If we are building an application, then LIBRARY is 0 and we need other files
 ##
 ifeq ($(LIBRARY),0)
@@ -65,8 +70,8 @@ CINCLUDES += -I$(STD_PERIPHERAL_INCLUDE)
 CINCLUDES += -I$(INC_DIR)
 
 
-BUILD_LIST += $(LIST_FILE) $(HEX_FILE) $(SREC_FILE) $(BIN_FILE)
 VPATH += $(COMMON_SRC)
+BUILD_LIST += $(LIST_FILE) $(HEX_FILE) $(SREC_FILE) $(BIN_FILE)
 #CFLAGS += -Werror
 
 ##
@@ -116,11 +121,6 @@ OBJECTS   += $(OBJ_DIR)/$(STARTUP_FILE).o
 endif
 
 endif
-
-##
-## The list of steps to build the image
-##
-BUILD_LIST = dirs $(ELF_FILE)
 
 ##
 ## ELF Target
@@ -175,7 +175,7 @@ VPATH += $(STD_PERIPHERAL_DIR)/src/
 ##
 ## The directories to make for this build.
 ##
-MAKE_DIRS += $(OBJ_DIR) $(TARGET_DIR)
+MAKE_DIRS += $(OBJ_DIR) $(TARGET_DIR) 
 
 ##
 ## These are other directories that must be build for this application
@@ -185,21 +185,25 @@ BUILD_DIRS += ../STM32F30x_StdPeriph_Driver/
 all: $(BUILD_LIST) 
 
 dirs:
-	@echo "$(TNKERNEL_PORT_ASM_OBJECTS)"
 	@echo "Making directories $(MAKE_DIRS)"
+	@echo "$(BUILD_LIST)"
 	@$(MKDIR) -p $(MAKE_DIRS)
 
 $(HEX_FILE) :$(ELF_FILE)
-	$(OBJCOPY) -Oihex $(ELF_FILE) $(HEX_FILE)
+	@echo "Creating $(HEX_FILE)"
+	@$(OBJCOPY) -Oihex $(ELF_FILE) $(HEX_FILE)
 
 $(SREC_FILE):$(ELF_FILE)
-	$(OBJCOPY) -Osrec $(ELF_FILE)  $(SREC_FILE)
+	@echo "Creating $(SREC_FILE)"
+	@$(OBJCOPY) -Osrec $(ELF_FILE)  $(SREC_FILE)
 
 $(BIN_FILE):$(ELF_FILE)
-	$(OBJCOPY) -Obinary $(ELF_FILE) $(BIN_FILE)
+	@echo "Creating $(BIN_FILE)"
+	@$(OBJCOPY) -Obinary $(ELF_FILE) $(BIN_FILE)
 
 $(LIST_FILE):$(ELF_FILE)
-	$(OBJDUMP) -S $(ELF_FILE) >  $(LIST_FILE)
+	@echo "Creating $(LIST_FILE)"
+	@$(OBJDUMP) -S $(ELF_FILE) >  $(LIST_FILE)
 
 $(ELF_FILE): $(ELF_REQUIREMENTS)
 ifeq ($(LIBRARY),1)
@@ -248,6 +252,7 @@ clean:
 	rm -rf $(MAKE_DIRS)
 	rm -rf $(COMMON_SRC)/*~
 	rm -rf $(COMMON_INC)/*~
+	rm -rf $(HEX_FILE) $(SREC_FILE) $(BIN_FILE) $(LIST_FILE)
 	find . -name "*~" | xargs rm -f 
 	rm -f TAGS
 

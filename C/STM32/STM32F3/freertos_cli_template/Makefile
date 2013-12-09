@@ -2,7 +2,7 @@
 ##
 ## Name of our project and executable
 ##
-TARGET =  freertos_template
+TARGET =  freertos_cli_template
 TARGET_DIR = executable
 LIBRARY = 0
 FREE_RTOS_USE = 1

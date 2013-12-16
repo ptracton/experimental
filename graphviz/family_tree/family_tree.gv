@@ -1,0 +1,75 @@
+digraph FamilyTree{
+	subgraph Generation0 {
+		rank = same
+		King1 [shape = box, color = blue]
+		Queen1 [shape = box, color = pink]
+		King1AndQueen1 [shape = point]
+		King1 -> King1AndQueen1 [dir = none]
+		King1AndQueen1 -> Queen1 [dir = none]
+
+		King2 [shape = box, color = blue]
+		Queen2 [shape = box, color = pink]
+		King2AndQueen2 [shape = point]
+		King2 -> King2AndQueen2 [dir = none]
+		King2AndQueen2 -> Queen2 [dir = none]				
+	}	
+	
+	subgraph Generation0Kids {
+		//
+		// Left to right layout of nodes and connections
+		//
+		rank = same		
+		PrinceA1Point [shape = point]		
+                PrincessA1Point [shape = point]		
+		PrinceA2Point [shape = point]
+
+		PrinceA1Point -> PrincessA1Point [dir = none]
+		PrincessA1Point -> PrinceA2Point [dir = none]
+		
+		PrincessB1Point [shape = point]
+		PrincessB2Point [shape = point]
+		PrinceB1Point [shape = point]
+					
+		PrincessB1Point -> PrincessB2Point [dir = none]
+		PrincessB2Point -> PrinceB1Point [dir = none]
+
+	}
+	
+	subgraph Generation1{
+		rank = same
+		PrinceA1 [shape = box, color = blue]
+		PrinceAndWifeA1 [shape = point]
+		WifeA1 [shape = box, color = pink]
+		PrinceA1 -> PrinceAndWifeA1 [dir = none]
+		PrinceAndWifeA1 -> WifeA1 [dir = none]
+		
+		PrincessA1 [shape = box, color = pink]
+		PrinceessAndHusbandA1 [shape = point]		
+		HusbandA1 [shape = box, color = blue]
+		PrincessA1 -> PrinceessAndHusbandA1 [dir = none]
+		PrinceessAndHusbandA1 -> HusbandA1 [dir = none]
+		
+		PrinceA2 [shape = box, color = blue]
+		PrinceA2AndPrincessB1 [shape = point]
+		PrinceA2 -> PrinceA2AndPrincessB1 [dir = none]
+		PrinceA2AndPrincessB1 -> PrincessB1 [dir = none]
+		
+		PrincessB1 [shape = box, color = pink]
+		PrincessB2 [shape = box, color = pink]
+		PrinceB1 [shape = box, color = blue]
+	}
+
+	//
+	// Top to bottom connections of nodes
+	//
+	King1AndQueen1 -> PrinceA1Point [dir = none]	
+	King2AndQueen2 -> PrincessB1Point [dir = none]	
+
+	PrinceA1 -> PrinceA1Point [dir = none]	
+	PrincessA1 -> PrincessA1Point [dir = none]
+	PrinceA2Point -> PrinceA2 [dir = none]
+
+	PrincessB1 -> PrincessB1Point [dir = none]	
+	PrincessB2 -> PrincessB2Point [dir = none]
+	PrinceB1 -> PrinceB1Point [dir = none]	
+}

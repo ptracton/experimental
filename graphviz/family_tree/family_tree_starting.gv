@@ -1,0 +1,94 @@
+digraph FamilyTree{
+
+//
+// People Involved
+//
+"Jacob Tracton" [shape = box, color =blue];
+"Mary Tracton" [shape = oval, color = pink];
+JacobAndMary [shape = point];
+
+"Unknown Father" [shape = box, color = blue];
+"Beatrice Bialek" [shape = oval, color = pink];
+UnknownAndBeatrice [shape=point];
+
+"Stanley Tracton" [shape = box, color =blue];
+StanleyTractonPoint [shape = point];
+"Shirley Tracton" [shape = oval, color =pink];
+StanleyAndShirley [shape = point];
+
+"Edith Tracton" [shape = oval, color =pink];
+EdithTractonPoint [shape = point];
+"Edith's Husband" [shape = box, color =blue];
+EdithMarriagePoint [shape = point];
+
+"Arthur Tracton" [shape = box, color =blue];
+ArthurTractonPoint [shape = point];
+ArthurAndMaxine [shape = point];
+"Maxine Tracton" [shape = oval, color = pink];
+MaxineTractonPoint [shape = point];
+
+"Leslie Gelber" [shape = oval, color = pink];
+LeslieGelberPoint  [shape = point];
+
+"Mark Bialek" [shape = box, color = blue];
+MarkBialekPoint  [shape = point];
+
+//"Paula Mandel" [shape = oval, color = pink];
+//"Wayne Tracton" [shape = box, color = blue];
+//"Keith Tracton" [shape = box, color = blue];
+//"Greg Tracton" [shape = box, color = blue];
+
+{
+	rank = same;
+	"Jacob Tracton"; JacobAndMary; "Mary Tracton";
+	"Unknown Father"; UnknownAndBeatrice;"Beatrice Bialek";
+}
+
+{
+	rank =same;
+	StanleyTractonPoint; EdithTractonPoint; ArthurTractonPoint;
+	MaxineTractonPoint; LeslieGelberPoint; MarkBialekPoint;		
+}
+
+{	
+	rank = same;
+	"Stanley Tracton"; StanleyAndShirley; "Shirley Tracton";
+	"Edith Tracton"; EdithMarriagePoint; "Edith's Husband"
+	"Arthur Tracton"; ArthurAndMaxine; "Maxine Tracton";
+	"Leslie Gelber"; "Mark Bialek";		
+}
+
+"Jacob Tracton" -> JacobAndMary [dir = none, style = dotted]
+JacobAndMary -> "Mary Tracton" [dir = none, style = dotted]
+
+"Unknown Father" -> UnknownAndBeatrice [dir = none, style = dotted]
+UnknownAndBeatrice -> "Beatrice Bialek"  [dir = none, style = dotted]
+
+StanleyTractonPoint -> EdithTractonPoint [dir = none]
+EdithTractonPoint -> ArthurTractonPoint [dir = none]
+JacobAndMary -> EdithTractonPoint [dir = none]
+
+MaxineTractonPoint -> LeslieGelberPoint[dir = none]
+LeslieGelberPoint -> MarkBialekPoint [dir = none]
+UnknownAndBeatrice -> LeslieGelberPoint [dir = none]
+
+StanleyTractonPoint -> "Stanley Tracton"  [dir = none]
+EdithTractonPoint -> "Edith Tracton"  [dir = none]
+ArthurTractonPoint -> "Arthur Tracton"  [dir = none]
+
+MaxineTractonPoint -> "Maxine Tracton" [dir = none]
+LeslieGelberPoint -> "Leslie Gelber"   [dir = none]
+MarkBialekPoint -> "Mark Bialek"   [dir = none]
+
+"Stanley Tracton" -> StanleyAndShirley [dir = none, style = dotted]
+StanleyAndShirley -> "Shirley Tracton" [dir = none, style = dotted]
+
+"Edith Tracton" -> EdithMarriagePoint [dir = none, style = dotted]
+EdithMarriagePoint -> "Edith's Husband" [dir = none, style = dotted]
+
+"Arthur Tracton" -> ArthurAndMaxine [dir = none, style = dotted]
+ArthurAndMaxine -> "Maxine Tracton" [dir = none, style = dotted]
+
+
+
+}

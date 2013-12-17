@@ -1,75 +1,283 @@
 digraph FamilyTree{
 	subgraph Generation0 {
 		rank = same
-		King1 [shape = box, color = blue]
-		Queen1 [shape = box, color = pink]
-		King1AndQueen1 [shape = point]
-		King1 -> King1AndQueen1 [dir = none]
-		King1AndQueen1 -> Queen1 [dir = none]
 
-		King2 [shape = box, color = blue]
-		Queen2 [shape = box, color = pink]
-		King2AndQueen2 [shape = point]
-		King2 -> King2AndQueen2 [dir = none]
-		King2AndQueen2 -> Queen2 [dir = none]				
-	}	
+		JacobTracton [shape = box, color = blue]
+		MaryTracton [shape = box, color = pink]
+		JacobTractonAndMaryTracton [shape = point]
+		JacobTracton -> JacobTractonAndMaryTracton [dir = none]
+		JacobTractonAndMaryTracton -> MaryTracton [dir = none]
+
+		UnknownBialek [shape = box, color = blue]
+		BeatricePlitch [shape = box, color = pink]
+		UnknownBialekAndBeatricePlitch [shape = point]
+		UnknownBialek -> UnknownBialekAndBeatricePlitch [dir = none]
+		UnknownBialekAndBeatricePlitch -> BeatricePlitch [dir = none]					}	
 	
 	subgraph Generation0Kids {
 		//
 		// Left to right layout of nodes and connections
 		//
 		rank = same		
-		PrinceA1Point [shape = point]		
-                PrincessA1Point [shape = point]		
-		PrinceA2Point [shape = point]
+		StanleyTractonPoint [shape = point]		
+                EdithTractonPoint [shape = point]		
+		ArthurTractonPoint [shape = point]
 
-		PrinceA1Point -> PrincessA1Point [dir = none]
-		PrincessA1Point -> PrinceA2Point [dir = none]
+		StanleyTractonPoint -> EdithTractonPoint [dir = none]
+		EdithTractonPoint -> ArthurTractonPoint [dir = none]
 		
-		PrincessB1Point [shape = point]
-		PrincessB2Point [shape = point]
-		PrinceB1Point [shape = point]
+		MaxineBialekPoint [shape = point]
+		LeslieBialekPoint [shape = point]
+		MarkBialekPoint [shape = point]
 					
-		PrincessB1Point -> PrincessB2Point [dir = none]
-		PrincessB2Point -> PrinceB1Point [dir = none]
+		MaxineBialekPoint -> LeslieBialekPoint [dir = none]
+		LeslieBialekPoint -> MarkBialekPoint [dir = none]
 
 	}
 	
 	subgraph Generation1{
 		rank = same
-		PrinceA1 [shape = box, color = blue]
-		PrinceAndWifeA1 [shape = point]
-		WifeA1 [shape = box, color = pink]
-		PrinceA1 -> PrinceAndWifeA1 [dir = none]
-		PrinceAndWifeA1 -> WifeA1 [dir = none]
+		StanleyTracton [shape = box, color = blue]
+		StanleyAndShirleyTracton [shape = point]
+		ShirleyTracton [shape = box, color = pink]
+		StanleyTracton -> StanleyAndShirleyTracton [dir = none]
+		StanleyAndShirleyTracton -> ShirleyTracton [dir = none]
 		
-		PrincessA1 [shape = box, color = pink]
-		PrinceessAndHusbandA1 [shape = point]		
-		HusbandA1 [shape = box, color = blue]
-		PrincessA1 -> PrinceessAndHusbandA1 [dir = none]
-		PrinceessAndHusbandA1 -> HusbandA1 [dir = none]
+		EdithTracton [shape = box, color = pink]
+		EdithAndEdithsHusband [shape = point]		
+		EdithsHusband [shape = box, color = blue]
+		EdithTracton -> EdithAndEdithsHusband [dir = none]
+		EdithAndEdithsHusband ->  EdithsHusband[dir = none]
 		
-		PrinceA2 [shape = box, color = blue]
-		PrinceA2AndPrincessB1 [shape = point]
-		PrinceA2 -> PrinceA2AndPrincessB1 [dir = none]
-		PrinceA2AndPrincessB1 -> PrincessB1 [dir = none]
+		ArthurTracton [shape = box, color = blue]
+		ArthurTractonAndMaxineBialek [shape = point]
+		ArthurTracton -> ArthurTractonAndMaxineBialek [dir = none]
+		ArthurTractonAndMaxineBialek -> MaxineBialek [dir = none]		
+		MaxineBialek [shape = box, color = pink]
 		
-		PrincessB1 [shape = box, color = pink]
-		PrincessB2 [shape = box, color = pink]
-		PrinceB1 [shape = box, color = blue]
+		LeslieBialek [shape = box, color = pink]
+		LeslieBialekAndLarryGelber [shape = point]
+		LarryGelber  [shape = box, color = blue]
+		LeslieBialek -> LeslieBialekAndLarryGelber [dir = none]
+		LeslieBialekAndLarryGelber -> LarryGelber [dir = none]		
+		
+		MarkBialek [shape = box, color = blue]
+		MarkBialekAndBarbaraUnknown[shape = point]
+		MarkBialek ->  MarkBialekAndBarbaraUnknown[dir = none]
+		MarkBialekAndBarbaraUnknown -> BarbaraUnknown [dir = none]		
+		BarbaraUnknown [shape = box, color = pink]		
 	}
 
+	subgraph Generation1Kids {
+	 	//
+	 	// Left to right layout of nodes and connections
+	 	//
+	 	rank = same		
+	 	PaulaTractonPoint [shape = point]
+                WayneTractonPoint [shape = point]		
+	 	KeithTractonPoint [shape = point]
+	 	GreggTractonPoint [shape = point]
+
+		PaulaTractonPoint ->WayneTractonPoint [dir =none]
+		WayneTractonPoint -> KeithTractonPoint [dir = none]
+		KeithTractonPoint -> GreggTractonPoint [dir = none]
+		
+		
+	 	EdithDaughterTractonPoint [shape = point]
+		
+	 	BethTractonPoint [shape = point]
+	 	PhilipTractonPoint [shape = point]
+		BethTractonPoint -> PhilipTractonPoint [dir = none]
+		
+		
+	 	LaurenGelberPoint [shape = point]
+	 	JennGelberPoint [shape = point]
+
+		LaurenGelberPoint -> JennGelberPoint [dir = none]		
+	}
+
+	subgraph Generation2{
+		rank = same
+		PaulaTracton [shape = box, color = pink]
+		PaulaTractonAndRichieMandel [shape = point]
+                RichieMandel [shape = box, color = blue]
+		PaulaTracton -> PaulaTractonAndRichieMandel [dir = none]
+		PaulaTractonAndRichieMandel -> RichieMandel [dir = none]
+
+                WayneTracton [shape = box, color = blue]
+		WayneTractonAndJayneWillen [shape = point]
+		JayneWillen [shape = box, color = pink]
+		WayneTracton -> WayneTractonAndJayneWillen [dir = none]	
+		WayneTractonAndJayneWillen -> JayneWillen [dir = none]	
+		
+		KeithTracton [shape = box, color = blue]
+		KeithTractonAndDebraPerez [shape = point]
+		DebraPerez [shape = box, color = pink]
+		KeithTracton -> KeithTractonAndDebraPerez [dir = none]	
+		KeithTractonAndDebraPerez -> DebraPerez [dir = none]	
+		
+		GreggTracton [shape = box, color = blue]
+		GreggTractonAndKateTracton [shape = point]
+		KateTracton [shape = box, color = pink]
+		GreggTracton -> GreggTractonAndKateTracton [dir = none]	
+		GreggTractonAndKateTracton -> KateTracton [dir = none]	
+		
+		EdithDaughter [shape = box, color = pink]
+
+		BethTracton [shape = box, color = pink]
+		BethTractonAndDaleBishop [shape = point]
+		DaleBishop [shape = box, color = blue] 
+		BethTracton -> BethTractonAndDaleBishop [dir = none]	
+		BethTractonAndDaleBishop -> DaleBishop [dir = none]	
+		
+		PhilipTracton [shape = box, color = blue]
+		PhilipTractonAndElizabethAbramson [shape = point]
+		ElizabethAbramson [shape = box, color = pink]
+		PhilipTracton -> PhilipTractonAndElizabethAbramson [dir = none]	
+		PhilipTractonAndElizabethAbramson -> ElizabethAbramson [dir = none]	
+
+		LaurenGelber [shape = box, color = pink]
+		LaurenGelberAndYaleLevy [shape = point]
+		YaleLevy [shape = box, color = blue]
+		LaurenGelber -> LaurenGelberAndYaleLevy [dir = none]	
+		LaurenGelberAndYaleLevy -> YaleLevy [dir = none]	
+		
+		JennGelber [shape = box, color = pink]
+		JennGelberAndMarkUnknown [shape = point]
+		MarkUnkown [shape = box, color = blue]
+		JennGelber -> JennGelberAndMarkUnknown[dir = none]	
+		JennGelberAndMarkUnknown -> MarkUnkown [dir = none]	
+	}
+
+	subgraph Generation2Kids {
+	 	//
+	 	// Left to right layout of nodes and connections
+	 	//
+	 	rank = same		
+	 	MichaelMandelPoint [shape = point]
+		LaurenMandelPoint [shape = point]
+		MichaelMandelPoint -> LaurenMandelPoint [dir = none]
+		
+		JustinTractonPoint [shape = point]
+
+		IanTractonPoint [shape = point]
+		KeithKidPoint [shape = point]
+		IanTractonPoint -> KeithKidPoint [dir = none]
+
+		AylesTractonBishopPoint [shape = point]
+
+		KaitlynTractonPoint [shape = point]
+		EmilyTractonPoint [shape = point]
+		KaitlynTractonPoint -> EmilyTractonPoint [dir = none]		
+
+		LaurenKid1Point [shape = point]
+		LaurenKid2Point [shape = point]
+		LaurenKid3Point [shape = point]
+		LaurenKid1Point -> LaurenKid2Point [dir = none]
+		LaurenKid2Point -> LaurenKid3Point [dir = none]		 
+
+		JennKid1Point [shape =point]
+	}
+
+	subgraph Generation3{
+		rank = same
+		MichaelMandel [shape = box, color = blue]
+		MichaelMandelAndWife [shape = point]
+		MichaelMandelWife [shape = box, color = pink]
+		MichaelMandel -> MichaelMandelAndWife [dir = none]
+		MichaelMandelAndWife -> MichaelMandelWife [dir = none]
+		
+		LaurenMandel [shape = box, color = pink]
+
+		JustinTracton [shape = box, color = blue]
+
+		IanTracton [shape = box, color = blue]
+		KeithKid [shape = box, color = blue]
+
+		AylesTractonBishop [shape = box, color = pink]
+
+		KaitlynTracton [shape = box, color = pink]
+		EmilyTracton [shape = box, color = pink]
+
+		LaurenKid1 [shape = box, color = blue]
+		LaurenKid2 [shape = box, color = blue]
+		LaurenKid3 [shape = box, color = blue]
+		
+		JennKid1 [shape = box, color = pink]
+        }
+
+	subgraph Generation3Kids {
+	 	//
+	 	// Left to right layout of nodes and connections
+	 	//
+	 	rank = same		
+	 	MichaelMandelKidPoint [shape = point]
+	}
+
+	subgraph Generation4{
+		MichaelMandelKid [shape = box, color = blue]
+        }
+	
 	//
 	// Top to bottom connections of nodes
 	//
-	King1AndQueen1 -> PrinceA1Point [dir = none]	
-	King2AndQueen2 -> PrincessB1Point [dir = none]	
+	JacobTractonAndMaryTracton -> StanleyTractonPoint [dir = none]	
+	UnknownBialekAndBeatricePlitch -> MaxineBialekPoint [dir = none]	
 
-	PrinceA1 -> PrinceA1Point [dir = none]	
-	PrincessA1 -> PrincessA1Point [dir = none]
-	PrinceA2Point -> PrinceA2 [dir = none]
+	StanleyTracton -> StanleyTractonPoint [dir = none]	
+	EdithTracton -> EdithTractonPoint [dir = none]
+	ArthurTractonPoint -> ArthurTracton [dir = none]
 
-	PrincessB1 -> PrincessB1Point [dir = none]	
-	PrincessB2 -> PrincessB2Point [dir = none]
-	PrinceB1 -> PrinceB1Point [dir = none]	
+	MaxineBialek -> MaxineBialekPoint [dir = none]	
+	LeslieBialek -> LeslieBialekPoint [dir = none]
+	MarkBialek -> MarkBialekPoint [dir = none]
+
+	StanleyAndShirleyTracton -> WayneTractonPoint [dir = none]
+	PaulaTractonPoint -> PaulaTracton [dir = none]
+	WayneTractonPoint -> WayneTracton [dir = none]
+	KeithTractonPoint -> KeithTracton [dir = none]
+	GreggTractonPoint -> GreggTracton [dir = none]
+
+	EdithAndEdithsHusband -> EdithDaughterTractonPoint [dir= none]
+	EdithDaughter -> EdithDaughterTractonPoint [dir = none]
+	
+	ArthurTractonAndMaxineBialek-> BethTractonPoint [dir = none]
+	BethTractonPoint -> BethTracton [dir = none]
+	PhilipTractonPoint -> PhilipTracton [dir = none]
+
+	LeslieBialekAndLarryGelber -> LaurenGelberPoint [dir = none]
+	LaurenGelberPoint -> LaurenGelber [dir = none]
+	JennGelberPoint -> JennGelber [dir = none]
+
+	PaulaTractonAndRichieMandel -> MichaelMandelPoint [dir = none]
+	MichaelMandelPoint -> MichaelMandel [dir = none]
+	LaurenMandelPoint -> LaurenMandel [dir = none]
+
+	WayneTracton -> JustinTractonPoint [dir = none]
+	JustinTractonPoint -> JustinTracton [dir = none]
+
+	KeithTracton -> IanTractonPoint [dir = none]
+	IanTractonPoint -> IanTracton [dir = none]
+	KeithKidPoint -> KeithKid [dir = none]
+	
+	BethTractonAndDaleBishop -> AylesTractonBishopPoint [dir = none]
+	AylesTractonBishopPoint -> AylesTractonBishop [dir = none]
+
+	PhilipTractonAndElizabethAbramson -> KaitlynTractonPoint [dir =none]
+	KaitlynTractonPoint -> KaitlynTracton [dir = none]
+	EmilyTractonPoint -> EmilyTracton [dir = none]
+
+	LaurenGelberAndYaleLevy -> LaurenKid2Point [dir = none]
+	LaurenKid1Point -> LaurenKid1 [dir = none]
+	LaurenKid2Point -> LaurenKid2 [dir = none]
+	LaurenKid3Point -> LaurenKid3 [dir = none]
+
+	JennGelberAndMarkUnknown -> JennKid1Point[ dir = none]
+	JennKid1Point -> JennKid1 [dir = none]
+
+	MichaelMandelAndWife -> MichaelMandelKidPoint [dir =  none]
+	MichaelMandelKidPoint -> MichaelMandelKid [dir = none]
+
 }
+
+

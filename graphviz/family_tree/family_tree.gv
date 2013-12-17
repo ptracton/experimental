@@ -12,7 +12,21 @@ digraph FamilyTree{
 		BeatricePlitch [shape = box, color = pink]
 		UnknownBialekAndBeatricePlitch [shape = point]
 		UnknownBialek -> UnknownBialekAndBeatricePlitch [dir = none]
-		UnknownBialekAndBeatricePlitch -> BeatricePlitch [dir = none]					}	
+		UnknownBialekAndBeatricePlitch -> BeatricePlitch [dir = none]
+
+		MarksFather [shape = box, color = blue]
+		MarksMother [shape = box, color = pink]
+		MarksFatherAndMarksMother [shape = point]
+		MarksFather ->  MarksFatherAndMarksMother[dir = none]
+		MarksFatherAndMarksMother -> MarksMother [dir = none]
+
+		IlenesFather [shape = box, color = blue]
+		IlenesMother [shape = box, color = pink]
+		IlenesFatherAndIlenesMother [shape = point]
+		IlenesFather ->  IlenesFatherAndIlenesMother[dir = none]
+		IlenesFatherAndIlenesMother -> IlenesMother [dir = none]		
+		
+        }	
 	
 	subgraph Generation0Kids {
 		//
@@ -33,6 +47,9 @@ digraph FamilyTree{
 		MaxineBialekPoint -> LeslieBialekPoint [dir = none]
 		LeslieBialekPoint -> MarkBialekPoint [dir = none]
 
+		MarkAbramsonPoint [shape = point]
+		IleneSimmonsPoint [shape = point]
+		
 	}
 	
 	subgraph Generation1{
@@ -65,7 +82,13 @@ digraph FamilyTree{
 		MarkBialekAndBarbaraUnknown[shape = point]
 		MarkBialek ->  MarkBialekAndBarbaraUnknown[dir = none]
 		MarkBialekAndBarbaraUnknown -> BarbaraUnknown [dir = none]		
-		BarbaraUnknown [shape = box, color = pink]		
+		BarbaraUnknown [shape = box, color = pink]
+
+		MarkAbramson[shape = box, color = blue]
+		MarkAbramsonAndIleneSimmons [shape = point]
+		MarkAbramson -> MarkAbramsonAndIleneSimmons [dir = none]
+		MarkAbramsonAndIleneSimmons -> IleneSimmons [dir = none]		
+		IleneSimmons [shape = box, color = pink]		
 	}
 
 	subgraph Generation1Kids {
@@ -81,14 +104,18 @@ digraph FamilyTree{
 		PaulaTractonPoint ->WayneTractonPoint [dir =none]
 		WayneTractonPoint -> KeithTractonPoint [dir = none]
 		KeithTractonPoint -> GreggTractonPoint [dir = none]
-		
-		
+				
 	 	EdithDaughterTractonPoint [shape = point]
 		
 	 	BethTractonPoint [shape = point]
 	 	PhilipTractonPoint [shape = point]
 		BethTractonPoint -> PhilipTractonPoint [dir = none]
-		
+
+		ElizabethAbramsonPoint [shape = point]
+		DanielAbramsonPoint [shape = point]
+		ElizabethAbramsonPoint -> DanielAbramsonPoint [dir = none]
+
+		AndreaFrankelPoint [shape = point] 
 		
 	 	LaurenGelberPoint [shape = point]
 	 	JennGelberPoint [shape = point]
@@ -136,6 +163,12 @@ digraph FamilyTree{
 		PhilipTracton -> PhilipTractonAndElizabethAbramson [dir = none]	
 		PhilipTractonAndElizabethAbramson -> ElizabethAbramson [dir = none]	
 
+		DanielAbramson [shape = box, color = blue]
+		DanielAbramsonAndAndreaFrankel [shape = point]		
+		AndreaFrankel [shape = box, color = pink]
+		DanielAbramson -> DanielAbramsonAndAndreaFrankel [dir = none]
+		DanielAbramsonAndAndreaFrankel -> AndreaFrankel [dir = none]
+		
 		LaurenGelber [shape = box, color = pink]
 		LaurenGelberAndYaleLevy [shape = point]
 		YaleLevy [shape = box, color = blue]
@@ -240,11 +273,21 @@ digraph FamilyTree{
 
 	EdithAndEdithsHusband -> EdithDaughterTractonPoint [dir= none]
 	EdithDaughter -> EdithDaughterTractonPoint [dir = none]
-	
+		
 	ArthurTractonAndMaxineBialek-> BethTractonPoint [dir = none]
 	BethTractonPoint -> BethTracton [dir = none]
 	PhilipTractonPoint -> PhilipTracton [dir = none]
 
+	MarksFatherAndMarksMother -> MarkAbramsonPoint [dir = none]
+	MarkAbramsonPoint -> MarkAbramson [dir = none]
+
+	IlenesFatherAndIlenesMother -> IleneSimmonsPoint [dir = none]
+	IleneSimmonsPoint -> IleneSimmons [dir = none]
+	
+//	MarkAbramsonAndIleneSimmons ->DanielAbramsonPoint [dir = none]
+	ElizabethAbramsonPoint -> ElizabethAbramson [dir = none]
+	DanielAbramsonPoint -> DanielAbramson [dir = none]
+	
 	LeslieBialekAndLarryGelber -> LaurenGelberPoint [dir = none]
 	LaurenGelberPoint -> LaurenGelber [dir = none]
 	JennGelberPoint -> JennGelber [dir = none]

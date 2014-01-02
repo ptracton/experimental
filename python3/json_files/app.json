@@ -1,0 +1,53 @@
+{
+    "application": "json_test_app",
+    "installed tools": [
+        "xilinx",
+        "altera",
+        "icarus"
+    ],
+    "recent_projects": {
+        "proj1": "/home/ptracton/proj1",
+        "proj2": "/home/ptracton/proj2"
+    },
+    "flow_steps": {
+	"1" : "compile",
+	"2" : "simulation"
+    },
+    "flow" : {
+	"compile" : {
+	    "default" : "",
+	    "executable": "make",
+	    "arguments" : ""	
+	},
+	"simulation" : {
+	    "default" : "icarus",
+	    "icarus" : {
+		"executable" :"iverilog",
+		"arguments": "",
+		"synthesis" : "",
+		"root" : "",
+		"sub_root" : "",
+		"version" : "",
+		"available_versions" : []
+	    },
+	    "xilinx" : {
+		"executable" : "isim",
+		"arguments" : "",
+		"synthesis" : "ise",
+		"root" : "/opt/Xilinx/",
+		"sub_root" : "/ISE_DS/ISE/",
+		"version" : "14.3",
+		"available_versions" : ["13.3", "14.1", "14.3"]
+	    },
+	    "altera" : {
+		"executable" : "vsim",
+		"arguments" : "",
+		"synthesis" : "quartus",
+		"root" : "/opt/altera/",
+		"sub_root" : "/quartus/",
+		"version" : "12.1",
+		"available_versions" : ["11.1", "12.1"]
+	    }
+	}
+    }
+}

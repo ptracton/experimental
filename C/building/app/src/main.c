@@ -11,8 +11,8 @@ int main(void)
     FOO_Type foo;
     foo.foo = 5;
     foo.bar = foo.foo;
-    
-    lib1_call();
+    foo.
+    Lib1_call();
     lib2_call();
     common_call();
     return 0;    

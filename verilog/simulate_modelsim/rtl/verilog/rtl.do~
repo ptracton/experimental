@@ -1,0 +1,3 @@
+vlog -work work ../../rtl/verilog/top_level.v
+vlog -work work ../../bench/verilog/dump.v
+vlog -work work ../../bench/verilog/testbench.v

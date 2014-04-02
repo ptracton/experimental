@@ -1,0 +1,31 @@
+{
+    "flow_steps": {
+	"1" : "clean",
+	"2" : "build_software",
+	"3" : "data2mem",
+	"4" : "build_hardware",
+	"5" : "simulation"
+    },
+    "flow" : {
+	"clean" :{
+	    "executable" : "rm",
+	    "arguments" : "-f dump.vcd  fuse.log  fuse.xmsgs  fuseRelaunch.cmd  isim  isim.log  isim.wdb  simulation.exe *.mem"
+	},
+	"build_software":{
+	    "executable" : "make",
+	    "arguments" : " -C ../../software/applications/Debug/"
+	},
+	"data2mem":{
+	    "executable" : "data2mem",
+	    "arguments" : " -p xc6slx16-csg324-3 -bm ../../fpga/ipcore_dir/microblaze_mcs_v1_4.bmm -bd ../../software/applications/Debug/simple_application.elf -bx . -u"
+	},
+	"build_hardware" :{
+	    "executable" : "fuse",
+	    "arguments" : "work.glbl work.testbench -L unisims_ver -L unimacro_ver -L xilinxcorelib_ver -prj ../../tools/simple.f -o simulation.exe"
+	},
+	"simulation" : {
+	    "executable": "simulation.exe",
+	    "arguments" : "-tclbatch simulation.tcl -gui -view simple.wcfg"	
+	}
+    }
+}

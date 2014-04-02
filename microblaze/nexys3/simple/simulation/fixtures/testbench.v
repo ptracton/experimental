@@ -66,7 +66,8 @@ module testbench;
       #2000;
       	     
       // Add stimulus here
-      $stop;          
+      $display("TEST DONE: %d", $time);      
+      $finish;          
    end
    dump dump0();
    

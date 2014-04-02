@@ -3,15 +3,15 @@
    <wave_state>
    </wave_state>
    <db_ref_list>
-      <db_ref path="/data/pace/scratch03/tractp1/src/experimental/microblaze/nexys3/simple/fpga/testbench_isim_beh.wdb" id="1" type="auto">
+      <db_ref path="./isim.wdb" id="1" type="auto">
          <top_modules>
             <top_module name="glbl" />
             <top_module name="testbench" />
          </top_modules>
       </db_ref>
    </db_ref_list>
-   <WVObjectSize size="3" />
-   <wvobject fp_name="group6" type="group">
+   <WVObjectSize size="4" />
+   <wvobject fp_name="group7" type="group">
       <obj_property name="label">TESTBENCH</obj_property>
       <obj_property name="DisplayName">label</obj_property>
       <wvobject fp_name="/testbench/XREADY" type="logic" db_ref_id="1">
@@ -34,8 +34,12 @@
          <obj_property name="ElementShortName">XGPI[31:0]</obj_property>
          <obj_property name="ObjectShortName">XGPI[31:0]</obj_property>
       </wvobject>
+      <wvobject fp_name="/testbench/impl1" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">impl1[0:0]</obj_property>
+         <obj_property name="ObjectShortName">impl1[0:0]</obj_property>
+      </wvobject>
    </wvobject>
-   <wvobject fp_name="group39" type="group">
+   <wvobject fp_name="group40" type="group">
       <obj_property name="label">UUT</obj_property>
       <obj_property name="DisplayName">label</obj_property>
       <wvobject fp_name="/testbench/uut/XCLK" type="logic" db_ref_id="1">
@@ -167,8 +171,60 @@
          <obj_property name="ObjectShortName">Trace_MB_Halted</obj_property>
       </wvobject>
    </wvobject>
-   <wvobject fp_name="group68" type="group">
-      <obj_property name="label">SLAVE 0</obj_property>
+   <wvobject fp_name="group53" type="group">
+      <obj_property name="label">SYSCON</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject fp_name="/testbench/uut/sys_con/XCLK" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">XCLK</obj_property>
+         <obj_property name="ObjectShortName">XCLK</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/sys_con/XRESET" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">XRESET</obj_property>
+         <obj_property name="ObjectShortName">XRESET</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/sys_con/XREADY" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">XREADY</obj_property>
+         <obj_property name="ObjectShortName">XREADY</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/sys_con/clk" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">clk</obj_property>
+         <obj_property name="ObjectShortName">clk</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/sys_con/reset" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">reset</obj_property>
+         <obj_property name="ObjectShortName">reset</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/sys_con/xclk_buf" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">xclk_buf</obj_property>
+         <obj_property name="ObjectShortName">xclk_buf</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/sys_con/LOCKED" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">LOCKED</obj_property>
+         <obj_property name="ObjectShortName">LOCKED</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/sys_con/dcm_clk_out" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">dcm_clk_out</obj_property>
+         <obj_property name="ObjectShortName">dcm_clk_out</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/sys_con/STATUS" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">STATUS[7:0]</obj_property>
+         <obj_property name="ObjectShortName">STATUS[7:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/sys_con/dcm_reset" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">dcm_reset</obj_property>
+         <obj_property name="ObjectShortName">dcm_reset</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/sys_con/reset_count" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">reset_count[4:0]</obj_property>
+         <obj_property name="ObjectShortName">reset_count[4:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/sys_con/dcm_reset_count" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">dcm_reset_count[3:0]</obj_property>
+         <obj_property name="ObjectShortName">dcm_reset_count[3:0]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="group82" type="group">
+      <obj_property name="label">SLAVE</obj_property>
       <obj_property name="DisplayName">label</obj_property>
       <wvobject fp_name="/testbench/uut/slave0/clk" type="logic" db_ref_id="1">
          <obj_property name="ElementShortName">clk</obj_property>

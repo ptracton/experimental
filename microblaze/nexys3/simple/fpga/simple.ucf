@@ -1,0 +1,103 @@
+## This file is a general .ucf for Nexys3 rev B board
+## To use it in a project:
+## - remove or comment the lines corresponding to unused pins
+## - rename the used signals according to the project
+
+## Clock signal
+NET "XCLK"            LOC = "V10" | IOSTANDARD = "LVCMOS33";   #Bank = 2, pin name = IO_L30N_GCLK0_USERCCLK,            Sch name = GCLK
+#Net "XCLK" TNM_NET = sys_clk_pin;
+#TIMESPEC TS_sys_clk_pin = PERIOD sys_clk_pin 100000 kHz;
+
+## onBoard USB controller
+## NOTE: DEPP and DSTM net names use some of the same pins, if trying to use both DEPP and DSTM use a signle net name for each shared pin.
+
+## Data bus for both the DEPP and DSTM interfaces uncomment lines 15-22 if using either one
+#NET "DB<0>"          LOC = "E1"  | IOSTANDARD = "LVCMOS33";   #Bank = 3, Pin name = IO_L50N_M3BA2,                     Sch name = U-FD0
+#NET "DB<1>"          LOC = "F4"  | IOSTANDARD = "LVCMOS33";   #Bank = 3, Pin name = IO_L51P_M3A10,                     Sch name = U-FD1
+#NET "DB<2>"          LOC = "F3"  | IOSTANDARD = "LVCMOS33";   #Bank = 3, Pin name = IO_L51N_M3A4,                      Sch name = U-FD2
+#NET "DB<3>"          LOC = "D2"  | IOSTANDARD = "LVCMOS33";   #Bank = 3, Pin name = IO_L52P_M3A8,                      Sch name = U-FD3
+#NET "DB<4>"          LOC = "D1"  | IOSTANDARD = "LVCMOS33";   #Bank = 3, Pin name = IO_L52N_M3A9,                      Sch name = U-FD4
+#NET "DB<5>"          LOC = "H7"  | IOSTANDARD = "LVCMOS33";   #Bank = 3, Pin name = IO_L53P_M3CKE,                     Sch name = U-FD5
+#NET "DB<6>"          LOC = "G6"  | IOSTANDARD = "LVCMOS33";   #Bank = 3, Pin name = IO_L53N_M3A12,                     Sch name = U-FD6
+#NET "DB<7>"          LOC = "E4"  | IOSTANDARD = "LVCMOS33";   #Bank = 3, Pin name = IO_L54P_M3RESET,                   Sch name = U-FD7
+
+
+#NET "XGPO<1>"      LOC = "K18" | IOSTANDARD = "LVCMOS33";   #Bank = 1, Pin name = IO_L45N_A0_M1LDQSN,                Sch name = P30-A0
+#NET "XGPO<2>"      LOC = "K17" | IOSTANDARD = "LVCMOS33";   #Bank = 1, Pin name = IO_L45P_A1_M1LDQS,                 Sch name = P30-A1
+#NET "XGPO<3>"      LOC = "J18" | IOSTANDARD = "LVCMOS33";   #Bank = 1, Pin name = IO_L44N_A2_M1DQ7,                  Sch name = P30-A2
+#NET "XGPO<4>"      LOC = "J16" | IOSTANDARD = "LVCMOS33";   #Bank = 1, Pin name = IO_L44P_A3_M1DQ6,                  Sch name = P30-A3
+#NET "XGPO<5>"      LOC = "G18" | IOSTANDARD = "LVCMOS33";   #Bank = 1, Pin name = IO_L38N_A4_M1CLKN,                 Sch name = P30-A4
+#NET "XGPO<6>"      LOC = "G16" | IOSTANDARD = "LVCMOS33";   #Bank = 1, Pin name = IO_L38P_A5_M1CLK,                  Sch name = P30-A5
+#NET "XGPO<7>"      LOC = "H16" | IOSTANDARD = "LVCMOS33";   #Bank = 1, Pin name = IO_L37N_A6_M1A1,                   Sch name = P30-A6
+#NET "XGPO<8>"      LOC = "H15" | IOSTANDARD = "LVCMOS33";   #Bank = 1, Pin name = IO_L37P_A7_M1A0,                   Sch name = P30-A7
+#NET "XGPO<9>"      LOC = "H14" | IOSTANDARD = "LVCMOS33";   #Bank = 1, Pin name = IO_L36N_A8_M1BA1,                  Sch name = P30-A8
+#NET "XGPO<10>"     LOC = "H13" | IOSTANDARD = "LVCMOS33";   #Bank = 1, Pin name = IO_L36P_A9_M1BA0,                  Sch name = P30-A9
+#NET "XGPO<11>"     LOC = "F18" | IOSTANDARD = "LVCMOS33";   #Bank = 1, Pin name = IO_L35N_A10_M1A2,                  Sch name = P30-A10
+#NET "XGPO<12>"     LOC = "F17" | IOSTANDARD = "LVCMOS33";   #Bank = 1, Pin name = IO_L35P_A11_M1A7,                  Sch name = P30-A11
+#NET "XGPO<13>"     LOC = "K13" | IOSTANDARD = "LVCMOS33";   #Bank = 1, Pin name = IO_L34N_A12_M1BA2,                 Sch name = P30-A12
+#NET "XGPO<14>"     LOC = "K12" | IOSTANDARD = "LVCMOS33";   #Bank = 1, Pin name = IO_L34P_A13_M1WE,                  Sch name = P30-A13
+#NET "XGPO<15>"     LOC = "E18" | IOSTANDARD = "LVCMOS33";   #Bank = 1, Pin name = IO_L33N_A14_M1A4,                  Sch name = P30-A14
+#NET "XGPO<16>"     LOC = "E16" | IOSTANDARD = "LVCMOS33";   #Bank = 1, Pin name = IO_L33P_A15_M1A10,                 Sch name = P30-A15
+#NET "XGPO<17>"     LOC = "G13" | IOSTANDARD = "LVCMOS33";   #Bank = 1, Pin name = IO_L32N_A16_M1A9,                  Sch name = P30-A16
+#NET "XGPO<18>"     LOC = "H12" | IOSTANDARD = "LVCMOS33";   #Bank = 1, Pin name = IO_L32P_A17_M1A8,                  Sch name = P30-A17
+#NET "XGPO<19>"     LOC = "D18" | IOSTANDARD = "LVCMOS33";   #Bank = 1, Pin name = IO_L31N_A18_M1A12,                 Sch name = P30-A18
+#NET "XGPO<20>"     LOC = "D17" | IOSTANDARD = "LVCMOS33";   #Bank = 1, Pin name = IO_L31P_A19_M1CKE,                 Sch name = P30-A19
+#NET "XGPO<21>"     LOC = "G14" | IOSTANDARD = "LVCMOS33";   #Bank = 1, Pin name = IO_L30N_A20_M1A11,                 Sch name = P30-A20
+#NET "XGPO<22>"     LOC = "F14" | IOSTANDARD = "LVCMOS33";   #Bank = 1, Pin name = IO_L30P_A21_M1RESET                Sch name = P30-A21
+#NET "XGPO<23>"     LOC = "C18" | IOSTANDARD = "LVCMOS33";   #Bank = 1, Pin name = IO_L29N_A22_M1A14,                 Sch name = P30-A22
+#NET "XGPO<24>"     LOC = "C17" | IOSTANDARD = "LVCMOS33";   #Bank = 1, Pin name = IO_L29P_A23_M1A13,                 Sch name = P30-A23
+#NET "XGPO<25>"     LOC = "F16" | IOSTANDARD = "LVCMOS33";   #Bank = 1, Pin name = IO_L1N_A24_VREF,                   Sch name = P30-A24
+#NET "XGPO<26>"     LOC = "F15" | IOSTANDARD = "LVCMOS33";   #Bank = 1, Pin name = IO_L1P_A25,                        Sch name = P30-A25
+
+#NET "XGPI<0>"       LOC = "R13" | IOSTANDARD = "LVCMOS33";   #Ram or Numonyx Paralell Flash DB<0>, or Dual/Quad SPI Flash DB<1>, Bank = MISC, Pin name = IO_L3P_D0_DIN_MISO_MISO1_2,     Sch name = P30-DQ0
+#NET "XGPI<1>"       LOC = "T14" | IOSTANDARD = "LVCMOS33";   #Ram or Numonyx Paralell Flash DB<1>, or Quad SPI Flash DB<2>, Bank = MISC, Pin name = IO_L12P_D1_MISO2_2,                      Sch name = P30-DQ1
+#NET "XGPI<2>"       LOC = "V14" | IOSTANDARD = "LVCMOS33";   #Ram or Numonyx Paralell Flash DB<2>, or Quad SPI Flash DB<3>, Bank = MISC, Pin name = IO_L12N_D2_MISO3_2,                      Sch name = P30-DQ2
+#NET "XGPI<3>"       LOC = "U5"  | IOSTANDARD = "LVCMOS33";   #Bank = 2, Pin name = IO_49P_D3,                         Sch name = P30-DQ3
+#NET "XGPI<4>"       LOC = "V5"  | IOSTANDARD = "LVCMOS33";   #Bank = 2, Pin name = IO_49N_D4,                         Sch name = P30-DQ4
+#NET "XGPI<5>"       LOC = "R3"  | IOSTANDARD = "LVCMOS33";   #Bank = 2, Pin name = IO_L62P_D5,                        Sch name = P30-DQ5
+#NET "XGPI<6>"       LOC = "T3"  | IOSTANDARD = "LVCMOS33";   #Bank = 2, Pin name = IO_L62N_D6,                        Sch name = P30-DQ6
+#NET "XGPI<7>"       LOC = "R5"  | IOSTANDARD = "LVCMOS33";   #Bank = 2, Pin name = IO_L48P_D7,                        Sch name = P30-DQ7
+#NET "XGPI<8>"       LOC = "N5"  | IOSTANDARD = "LVCMOS33";   #Bank = 2, Pin name = IO_L64P_D8,                        Sch name = P30-DQ8
+#NET "XGPI<9>"       LOC = "P6"  | IOSTANDARD = "LVCMOS33";   #Bank = 2, Pin name = IO_L64N_D9,                        Sch name = P30-DQ9
+#NET "XGPI<10>"      LOC = "P12" | IOSTANDARD = "LVCMOS33";   #Bank = 2, Pin name = IO_L13N_D10,                       Sch name = P30-DQ10
+#NET "XGPI<11>"      LOC = "U13" | IOSTANDARD = "LVCMOS33";   #Bank = 2, Pin name = IO_L14P_D11,                       Sch name = P30-DQ11
+#NET "XGPI<12>"      LOC = "V13" | IOSTANDARD = "LVCMOS33";   #Bank = 2, Pin name = IO_L14N_D12,                       Sch name = P30-DQ12
+#NET "XGPI<13>"      LOC = "U10" | IOSTANDARD = "LVCMOS33";   #Bank = 2, Pin name = IO_L30P_GCLK1_D13,                 Sch name = P30-DQ13
+#NET "XGPI<14>"      LOC = "R8"  | IOSTANDARD = "LVCMOS33";   #Bank = 2, Pin name = IO_L31P_GCLK31_D14,                Sch name = P30-DQ14
+#NET "XGPI<15>"      LOC = "T8"  | IOSTANDARD = "LVCMOS33";   #Bank = 2, Pin name = IO_L31N_GCLK30_D15,                Sch name = P30-DQ15
+
+
+## 7 segment display
+#NET "XGPO<27>"         LOC = "T17" | IOSTANDARD = "LVCMOS33";   #Bank = 1, Pin name = IO_L51P_M1DQ12,                    Sch name = CA
+#NET "XGPO<28>"         LOC = "T18" | IOSTANDARD = "LVCMOS33";   #Bank = 1, Pin name = IO_L51N_M1DQ13,                    Sch name = CB
+#NET "XGPO<29>"         LOC = "U17" | IOSTANDARD = "LVCMOS33";   #Bank = 1, Pin name = IO_L52P_M1DQ14,                    Sch name = CC
+#NET "XGPO<30>"         LOC = "U18" | IOSTANDARD = "LVCMOS33";   #Bank = 1, Pin name = IO_L52N_M1DQ15,                    Sch name = CD
+#NET "XGPO<31>"         LOC = "M14" | IOSTANDARD = "LVCMOS33";   #Bank = 1, Pin name = IO_L53P,                           Sch name = CE
+
+
+## Leds
+#NET "XGPI<16>"         LOC = "U16" | IOSTANDARD = "LVCMOS33";   #Bank = 2, Pin name = IO_L2P_CMPCLK,                     Sch name = LD0
+#NET "XGPI<17>"         LOC = "V16" | IOSTANDARD = "LVCMOS33";   #Bank = 2, Pin name = IO_L2N_CMPMOSI,                    Sch name = LD1
+#NET "XGPI<18>"         LOC = "U15" | IOSTANDARD = "LVCMOS33";   #Bank = 2, Pin name = IO_L5P,                            Sch name = LD2
+#NET "XGPI<19>"         LOC = "V15" | IOSTANDARD = "LVCMOS33";   #Bank = 2, Pin name = IO_L5N,                            Sch name = LD3
+#NET "XGPI<20>"         LOC = "M11" | IOSTANDARD = "LVCMOS33";   #Bank = 2, Pin name = IO_L15P,                           Sch name = LD4
+#NET "XGPI<21>"         LOC = "N11" | IOSTANDARD = "LVCMOS33";   #Bank = 2, Pin name = IO_L15N,                           Sch name = LD5
+#NET "XGPI<22>"         LOC = "R11" | IOSTANDARD = "LVCMOS33";   #Bank = 2, Pin name = IO_L16P,                           Sch name = LD6
+#NET "XGPI<23>"         LOC = "T11" | IOSTANDARD = "LVCMOS33";   #Bank = 2, Pin name = IO_L16N_VREF,                      Sch name = LD7
+
+
+## Switches
+#NET "XGPI<24>"          LOC = "T10" | IOSTANDARD = "LVCMOS33";   #Bank = 2, Pin name = IO_L29N_GCLK2,                     Sch name = XGPI0
+#NET "XGPI<25>"          LOC = "T9"  | IOSTANDARD = "LVCMOS33";   #Bank = 2, Pin name = IO_L32P_GCLK29,                    Sch name = XGPI1
+#NET "XGPI<26>"          LOC = "V9"  | IOSTANDARD = "LVCMOS33";   #Bank = 2, Pin name = IO_L32N_GCLK28,                    Sch name = XGPI2
+#NET "XGPI<27>"          LOC = "M8"  | IOSTANDARD = "LVCMOS33";   #Bank = 2, Pin name = IO_L40P,                           Sch name = XGPI3
+#NET "XGPI<28>"          LOC = "N8"  | IOSTANDARD = "LVCMOS33";   #Bank = 2, Pin name = IO_L40N,                           Sch name = XGPI4
+#NET "XGPI<29>"          LOC = "U8"  | IOSTANDARD = "LVCMOS33";   #Bank = 2, Pin name = IO_L41P,                           Sch name = XGPI5
+#NET "XGPI<30>"          LOC = "V8"  | IOSTANDARD = "LVCMOS33";   #Bank = 2, Pin name = IO_L41N_VREF,                      Sch name = XGPI6
+#NET "XGPI<31>"          LOC = "T5"  | IOSTANDARD = "LVCMOS33";   #Bank = MISC, Pin name = IO_L48N_RDWR_B_VREF_2,          Sch name = XGPI7
+
+
+## Buttons
+#NET "XRESET"         LOC = "B8"  | IOSTANDARD = "LVCMOS33";   #Bank = 0, Pin name = IO_L33P,                           Sch name = BTNS
+#NET "XREADY"         LOC = "A8"  | IOSTANDARD = "LVCMOS33";   #Bank = 0, Pin name = IO_L33N,                           Sch name = BTNU
+

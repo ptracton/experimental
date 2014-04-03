@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- IMPORTANT: This is an internal file that has been generated
+     by the Xilinx ISE software.  Any direct editing or
+     changes made to this file may result in unpredictable
+     behavior or data corruption.  It is strongly advised that
+     users do not edit the contents of this file. -->
+<messages>
+<msg type="warning" file="HDLCompiler" num="687" delta="unknown" >"/opt/Xilinx/14.7/ISE_DS/ISE//verilog/src/glbl.v" Line 5: Illegal redeclaration of module &lt;<arg fmt="%s" index="1">glbl</arg>&gt;.
+</msg>
+
+<msg type="warning" file="HDLCompiler" num="1016" delta="unknown" >"/home/ptracton/src/software/experimental/microblaze/nexys3/uart/fpga/../rtl/top.v" Line 63: Port <arg fmt="%s" index="1">GPI1_Interrupt</arg> is not connected to this instance
+</msg>
+
+<msg type="warning" file="HDLCompiler" num="1007" delta="unknown" >"/build/xfndry10/P.20131013/rtf/verilog/src/unisims/RAMB16BWER.v" Line 1973: Element index <arg fmt="%d" index="1">7</arg> into <arg fmt="%s" index="2">mem</arg> is out of bounds
+</msg>
+
+<msg type="warning" file="HDLCompiler" num="1007" delta="unknown" >"/build/xfndry10/P.20131013/rtf/verilog/src/unisims/RAMB16BWER.v" Line 1985: Element index <arg fmt="%d" index="1">15</arg> into <arg fmt="%s" index="2">mem</arg> is out of bounds
+</msg>
+
+<msg type="warning" file="HDLCompiler" num="1007" delta="unknown" >"/build/xfndry10/P.20131013/rtf/verilog/src/unisims/RAMB16BWER.v" Line 2000: Element index <arg fmt="%d" index="1">7</arg> into <arg fmt="%s" index="2">mem</arg> is out of bounds
+</msg>
+
+<msg type="warning" file="HDLCompiler" num="1007" delta="unknown" >"/build/xfndry10/P.20131013/rtf/verilog/src/unisims/RAMB16BWER.v" Line 2006: Element index <arg fmt="%d" index="1">15</arg> into <arg fmt="%s" index="2">mem</arg> is out of bounds
+</msg>
+
+<msg type="warning" file="HDLCompiler" num="1007" delta="unknown" >"/build/xfndry10/P.20131013/rtf/verilog/src/unisims/RAMB16BWER.v" Line 2012: Element index <arg fmt="%d" index="1">23</arg> into <arg fmt="%s" index="2">mem</arg> is out of bounds
+</msg>
+
+<msg type="warning" file="HDLCompiler" num="1007" delta="unknown" >"/build/xfndry10/P.20131013/rtf/verilog/src/unisims/RAMB16BWER.v" Line 2018: Element index <arg fmt="%d" index="1">31</arg> into <arg fmt="%s" index="2">mem</arg> is out of bounds
+</msg>
+
+<msg type="warning" file="HDLCompiler" num="1007" delta="unknown" >"/build/xfndry10/P.20131013/rtf/verilog/src/unisims/RAMB16BWER.v" Line 2081: Element index <arg fmt="%d" index="1">7</arg> into <arg fmt="%s" index="2">mem</arg> is out of bounds
+</msg>
+
+<msg type="warning" file="HDLCompiler" num="1007" delta="unknown" >"/build/xfndry10/P.20131013/rtf/verilog/src/unisims/RAMB16BWER.v" Line 2095: Element index <arg fmt="%d" index="1">15</arg> into <arg fmt="%s" index="2">mem</arg> is out of bounds
+</msg>
+
+<msg type="warning" file="HDLCompiler" num="1007" delta="unknown" >"/build/xfndry10/P.20131013/rtf/verilog/src/unisims/RAMB16BWER.v" Line 2110: Element index <arg fmt="%d" index="1">7</arg> into <arg fmt="%s" index="2">mem</arg> is out of bounds
+</msg>
+
+<msg type="warning" file="HDLCompiler" num="1007" delta="unknown" >"/build/xfndry10/P.20131013/rtf/verilog/src/unisims/RAMB16BWER.v" Line 2116: Element index <arg fmt="%d" index="1">15</arg> into <arg fmt="%s" index="2">mem</arg> is out of bounds
+</msg>
+
+<msg type="warning" file="HDLCompiler" num="1007" delta="unknown" >"/build/xfndry10/P.20131013/rtf/verilog/src/unisims/RAMB16BWER.v" Line 2122: Element index <arg fmt="%d" index="1">23</arg> into <arg fmt="%s" index="2">mem</arg> is out of bounds
+</msg>
+
+<msg type="warning" file="HDLCompiler" num="1007" delta="unknown" >"/build/xfndry10/P.20131013/rtf/verilog/src/unisims/RAMB16BWER.v" Line 2128: Element index <arg fmt="%d" index="1">31</arg> into <arg fmt="%s" index="2">mem</arg> is out of bounds
+</msg>
+
+</messages>
+

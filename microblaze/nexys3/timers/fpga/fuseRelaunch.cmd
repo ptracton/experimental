@@ -1,0 +1,1 @@
+-intstyle "ise" -incremental -lib "unisims_ver" -lib "unimacro_ver" -lib "xilinxcorelib_ver" -lib "secureip" -o "/home/ptracton/src/software/experimental/microblaze/nexys3/timers/fpga/testbench_isim_beh.exe" -prj "/home/ptracton/src/software/experimental/microblaze/nexys3/timers/fpga/testbench_beh.prj" "work.testbench" "work.glbl" 

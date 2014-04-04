@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="/home/ptracton/src/software/experimental/microblaze/nexys3/timers/fpga/testbench_isim_beh.wdb" id="1" type="auto">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="testbench" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="3" />
+   <wvobject fp_name="group6" type="group">
+      <obj_property name="label">TEST BENCH</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject fp_name="/testbench/XREADY" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">XREADY</obj_property>
+         <obj_property name="ObjectShortName">XREADY</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/XGPO" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">XGPO[31:0]</obj_property>
+         <obj_property name="ObjectShortName">XGPO[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/XCLK" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">XCLK</obj_property>
+         <obj_property name="ObjectShortName">XCLK</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/XRESET" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">XRESET</obj_property>
+         <obj_property name="ObjectShortName">XRESET</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/XGPI" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">XGPI[31:0]</obj_property>
+         <obj_property name="ObjectShortName">XGPI[31:0]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="group42" type="group">
+      <obj_property name="label">UUT</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject fp_name="/testbench/uut/XCLK" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">XCLK</obj_property>
+         <obj_property name="ObjectShortName">XCLK</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/XRESET" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">XRESET</obj_property>
+         <obj_property name="ObjectShortName">XRESET</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/XREADY" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">XREADY</obj_property>
+         <obj_property name="ObjectShortName">XREADY</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/XGPI" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">XGPI[31:0]</obj_property>
+         <obj_property name="ObjectShortName">XGPI[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/XGPO" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">XGPO[31:0]</obj_property>
+         <obj_property name="ObjectShortName">XGPO[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/clk_user" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">clk_user</obj_property>
+         <obj_property name="ObjectShortName">clk_user</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/reset_user" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">reset_user</obj_property>
+         <obj_property name="ObjectShortName">reset_user</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/IO_Addr_Strobe" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">IO_Addr_Strobe</obj_property>
+         <obj_property name="ObjectShortName">IO_Addr_Strobe</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/IO_Read_Strobe" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">IO_Read_Strobe</obj_property>
+         <obj_property name="ObjectShortName">IO_Read_Strobe</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/IO_Write_Strobe" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">IO_Write_Strobe</obj_property>
+         <obj_property name="ObjectShortName">IO_Write_Strobe</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/IO_Address" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">IO_Address[31:0]</obj_property>
+         <obj_property name="ObjectShortName">IO_Address[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/IO_Byte_Enable" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">IO_Byte_Enable[3:0]</obj_property>
+         <obj_property name="ObjectShortName">IO_Byte_Enable[3:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/IO_Write_Data" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">IO_Write_Data[31:0]</obj_property>
+         <obj_property name="ObjectShortName">IO_Write_Data[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/IO_Read_Data" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">IO_Read_Data[31:0]</obj_property>
+         <obj_property name="ObjectShortName">IO_Read_Data[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/IO_Ready" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">IO_Ready</obj_property>
+         <obj_property name="ObjectShortName">IO_Ready</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/Trace_Instruction" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">Trace_Instruction[0:31]</obj_property>
+         <obj_property name="ObjectShortName">Trace_Instruction[0:31]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/Trace_PC" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">Trace_PC[0:31]</obj_property>
+         <obj_property name="ObjectShortName">Trace_PC[0:31]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/Trace_Reg_Addr" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">Trace_Reg_Addr[0:4]</obj_property>
+         <obj_property name="ObjectShortName">Trace_Reg_Addr[0:4]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/Trace_MSR_Reg" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">Trace_MSR_Reg[0:14]</obj_property>
+         <obj_property name="ObjectShortName">Trace_MSR_Reg[0:14]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/Trace_New_Reg_Value" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">Trace_New_Reg_Value[0:31]</obj_property>
+         <obj_property name="ObjectShortName">Trace_New_Reg_Value[0:31]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/Trace_Data_Address" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">Trace_Data_Address[0:31]</obj_property>
+         <obj_property name="ObjectShortName">Trace_Data_Address[0:31]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/Trace_Data_Write_Value" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">Trace_Data_Write_Value[0:31]</obj_property>
+         <obj_property name="ObjectShortName">Trace_Data_Write_Value[0:31]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/Trace_Data_Byte_Enable" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">Trace_Data_Byte_Enable[0:3]</obj_property>
+         <obj_property name="ObjectShortName">Trace_Data_Byte_Enable[0:3]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/FIT1_Interrupt" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">FIT1_Interrupt</obj_property>
+         <obj_property name="ObjectShortName">FIT1_Interrupt</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/FIT1_Toggle" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">FIT1_Toggle</obj_property>
+         <obj_property name="ObjectShortName">FIT1_Toggle</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/PIT1_Interrupt" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">PIT1_Interrupt</obj_property>
+         <obj_property name="ObjectShortName">PIT1_Interrupt</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/PIT1_Toggle" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">PIT1_Toggle</obj_property>
+         <obj_property name="ObjectShortName">PIT1_Toggle</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/Trace_Valid_Instr" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">Trace_Valid_Instr</obj_property>
+         <obj_property name="ObjectShortName">Trace_Valid_Instr</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/Trace_Reg_Write" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">Trace_Reg_Write</obj_property>
+         <obj_property name="ObjectShortName">Trace_Reg_Write</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/Trace_Jump_Taken" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">Trace_Jump_Taken</obj_property>
+         <obj_property name="ObjectShortName">Trace_Jump_Taken</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/Trace_Delay_Slot" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">Trace_Delay_Slot</obj_property>
+         <obj_property name="ObjectShortName">Trace_Delay_Slot</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/Trace_Data_Access" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">Trace_Data_Access</obj_property>
+         <obj_property name="ObjectShortName">Trace_Data_Access</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/Trace_Data_Read" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">Trace_Data_Read</obj_property>
+         <obj_property name="ObjectShortName">Trace_Data_Read</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/Trace_Data_Write" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">Trace_Data_Write</obj_property>
+         <obj_property name="ObjectShortName">Trace_Data_Write</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/Trace_MB_Halted" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">Trace_MB_Halted</obj_property>
+         <obj_property name="ObjectShortName">Trace_MB_Halted</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="group71" type="group">
+      <obj_property name="label">SLAVE</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject fp_name="/testbench/uut/slave0/clk" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">clk</obj_property>
+         <obj_property name="ObjectShortName">clk</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/slave0/reset" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">reset</obj_property>
+         <obj_property name="ObjectShortName">reset</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/slave0/IO_Addr_Strobe" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">IO_Addr_Strobe</obj_property>
+         <obj_property name="ObjectShortName">IO_Addr_Strobe</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/slave0/IO_Read_Strobe" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">IO_Read_Strobe</obj_property>
+         <obj_property name="ObjectShortName">IO_Read_Strobe</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/slave0/IO_Write_Strobe" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">IO_Write_Strobe</obj_property>
+         <obj_property name="ObjectShortName">IO_Write_Strobe</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/slave0/IO_Address" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">IO_Address[2:0]</obj_property>
+         <obj_property name="ObjectShortName">IO_Address[2:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/slave0/IO_Byte_Enable" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">IO_Byte_Enable[3:0]</obj_property>
+         <obj_property name="ObjectShortName">IO_Byte_Enable[3:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/slave0/IO_Write_Data" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">IO_Write_Data[31:0]</obj_property>
+         <obj_property name="ObjectShortName">IO_Write_Data[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/slave0/IO_Ready" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">IO_Ready</obj_property>
+         <obj_property name="ObjectShortName">IO_Ready</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/slave0/reg0_decode" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">reg0_decode</obj_property>
+         <obj_property name="ObjectShortName">reg0_decode</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/slave0/reg0_write" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">reg0_write</obj_property>
+         <obj_property name="ObjectShortName">reg0_write</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/slave0/reg0_read" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">reg0_read</obj_property>
+         <obj_property name="ObjectShortName">reg0_read</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/slave0/reg1_decode" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">reg1_decode</obj_property>
+         <obj_property name="ObjectShortName">reg1_decode</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/slave0/reg1_write" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">reg1_write</obj_property>
+         <obj_property name="ObjectShortName">reg1_write</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/slave0/reg1_read" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">reg1_read</obj_property>
+         <obj_property name="ObjectShortName">reg1_read</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/slave0/reg2_decode" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">reg2_decode</obj_property>
+         <obj_property name="ObjectShortName">reg2_decode</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/slave0/reg2_write" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">reg2_write</obj_property>
+         <obj_property name="ObjectShortName">reg2_write</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/slave0/reg2_read" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">reg2_read</obj_property>
+         <obj_property name="ObjectShortName">reg2_read</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/slave0/reg3_decode" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">reg3_decode</obj_property>
+         <obj_property name="ObjectShortName">reg3_decode</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/slave0/reg3_write" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">reg3_write</obj_property>
+         <obj_property name="ObjectShortName">reg3_write</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/slave0/reg3_read" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">reg3_read</obj_property>
+         <obj_property name="ObjectShortName">reg3_read</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/slave0/IO_Read_Data" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">IO_Read_Data[31:0]</obj_property>
+         <obj_property name="ObjectShortName">IO_Read_Data[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/slave0/read_ready" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">read_ready</obj_property>
+         <obj_property name="ObjectShortName">read_ready</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/slave0/write_ready" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">write_ready</obj_property>
+         <obj_property name="ObjectShortName">write_ready</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/slave0/reg0" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">reg0[0:31]</obj_property>
+         <obj_property name="ObjectShortName">reg0[0:31]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/slave0/reg1" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">reg1[0:31]</obj_property>
+         <obj_property name="ObjectShortName">reg1[0:31]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/slave0/reg2" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">reg2[0:31]</obj_property>
+         <obj_property name="ObjectShortName">reg2[0:31]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/testbench/uut/slave0/reg3" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">reg3[0:31]</obj_property>
+         <obj_property name="ObjectShortName">reg3[0:31]</obj_property>
+      </wvobject>
+   </wvobject>
+</wave_config>

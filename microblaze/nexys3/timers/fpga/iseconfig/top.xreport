@@ -1,12 +1,12 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <report-views version="2.0" >
  <header>
-  <DateModified>2014-04-03T21:50:17</DateModified>
+  <DateModified>2014-04-03T22:45:07</DateModified>
   <ModuleName>top</ModuleName>
-  <SummaryTimeStamp>Unknown</SummaryTimeStamp>
-  <SavedFilePath>/home/ptracton/src/software/experimental/microblaze/nexys3/uart/fpga/iseconfig/top.xreport</SavedFilePath>
-  <ImplementationReportsDirectory>/home/ptracton/src/software/experimental/microblaze/nexys3/uart/fpga/</ImplementationReportsDirectory>
-  <DateInitialized>2014-04-02T20:58:00</DateInitialized>
+  <SummaryTimeStamp>2014-04-03T22:43:08</SummaryTimeStamp>
+  <SavedFilePath>/home/ptracton/src/software/experimental/microblaze/nexys3/timers/fpga/iseconfig/top.xreport</SavedFilePath>
+  <ImplementationReportsDirectory>/home/ptracton/src/software/experimental/microblaze/nexys3/timers/fpga</ImplementationReportsDirectory>
+  <DateInitialized>2014-04-03T21:51:13</DateInitialized>
   <EnableMessageFiltering>false</EnableMessageFiltering>
  </header>
  <body>

@@ -1,0 +1,79 @@
+\documentclass{beamer}
+\usetheme{Madrid}
+\usepackage{tikz}
+\usepackage{tikz-timing}[2009/05/15]
+\usepackage{circuitikz}
+\usetikzlibrary{positioning,shapes,shadows,arrows}
+\usetikzlibrary{trees}
+\usepackage{xxcolor}
+\usetikzlibrary{chains,matrix,scopes,decorations.shapes,arrows,shapes}
+
+\definecolor{UCLABlue}{RGB}{83, 104, 149}
+\definecolor{UCLAGold}{RGB}{254, 187, 54}
+\usecolortheme[named=UCLABlue]{structure} 
+
+\begin{document}
+
+\begin{frame}
+\begin{tikztimingtable}
+ HCLK              & 35{2c} \\
+ HADDR             & 9D{} 2D{ADDR} 25{D}      \\
+ HTRANS            & 9D{} 2D{TRANS} 25{D}        \\
+ HSEL              & 9D{} 2D{SEL} 25{D}        \\
+ HRDATA            & 11D{} 2D{READ} 23{D}        \\
+ HWDATA            & 9D{} 2D{WRITE} 25{D}        \\
+ HWRITE            & 11D{} 2D{WRITE} 23{D}       \\
+\end{tikztimingtable}
+\end{frame}
+
+
+\begin{frame}
+\begin{tabular}{| l| l | }
+  \hline
+  Verilog  & Symbolic Logic  \\ \hline
+  wire in1, in2, out; \\
+  assign out = in1 \& in2;  &  
+ \begin{circuitikz} \draw
+(0,2) node[and port] (myand) {}
+(myand.in 1) node[left=0.1cm](a) {in1}
+(myand.in 2) node[left=0.1cm](b) {in2}
+(myand.out) node[right = .1cm](c) {out}
+(a) -- (myand.in 1)
+(b) -- (myand.in 2);  
+\end{circuitikz}
+ \\ \hline
+
+
+ wire in1, in2, out; \\
+ assign out = in1 $\mid$ in2; & 
+\begin{circuitikz} \draw
+(0,2) node[or port] (myor) {}
+(myor.in 1) node[left=0.1cm](a) {in1}
+(myor.in 2) node[left=0.1cm](b) {in2}
+(myor.out) node[right = .1cm](c) {out}
+(a) -- (myor.in 1)
+(b) -- (myor.in 2);  
+\end{circuitikz}  
+ \\ \hline 
+
+ wire in1, in2, out; \\
+ assign out = in1 $\wedge$ in2; & 
+\begin{circuitikz} \draw
+(0,2) node[xor port] (myxor) {}
+(myxor.in 1) node[left=0.1cm](a) {in1}
+(myxor.in 2) node[left=0.1cm](b) {in2}
+(myxor.out) node[right = .1cm](c) {out}
+(a) -- (myxor.in 1)
+(b) -- (myxor.in 2);  
+\end{circuitikz}  
+ \\ \hline 
+
+\end{tabular}
+
+
+  
+
+
+
+\end{frame}
+\end{document}

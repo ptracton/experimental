@@ -15,13 +15,13 @@ class UI(QDialog, Network_UI.Ui_Dialog):
         ## Get our hostname from the OS and update the label to display it
         ##
         hostInfo = QHostInfo()
-        self.ipAddressLabel.setText(hostInfo.localHostName())
+        self.hostNameLabel.setText(hostInfo.localHostName())
         self.localDomainLabel.setText(hostInfo.localDomainName())
 
 
         self.__IPAddress = IPAddress.IPAddress()
-        self.__IPAddress.findAddress()
-
+        self.ipAddressLabel.setText(self.__IPAddress.getAddress())
+        print(self.__IPAddress.getAddress())
 
 __author__ = 'ptracton'
 

@@ -19,9 +19,14 @@ class UI(QDialog, Network_UI.Ui_Dialog):
         self.localDomainLabel.setText(hostInfo.localDomainName())
 
 
-        self.__IPAddress = IPAddress.IPAddress()
-        self.ipAddressLabel.setText(self.__IPAddress.getAddress())
-        print(self.__IPAddress.getAddress())
+        #self.__IPAddress = IPAddress.IPAddress()
+        #self.ipAddressLabel.setText(self.__IPAddress.getAddress())
+        #print(self.__IPAddress.getAddress())
+
+        self.networkInterface = QNetworkInterface()
+        list_addr = self.networkInterface.allAddresses()
+        self.ipAddressLabel.setText(list_addr[2].toString())
+
 
 __author__ = 'ptracton'
 

@@ -23,9 +23,17 @@ class IPAddress(QHostAddress):
             self.__IPAddress = socket.gethostbyname(socket.getfqdn())
 
         if (self.__system == "Linux"):
-            self.__IPAddress = subprocess.check_output(["hostname",
-                                                        "-i"]).decode("utf-8")
+            (dist, version, name) = platform.linux_distribution()
+            print (dist)
+            if (dist == "LinuxMint"):
+                self.__IPAddress = subprocess.check_output(["hostname",
+                "-I"]).decode("utf-8")
+            if (dist == "RedHat"):
+                self.__IPAddress = subprocess.check_output(["hostname",
+                "-i"]).decode("utf-8")
+
 
 
         print ("IP ADDR:  %s" % self.__IPAddress)
-
+        f = QNetworkInterface()
+        print ("FOO: " + f.hardwareAddress())

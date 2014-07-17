@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'network_ui_designer.ui'
 #
-# Created: Tue Jul 15 23:03:29 2014
+# Created: Wed Jul 16 22:34:37 2014
 #      by: PyQt4 UI code generator 4.9.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -18,24 +18,26 @@ class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName(_fromUtf8("Dialog"))
         Dialog.resize(400, 300)
+        self.gridLayout = QtGui.QGridLayout(Dialog)
+        self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
         self.label = QtGui.QLabel(Dialog)
-        self.label.setGeometry(QtCore.QRect(10, 10, 101, 17))
         self.label.setObjectName(_fromUtf8("label"))
+        self.gridLayout.addWidget(self.label, 0, 0, 1, 1)
         self.hostNameLabel = QtGui.QLabel(Dialog)
-        self.hostNameLabel.setGeometry(QtCore.QRect(140, 10, 241, 17))
         self.hostNameLabel.setObjectName(_fromUtf8("hostNameLabel"))
+        self.gridLayout.addWidget(self.hostNameLabel, 0, 1, 1, 1)
         self.label_2 = QtGui.QLabel(Dialog)
-        self.label_2.setGeometry(QtCore.QRect(10, 40, 121, 17))
         self.label_2.setObjectName(_fromUtf8("label_2"))
+        self.gridLayout.addWidget(self.label_2, 1, 0, 1, 1)
         self.localDomainLabel = QtGui.QLabel(Dialog)
-        self.localDomainLabel.setGeometry(QtCore.QRect(140, 40, 251, 17))
         self.localDomainLabel.setObjectName(_fromUtf8("localDomainLabel"))
+        self.gridLayout.addWidget(self.localDomainLabel, 1, 1, 1, 1)
         self.label_3 = QtGui.QLabel(Dialog)
-        self.label_3.setGeometry(QtCore.QRect(10, 70, 111, 17))
         self.label_3.setObjectName(_fromUtf8("label_3"))
+        self.gridLayout.addWidget(self.label_3, 2, 0, 1, 1)
         self.ipAddressLabel = QtGui.QLabel(Dialog)
-        self.ipAddressLabel.setGeometry(QtCore.QRect(130, 70, 251, 17))
         self.ipAddressLabel.setObjectName(_fromUtf8("ipAddressLabel"))
+        self.gridLayout.addWidget(self.ipAddressLabel, 2, 1, 1, 1)
 
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)

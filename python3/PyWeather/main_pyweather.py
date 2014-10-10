@@ -21,14 +21,11 @@ if __name__ == '__main__':
 #    pprint(request[0]['type'])
 #    current = weather.GetCurrentConditions()
 #    pprint (current)
-#    print (str(current[0]['temp_F']))       
-
-
-
+#    print (str(current[0]['temp_F']))
 
     app = QApplication(sys.argv)
     gui = PyWeatherGUI.PyWeatherGUI()
     gui.show()
-    app.exec_()    
-    
+    app.exec_()
+
     pass

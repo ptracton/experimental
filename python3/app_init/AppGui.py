@@ -5,17 +5,19 @@ from PyQt4.QtGui import *
 import App
 import AppConfigGUI
 
+
 class AppGui(QMainWindow):
+
     """
     """
 
-    def __init__(self, parent = None):
+    def __init__(self, parent=None):
         #
         # Call contstructor of our Super Class, we inherit from QDialog
         #
         super(AppGui, self).__init__(parent)
-        print ("STARTING GUI")
-        
+        print("STARTING GUI")
+
         ########################################################################
         #
         # Create instance of the "Application" and make sure it has either loaded
@@ -26,11 +28,11 @@ class AppGui(QMainWindow):
         self.Configure()
 
         TopLayout = QVBoxLayout()
-
+        QHBoxLayout.
         status = self.statusBar()
         status.setSizeGripEnabled(False)
         status.showMessage("Ready", 5000)
-        
+
         self.FileMenu = self.menuBar().addMenu("&File")
         self.FileMenu.clear()
         FileNewAction = self.CreateAction("&New...", self.FileNew,
@@ -41,12 +43,13 @@ class AppGui(QMainWindow):
         FileSaveAction = self.CreateAction("&Save", self.FileSave,
                                            QKeySequence.Save, "filesave", "Save the image")
         FileSaveAsAction = self.CreateAction("Save &As...",
-                                             self.FileSaveAs, icon = "filesaveas",
-                                             tip = "Save the image using a new name")
+                                             self.FileSaveAs, icon="filesaveas",
+                                             tip="Save the image using a new name")
         FileQuitAction = self.CreateAction("&Quit", self.FileQuit,
                                            "Ctrl+Q", "FileQuit", "Close the application")
-        
-        self.FileMenuActions = (FileNewAction, FileOpenAction, FileSaveAction, FileSaveAsAction, FileQuitAction)
+
+        self.FileMenuActions = (
+            FileNewAction, FileOpenAction, FileSaveAction, FileSaveAsAction, FileQuitAction)
         self.AddActions(self.FileMenu, self.FileMenuActions)
 
         self.FileMenu = self.menuBar().addMenu("&Edit")
@@ -86,9 +89,8 @@ class AppGui(QMainWindow):
             else:
                 target.addAction(action)
 
-
-    def CreateAction(self, text, slot = None, shortcut = None, icon = None,
-                     tip = None, checkable = False, signal = "triggered()"):
+    def CreateAction(self, text, slot=None, shortcut=None, icon=None,
+                     tip=None, checkable=False, signal="triggered()"):
         action = QAction(text, self)
         if icon is not None:
             action.setIcon(QIcon(":/{0}.png".format(icon)))
@@ -102,11 +104,11 @@ class AppGui(QMainWindow):
         if checkable:
             action.setCheckable(True)
         return action
-                        
+
     def Configure(self):
         if self.app.appConfig.ConfigExists():
-            print ("Found it")
+            print("Found it")
         else:
-            print ("Config does not exist")
-            appConfigGUI = AppConfigGUI.AppConfigGUI(parent = self)
+            print("Config does not exist")
+            appConfigGUI = AppConfigGUI.AppConfigGUI(parent=self)
             appConfigGUI.exec_()

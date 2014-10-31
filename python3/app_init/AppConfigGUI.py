@@ -7,25 +7,25 @@ import GUITools
 
 
 class AppConfigGUI(QDialog):
-    
-    def __init__(self, parent = None):
+
+    def __init__(self, parent=None):
         #
         # Call contstructor of our Super Class, we inherit from QDialog
         #
         super(AppConfigGUI, self).__init__(parent)
-        print ("STARTING Config GUI")
-        
+        print("STARTING Config GUI")
+
         TopLayout = QVBoxLayout()
-        self.XilinxPath = GUITools.PathOptionEditor(parent = self, name = "Xilinx Path")
-        self.AlteraPath = GUITools.PathOptionEditor(parent = self, name = "Altera Path")
+        self.XilinxPath = GUITools.PathOptionEditor(parent=self, name="Xilinx Path")
+        self.AlteraPath = GUITools.PathOptionEditor(parent=self, name="Altera Path")
 
         ########################################################################
         #
-        ########################################################################        
+        ########################################################################
         PushButtonLayout = QHBoxLayout()
         self.OKButton = QPushButton("OK")
         self.CancelButton = QPushButton("Cancel")
-        
+
         PushButtonLayout.addWidget(self.OKButton)
         PushButtonLayout.addWidget(self.CancelButton)
 
@@ -35,14 +35,14 @@ class AppConfigGUI(QDialog):
         TopLayout.addLayout(self.XilinxPath.GetLayout())
         TopLayout.addLayout(self.AlteraPath.GetLayout())
         TopLayout.addLayout(PushButtonLayout)
-        
+
         self.setLayout(TopLayout)
         self.setWindowTitle("App Config Editor")
-        
+
         return
 
     def OKButtonClicked(self):
-        app = AppConfig.AppConfig()       
+        app = AppConfig.AppConfig()
         app.AddSectionAndData("Xilinx", "Path", self.XilinxPath.LineEdit.text())
         app.AddSectionAndData("Altera", "Path", self.AlteraPath.LineEdit.text())
         app.AddSectionAndData("Projects", "Path", [])

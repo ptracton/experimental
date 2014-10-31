@@ -7,6 +7,7 @@ Created on Apr 8, 2013
 import sys
 from PyQt4 import QtGui
 import UI
+import os
 
 if __name__ == '__main__':
     app = QtGui.QApplication(sys.argv)

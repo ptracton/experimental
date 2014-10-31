@@ -2,19 +2,19 @@
 import serial
 import array
 
+
 class SerialPort (serial.Serial):
-    
 
     def __init__(self):
         serial.Serial.__init__(self)
 
-        settings =self.getSettingsDict()
+        settings = self.getSettingsDict()
         self.applySettingsDict(settings)
-        self.baudrate=115200    
+        self.baudrate = 115200
         self.port = "COM9"
-             
+
         pass
-    
+
     def calculate_crc(self, data):
         crc = 0
         for x in data:
@@ -26,19 +26,19 @@ class SerialPort (serial.Serial):
         #
         # http://stackoverflow.com/questions/472977/binary-data-with-pyserialpython-serial-port
         #
-        
+
         transmit = array.array('B', data).tostring()
-        print (transmit)
+        print(transmit)
         self.write(transmit)
 
     def send_ping(self):
         packet = [0x0C, 0x03, 0xF0, 0xAA, 0x00]
-        print (packet)
+        print(packet)
         crc = self.calculate_crc(packet)
-        crc =  crc.to_bytes(2, byteorder='big')
-        print (crc)
+        crc = crc.to_bytes(2, byteorder='big')
+        print(crc)
         for x in crc:
-            print (x)
+            print(x)
             packet.append(x)
         packet.append(0x0D)
         print(packet)
@@ -52,4 +52,4 @@ class SerialPort (serial.Serial):
         self.transmit_binary(packet)
         while (1):
             data = self.character(self.read(1))
-            print (data)
+            print(data)

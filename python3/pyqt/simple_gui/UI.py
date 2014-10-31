@@ -7,8 +7,10 @@ Created on Mar 18, 2013
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 
+
 class SmartPopUp(QDialog):
-    def __init__(self, name = "", count = 0, parent = None):
+
+    def __init__(self, name="", count=0, parent=None):
         super(SmartPopUp, self).__init__(parent)
         self.setAttribute(Qt.WA_DeleteOnClose)
 
@@ -16,7 +18,7 @@ class SmartPopUp(QDialog):
         self.name = name
 
         buttonBox = QDialogButtonBox(QDialogButtonBox.Apply |
-                             QDialogButtonBox.Cancel)
+                                     QDialogButtonBox.Cancel)
 
         self.connect(buttonBox.button(QDialogButtonBox.Apply),
                      SIGNAL("clicked()"), SLOT("accept()"))
@@ -33,8 +35,10 @@ class SmartPopUp(QDialog):
 
         return
 
+
 class PopUp (QDialog):
-    def __init__(self, parent = None):
+
+    def __init__(self, parent=None):
         super(PopUp, self).__init__(parent)
 
         widthLabel = QLabel("&Width:")
@@ -42,7 +46,6 @@ class PopUp (QDialog):
         widthLabel.setBuddy(self.widthComboBox)
         lst = [str(x) for x in range(24)]
         self.widthComboBox.addItems(lst)
-
 
         #######################################################################
         #
@@ -64,13 +67,14 @@ class PopUp (QDialog):
         self.setWindowTitle("Pop Up")
         return
 
+
 class UI(QDialog):
+
     '''
     classdocs
     '''
 
-
-    def __init__(self, parent = None):
+    def __init__(self, parent=None):
         '''
         Constructor
         '''
@@ -286,7 +290,7 @@ class UI(QDialog):
 
     def updateTime(self):
         self.TimeValue.setText("%s" % QTime.currentTime().toString("hh:mm:ss"))
-        self.LCDNumber.display( self.LCDNumber.value()+1)
+        self.LCDNumber.display(self.LCDNumber.value() + 1)
         return
 
     def updateDial(self):
@@ -329,6 +333,7 @@ class UI(QDialog):
     def updateStartDate(self):
         self.StartDateLabel.setText("Start %s" % self.StartDate.date().toString("yyyy-MM-dd"))
         return
+
     def updateEndDate(self):
         self.EndDateLabel.setText("End %s" % self.EndDate.date().toString("yyyy-MM-dd"))
         return
@@ -336,9 +341,11 @@ class UI(QDialog):
     def updateRadio1(self):
         self.RadioLabel.setText("Radio 1 Clicked")
         return
+
     def updateRadio2(self):
         self.RadioLabel.setText("Radio 2 Clicked")
         return
+
     def updateRadio3(self):
         self.RadioLabel.setText("Radio 3 Clicked")
         return
@@ -349,5 +356,3 @@ class UI(QDialog):
 
 if __name__ == '__main__':
     print("Wrong Window!")
-
-

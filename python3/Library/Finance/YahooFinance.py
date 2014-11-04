@@ -25,7 +25,7 @@ class YahooFinance:
         self.base_url = "http://real-chart.finance.yahoo.com/table.csv?s="
         return
 
-    def getStock(self, filename=None):
+    def get_stock(self, filename=None):
         """
         Get's the historical stock prices from the specified start date through
         today
@@ -43,9 +43,9 @@ class YahooFinance:
         csv = (url_data.read()).decode("utf-8-sig").encode("utf-8")
         if filename is not None:
             try:
-                f = open(filename, 'w')
-                f.write(csv.decode("utf-8"))
-                f.close()
+                file_handle = open(filename, 'w')
+                file_handle.write(csv.decode("utf-8"))
+                file_handle.close()
             except OSError:
                 print("Failed to open %s for writing!" % filename)
                 logging.error("%s: Failed to open %s for writing" %

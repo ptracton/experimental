@@ -94,7 +94,8 @@ if __name__ == "__main__":
         else:
             print("MISSING Section %s" % stock)
 
-    yfname = str(list_of_stocks[0].name + "Yahoo.csv")
-    list_of_stocks[0].getFromYahoo(filename=yfname)
-    gfname = str(list_of_stocks[0].name + "Google.csv")
-    list_of_stocks[0].getFromGoogle(filename=gfname)
+    for x in list_of_stocks:
+        yfname = str(x.name + "Yahoo.csv")
+        x.getFromYahoo(filename=yfname)
+        gfname = str(x.name + "Google.csv")
+        x.getFromGoogle(filename=gfname)

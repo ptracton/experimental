@@ -68,7 +68,6 @@ if __name__ == "__main__":
         if config_file.has_option('STOCKS', 'stocks'):
             cfg_list_of_stocks =\
                 list(config_file.get('STOCKS', 'stocks').split(","))
-            # print(list_of_stocks)
         else:
             cfg_list_of_stocks = []
 
@@ -76,7 +75,6 @@ if __name__ == "__main__":
     for s in cfg_list_of_stocks:
         stock = s.strip(' ')
         if config_file.has_section(stock):
-            #print("FOUND Section %s" % stock)
             s = Finance.Stock.Stock()
             s.symbol = stock
             if config_file.has_option(stock, 'SHARES'):
@@ -88,7 +86,6 @@ if __name__ == "__main__":
             if config_file.has_option(stock, 'NAME'):
                 s.name = config_file.get(stock, 'NAME')
 
-            print(s)
             list_of_stocks.append(s)
             del(s)
         else:

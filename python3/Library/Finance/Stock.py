@@ -81,7 +81,6 @@ class Stock:
         '''
         Get the purchase date
         '''
-        # return str("%s-%s-%s" % (self._purchase[1], self._purchase[2], self._purchase[0]))
         return self._purchase
 
     @purchase.setter
@@ -97,14 +96,7 @@ class Stock:
         return str("%s: %d shares on %s" % (self.name,
                                             self.shares, self.purchase))
 
-    def getFromGoogle(self):
-        '''
-        Get this stock's history from Google
-        '''
-        g = Finance.GoogleFinance.GoogleFinance()
-        return
-
-    def getFromYahoo(self, filename=None):
+    def get_from_yahoo(self, filename=None):
         '''
         Get this stock's history from Yahoo
         '''
@@ -114,10 +106,10 @@ class Stock:
 
         yahoo = Finance.YahooFinance.YahooFinance(symbol=self.symbol,
                                                   start_date=self.purchase)
-        yahoo.getStock(filename=filename)
+        yahoo.get_stock(filename=filename)
         return
 
-    def getFromGoogle(self, filename=None):
+    def get_from_google(self, filename=None):
         '''
         Get this stock's history from Yahoo
         '''
@@ -127,5 +119,5 @@ class Stock:
 
         google = Finance.GoogleFinance.GoogleFinance(symbol=self.symbol,
                                                      start_date=self.purchase)
-        google.getStock(filename=filename)
+        google.get_stock(filename=filename)
         return

@@ -28,7 +28,7 @@ class GoogleFinance:
 
         return
 
-    def getStock(self, filename=None):
+    def get_stock(self, filename=None):
         """
         Get the historical stock prices from the start_date in
         the config file until today
@@ -47,9 +47,9 @@ class GoogleFinance:
 
         if filename is not None:
             try:
-                f = open(filename, 'w')
-                f.write(csv.decode("utf-8"))
-                f.close()
+                file_handle = open(filename, 'w')
+                file_handle.write(csv.decode("utf-8"))
+                file_handle.close()
             except OSError:
                 logging.error("%s: Failed to open %s for writing" %
                               (__name__, filename))

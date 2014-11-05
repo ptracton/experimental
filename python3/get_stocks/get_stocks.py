@@ -8,7 +8,7 @@ from Google or Yahoo
 import sys
 from PyQt4.QtGui import *
 import UI
-
+ 
 if __name__ == "__main__":
     print("Getting Stocks")
 

@@ -4,15 +4,12 @@
 UI class for a Stock.  This will have an instantiation of a stock to handle it
 """
 
-import sys
 import copy
 #
 # The GUI libraries since we build some GUI components here
 #
 from PyQt4.QtGui import *
 from PyQt4.QtCore import *
-
-import Stock
 
 
 class StockUI:
@@ -41,8 +38,10 @@ class StockUI:
         #
         # connect signals and slots
         #
-        QObject.connect(self.google_button, SIGNAL("clicked()"), self.googleButtonClicked)
-        QObject.connect(self.yahoo_button, SIGNAL("clicked()"), self.yahooButtonClicked)
+        QObject.connect(self.google_button, SIGNAL("clicked()"),
+                        self.googleButtonClicked)
+        QObject.connect(self.yahoo_button, SIGNAL("clicked()"),
+                        self.yahooButtonClicked)
 
         return
 
@@ -54,7 +53,8 @@ class StockUI:
 
     def googleButtonClicked(self):
         '''
-        Handles the google button getting clicked.  This will download the historical stock
+        Handles the google button getting clicked.
+        This will download the historical stock
         data
         '''
         file_name = self.stock.name + "Google.csv"
@@ -63,7 +63,8 @@ class StockUI:
 
     def yahooButtonClicked(self):
         '''
-        Handles the google button getting clicked.  This will download the historical stock
+        Handles the google button getting clicked.
+        This will download the historical stock
         data
         '''
         file_name = self.stock.name + "Yahoo.csv"

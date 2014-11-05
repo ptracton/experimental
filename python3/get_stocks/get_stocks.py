@@ -22,7 +22,7 @@ if __name__ == "__main__":
         config_file = configparser.ConfigParser()
         try:
             config_file.read(project_config_file)
-        except:
+        except OSError:
             print("%s exists but we can not open or read it!" %
                   (project_config_file))
             sys.exit(-1)
@@ -87,7 +87,7 @@ if __name__ == "__main__":
                 s.name = config_file.get(stock, 'NAME')
 
             list_of_stocks.append(s)
-            del(s)
+            del s
         else:
             print("MISSING Section %s" % stock)
 

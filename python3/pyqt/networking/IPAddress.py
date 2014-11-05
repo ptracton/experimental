@@ -7,13 +7,14 @@ import socket
 
 __author__ = 'ptracton'
 
+
 class IPAddress(QHostAddress):
+
     def __init__(self):
         super(IPAddress, self).__init__(None)
         self.__IPAddress = None
         self.__system = platform.system()
         self.findAddress()
-
 
     def getAddress(self):
         return self.__IPAddress
@@ -27,12 +28,10 @@ class IPAddress(QHostAddress):
             print (dist)
             if (dist == "LinuxMint"):
                 self.__IPAddress = subprocess.check_output(["hostname",
-                "-I"]).decode("utf-8")
+                                                            "-I"]).decode("utf-8")
             if (dist == "RedHat"):
                 self.__IPAddress = subprocess.check_output(["hostname",
-                "-i"]).decode("utf-8")
-
-
+                                                            "-i"]).decode("utf-8")
 
         print ("IP ADDR:  %s" % self.__IPAddress)
         f = QNetworkInterface()

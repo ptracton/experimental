@@ -19,6 +19,7 @@ class Postgres:
         self._password = password
         self.connection = None
         self.cursor = None
+        self._table_name = None
         return
 
     @property
@@ -79,14 +80,14 @@ class Postgres:
             self.cursor = self.connection.cursor()
         except psycopg2.ProgrammingError as err:
             print("%s Exception %s " % (__name__, err))
-            return False
             self.connection = None
             self.cursor = None
+            return False
         except psycopg2.OperationalError as err:
             print("%s Exception %s " % (__name__, err))
-            return False
             self.connection = None
             self.cursor = None
+            return False
 
         return True
 
@@ -117,7 +118,7 @@ class Postgres:
             return False
         if table_dict is None:
             return False
-
+        self._table_name = table_name
         table_string = "create table " + table_name + "("
         for key, value in table_dict.items():
             table_string += "%s %s," % (key, value)
@@ -142,4 +143,35 @@ class Postgres:
             print("Failed to delete table %s" % table_name)
             return False
 
+        return True
+
+    def insert_single_row(self, columns, data):
+        '''
+        Insert a single row of data into our table.
+        Input data is expected to be a LIST!
+        '''
+        if self.cursor is None:
+            return False
+        if columns is None:
+            return False
+        if data is None:
+            return False
+
+        command_string = "insert into " + self._table_name + " ( "
+
+        for x in columns:
+            command_string += x + ","
+        command_string = command_string[:-1]
+
+        command_string += ") values ("
+
+        for x in data:
+            command_string += "\'" + x + "\',"
+        command_string = command_string[:-1]
+
+        command_string += ");"
+        print(command_string)
+        if not self._execute_and_commit(command_string):
+            print("Failed to insert single row into %s" % self._table_name)
+            return False
         return True

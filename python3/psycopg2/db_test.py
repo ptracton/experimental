@@ -1,33 +1,31 @@
-#! /usr/bin/env python3
-
+# ! /usr/bin/env python3
+'''
+Testing out the way to use the Postgres class that wraps
+around the psycopg2 modules
+'''
 import sys
 import Postgres
 
 if __name__ == "__main__":
     print("db_testing")
 
-    database = Postgres.Postgres()
-    database.database = "postgres"
-    database.password = "python"
-    database.username = "postgres"
-    if not database.get_connection():
-        print ("connection or cursor failed")
+    DATABASE = Postgres.Postgres()
+    DATABASE.database = "postgres"
+    DATABASE.password = "python"
+    DATABASE.username = "postgres"
+    if not DATABASE.get_connection():
+        print("connection or cursor failed")
         sys.exit(-1)
 
-    table = {"stock_name": "text",
+    TABLE = {"stock_name": "text",
              "stock_symbol": "text"
              }
-#    return_code = database.delete_table(table_name="stocks")
-#    return_code = database.delete_table(table_name="stocks2")
-    return_code = database.create_table(table_name="stocks2", table_dict=table)
 
+    RETURN_CODE = DATABASE.create_table(table_name="stocks2", table_dict=TABLE)
+    while not RETURN_CODE:
+        DATABASE.delete_table(table_name="stocks2")
+        RETURN_CODE = DATABASE.create_table(table_name="stocks2",
+                                            table_dict=TABLE)
 
-#    connection = psycopg2.connect(database="postgres", user="postgres",
-#    password="python")
-#    cursor = connection.cursor()
-
-#    try:
-#        cursor.execute("create table stocks(name text, symbol text);")
-#        connection.commit()
-#    except psycopg2.ProgrammingError:
-#        print("Table already exists")
+    DATABASE.insert_single_row(TABLE.keys(), ["Medtronic", "MDT"])
+    DATABASE.insert_single_row(TABLE.keys(), ["Google", "GOOG"])

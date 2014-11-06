@@ -31,7 +31,6 @@ class Test_Postgres:
         This function is ran after each test case
         '''
         print("Tear Down")
-        self.dut.delete_table("test1")
         del self.dut
 
     def test_get_connection(self):
@@ -69,3 +68,11 @@ class Test_Postgres:
 
         assert self.dut.delete_table(table_name) == True
         assert self.dut.delete_table(table_name) == False
+        assert self.dut.delete_table(None) == False
+
+        temp_cursor = self.dut.cursor
+        self.dut.cursor = None
+        assert self.dut.create_table(table_name, table_dict) == False
+
+        self.dut.cursor = temp_cursor
+        assert self.dut.create_table(table_name, None) == False

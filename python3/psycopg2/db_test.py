@@ -13,6 +13,7 @@ if __name__ == "__main__":
     DATABASE.database = "postgres"
     DATABASE.password = "python"
     DATABASE.username = "postgres"
+    DATABASE.table_name = "stocks2"
     if not DATABASE.get_connection():
         print("connection or cursor failed")
         sys.exit(-1)
@@ -21,11 +22,18 @@ if __name__ == "__main__":
              "stock_symbol": "text"
              }
 
-    RETURN_CODE = DATABASE.create_table(table_name="stocks2", table_dict=TABLE)
+    RETURN_CODE = DATABASE.create_table(table_dict=TABLE)
     while not RETURN_CODE:
-        DATABASE.delete_table(table_name="stocks2")
+        DATABASE.drop_table(table_name="stocks2")
         RETURN_CODE = DATABASE.create_table(table_name="stocks2",
                                             table_dict=TABLE)
 
     DATABASE.insert_single_row(TABLE.keys(), ["Medtronic", "MDT"])
-    DATABASE.insert_single_row(TABLE.keys(), ["Google", "GOOG"])
+#    DATABASE.insert_single_row(TABLE.keys(), ["Google", "GOOG"])
+
+    MULTIPLE_ROWS = []
+    MULTIPLE_ROWS.append(('Amazon', 'AMZ'))
+    MULTIPLE_ROWS.append(('Yahoo', 'YHOO'))
+    MULTIPLE_ROWS.append(('Microsoft', 'MSFT'))
+    MULTIPLE_ROWS.append(('MRV', 'MRV'))
+    DATABASE.insert_multiple_rows(TABLE, MULTIPLE_ROWS)

@@ -67,6 +67,22 @@ class Postgres:
         self._password = value
         return
 
+    @property
+    def table_name(self):
+        '''
+        Get the table_name
+        '''
+        return self._table_name
+
+    @table_name.setter
+    def table_name(self, value):
+        '''
+        Set the table_name
+        '''
+        self._table_name = value
+        print(self.table_name)
+        return
+
     def get_connection(self):
         '''
         Attempt to get a connection to the database, if we do
@@ -91,12 +107,32 @@ class Postgres:
 
         return True
 
-    def _execute_and_commit(self, command):
+    def _execute_and_commit(self, command=None, data=None, many=False):
         '''
         Excutes and commits the specified command
         '''
         try:
-            self.cursor.execute(command)
+            if many:
+                self.cursor.executemany(command, data)
+            else:
+                self.cursor.execute(command)
+            self.connection.commit()
+        except psycopg2.ProgrammingError as err:
+            self.connection.rollback()
+            print("%s Exception %s " % (__name__, err))
+            return False
+        except psycopg2.InternalError as err:
+            self.connection.rollback()
+            print("%s Exception %s " % (__name__, err))
+            return False
+        return True
+
+    def _executemany_and_commit(self, command):
+        '''
+        Excutes and commits the specified command
+        '''
+        try:
+            self.cursor.executemany(command)
             self.connection.commit()
         except psycopg2.ProgrammingError as err:
             self.connection.rollback()
@@ -118,8 +154,14 @@ class Postgres:
             return False
         if table_dict is None:
             return False
-        self._table_name = table_name
-        table_string = "create table " + table_name + "("
+
+        if table_name is not None:
+            self._table_name = table_name
+
+        if self.table_name is None:
+            return False
+
+        table_string = "create table " + self._table_name + "("
         for key, value in table_dict.items():
             table_string += "%s %s," % (key, value)
 
@@ -131,9 +173,9 @@ class Postgres:
 
         return True
 
-    def delete_table(self, table_name=None):
+    def drop_table(self, table_name=None):
         '''
-        Delete the specified table
+        Drop the specified table
         '''
         if table_name is None:
             return False
@@ -159,14 +201,14 @@ class Postgres:
 
         command_string = "insert into " + self._table_name + " ( "
 
-        for x in columns:
-            command_string += x + ","
+        for index in columns:
+            command_string += index + ","
         command_string = command_string[:-1]
 
         command_string += ") values ("
 
-        for x in data:
-            command_string += "\'" + x + "\',"
+        for index in data:
+            command_string += "\'" + index + "\',"
         command_string = command_string[:-1]
 
         command_string += ");"
@@ -174,4 +216,50 @@ class Postgres:
         if not self._execute_and_commit(command_string):
             print("Failed to insert single row into %s" % self._table_name)
             return False
+        return True
+
+    def _sql_type_to_python(self, data):
+        if data is None:
+            return None
+        if data is "text":
+            return "%s"
+        if data is "text":
+            return "%d"
+        else:
+            return None
+
+    def insert_multiple_rows(self, columns, data):
+        '''
+        Insert multiple rows of data into our table.
+        Input data columns is a DICT of columns(keys) and their types (values)
+        INPUT data is expected to be a LIST of tuples!
+        '''
+        if self.cursor is None:
+            return False
+        if columns is None:
+            return False
+        if data is None:
+            return False
+
+        command_string = "insert into " + self._table_name + " ( "
+
+        for index in columns:
+            command_string += index + ","
+        command_string = command_string[:-1]
+
+        command_string += ") values ("
+
+        for index in columns.values():
+            command_string += self._sql_type_to_python(index) + ","
+
+        command_string = command_string[:-1]
+        command_string += ")  "
+
+        print(command_string)
+        print(data)
+        if not self._execute_and_commit(command=command_string,
+                                        data=data, many=True):
+            print("Failed to insert multiple rows into %s" % self._table_name)
+            return False
+
         return True

@@ -52,11 +52,11 @@ class Test_Postgres:
         assert self.dut.get_connection() == False
         self.dut.username = "postgres"
 
-    def test_create_and_delete_table(self):
+    def test_create_and_drop_table(self):
         '''
-        create and delete tables in the database.
+        create and drop tables in the database.
         demonstrate you can not create a table twice
-        demonstrate you can not delete a table twice
+        demonstrate you can not drop a table twice
         '''
         table_name = "test1"
         table_dict = {"first": "text",
@@ -66,9 +66,9 @@ class Test_Postgres:
         assert self.dut.create_table(table_name, table_dict) == True
         assert self.dut.create_table(table_name, table_dict) == False
 
-        assert self.dut.delete_table(table_name) == True
-        assert self.dut.delete_table(table_name) == False
-        assert self.dut.delete_table(None) == False
+        assert self.dut.drop_table(table_name) == True
+        assert self.dut.drop_table(table_name) == False
+        assert self.dut.drop_table(None) == False
 
         temp_cursor = self.dut.cursor
         self.dut.cursor = None

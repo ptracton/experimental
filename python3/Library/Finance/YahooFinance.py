@@ -8,6 +8,10 @@ from Yahoo's Finance Web Site
 import urllib.request
 import datetime
 import logging
+import re
+import urllib.request
+from bs4 import BeautifulSoup
+from bs4 import UnicodeDammit
 
 
 class YahooFinance:
@@ -25,7 +29,7 @@ class YahooFinance:
         self.base_url = "http://real-chart.finance.yahoo.com/table.csv?s="
         return
 
-    def get_stock(self, filename=None):
+    def get_historical_stock_data(self, filename=None):
         """
         Get's the historical stock prices from the specified start date through
         today
@@ -50,3 +54,36 @@ class YahooFinance:
                 print("Failed to open %s for writing!" % filename)
                 logging.error("%s: Failed to open %s for writing" %
                               (__name__, filename))
+        return
+
+    def get_profile(self, filename=None):
+        '''
+        Get the company profile information
+        '''
+        url_string = "http://finance.yahoo.com/q/pr?s=" + self.symbol
+        try:
+            url_open = urllib.request.urlopen(url_string)
+            web_page = url_open.read()
+        except:
+            print("Failed to get %s" % url_string)
+            return False
+
+        if filename is not None:
+            try:
+                profile = open(filename, "wb")  # open file in binary mode
+                profile.write(web_page)
+                profile.close()
+            except OSError:
+                print("Failed to open %s for writing!" % filename)
+                logging.error("%s: Failed to open %s for writing" %
+                              (__name__, filename))
+                return False
+        soup = BeautifulSoup(web_page)
+        text = soup.get_text()
+        print(type(text))
+        print(soup.get_text().encode('ascii', 'ignore'))
+        print(soup.head)
+        print(soup.a)
+        print(soup.b)
+        print(soup.find_all(text=re.compile("Key Executives")))
+        return False

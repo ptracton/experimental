@@ -9,6 +9,8 @@ from Google's Finance Web Site
 import urllib.request
 import datetime
 import logging
+import urllib.request
+from bs4 import BeautifulSoup
 
 
 class GoogleFinance:
@@ -28,7 +30,7 @@ class GoogleFinance:
 
         return
 
-    def get_stock(self, filename=None):
+    def get_historical_stock_data(self, filename=None):
         """
         Get the historical stock prices from the start_date in
         the config file until today
@@ -55,3 +57,25 @@ class GoogleFinance:
                               (__name__, filename))
                 print("Failed to open %s for writing!" % filename)
         return
+
+    def get_profile(self, filename=None):
+        '''
+        Get the company profile information
+        '''
+        url_string = "https://www.google.com/finance?q=" + self.symbol
+        try:
+            url_open = urllib.request.urlopen(url_string)
+            web_page = url_open.read()
+        except:
+            print("Failed to get %s" % url_string)
+            return False
+
+        #web_page = web_page.decode('utf-8', 'ignore').encode('ascii', 'ignore')
+        soup = BeautifulSoup(web_page)
+        text = soup.get_text()
+        print(type(text))
+        print(soup.get_text().encode('ascii', 'ignore'))
+        print(soup.head)
+        print(soup.a)
+        print(soup.b)
+        return False

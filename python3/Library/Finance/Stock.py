@@ -96,28 +96,57 @@ class Stock:
         return str("%s: %d shares on %s" % (self.name,
                                             self.shares, self.purchase))
 
-    def get_from_yahoo(self, filename=None):
+    def get_historical_stock_data_from_yahoo(self, filename=None):
         '''
         Get this stock's history from Yahoo
         '''
 
-        logging.info("%s: Get %s from Yahoo" %
+        logging.info("%s: Get %s historical stock data from Yahoo" %
                      (__name__, self.symbol))
 
         yahoo = Finance.YahooFinance.YahooFinance(symbol=self.symbol,
                                                   start_date=self.purchase)
-        yahoo.get_stock(filename=filename)
+        yahoo.get_historical_stock_data(filename=filename)
         return
 
-    def get_from_google(self, filename=None):
+    def get_profile_from_yahoo(self, filename=None):
+        '''
+        Get this stock's profile web page from Yahoo
+        '''
+
+        logging.info("%s: Get %s profile from Yahoo" %
+                     (__name__, self.symbol))
+
+        yahoo = Finance.YahooFinance.YahooFinance(symbol=self.symbol,
+                                                  start_date=self.purchase)
+        yahoo.get_profile(filename=filename)
+        # yahoo.parse_profile(filename=filename)
+        return
+
+    def get_historical_stock_data_from_google(self, filename=None):
         '''
         Get this stock's history from Yahoo
         '''
 
-        logging.info("%s: Get %s from Google" %
+        logging.info("%s: Get %s historical stock data from Google" %
                      (__name__, self.symbol))
 
         google = Finance.GoogleFinance.GoogleFinance(symbol=self.symbol,
                                                      start_date=self.purchase)
-        google.get_stock(filename=filename)
+        google.get_historical_stock_data(filename=filename)
+        # google.get_profile(filename=filename)
+        return
+
+    def get_profile_from_google(self, filename=None):
+        '''
+        Get this stock's profile web page from Google
+        '''
+
+        logging.info("%s: Get %s profile from Google" %
+                     (__name__, self.symbol))
+
+        google = Finance.GoogleFinance.GoogleFinance(symbol=self.symbol,
+                                                     start_date=self.purchase)
+        google.get_profile(filename=filename)
+        # yahoo.parse_profile(filename=filename)
         return

@@ -58,7 +58,9 @@ class StockUI:
         data
         '''
         file_name = self.stock.name + "Google.csv"
-        self.stock.get_from_google(filename=file_name)
+        self.stock.get_historical_stock_data_from_google(filename=file_name)
+        file_name = self.stock.name + "_Profile_Google.html"
+        self.stock.get_profile_from_google(filename=file_name)
         return
 
     def yahooButtonClicked(self):
@@ -68,5 +70,7 @@ class StockUI:
         data
         '''
         file_name = self.stock.name + "Yahoo.csv"
-        self.stock.get_from_yahoo(filename=file_name)
+        self.stock.get_historical_stock_data_from_yahoo(filename=file_name)
+        file_name = self.stock.name + "_Profile_Yahoo.html"
+        self.stock.get_profile_from_yahoo(filename=file_name)
         return

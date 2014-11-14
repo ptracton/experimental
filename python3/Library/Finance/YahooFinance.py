@@ -9,9 +9,7 @@ import urllib.request
 import datetime
 import logging
 import re
-import urllib.request
 from bs4 import BeautifulSoup
-from bs4 import UnicodeDammit
 
 
 class YahooFinance:
@@ -52,8 +50,9 @@ class YahooFinance:
                 file_handle.close()
             except OSError:
                 print("Failed to open %s for writing!" % filename)
-                logging.error("%s: Failed to open %s for writing" %
-                              (__name__, filename))
+                error_string = "%s: Failed to open %s for writing" %\
+                    (__name__, filename)
+                logging.error(error_string)
         return
 
     def get_profile(self, filename=None):
@@ -64,8 +63,12 @@ class YahooFinance:
         try:
             url_open = urllib.request.urlopen(url_string)
             web_page = url_open.read()
-        except:
+        except urllib.error.URLError:
             print("Failed to get %s" % url_string)
+            print("Failed to get %s" % url_string)
+            error_string = "%s: Failed to get %s" %\
+                           (__name__, url_string)
+            logging.error(error_string)
             return False
 
         if filename is not None:
@@ -75,9 +78,11 @@ class YahooFinance:
                 profile.close()
             except OSError:
                 print("Failed to open %s for writing!" % filename)
-                logging.error("%s: Failed to open %s for writing" %
-                              (__name__, filename))
+                error_string = "%s: Failed to open %s for writing" %\
+                    (__name__, filename)
+                logging.error(error_string)
                 return False
+
         soup = BeautifulSoup(web_page)
         text = soup.get_text()
         print(type(text))

@@ -9,7 +9,6 @@ from Google's Finance Web Site
 import urllib.request
 import datetime
 import logging
-import urllib.request
 from bs4 import BeautifulSoup
 
 
@@ -53,8 +52,9 @@ class GoogleFinance:
                 file_handle.write(csv.decode("utf-8"))
                 file_handle.close()
             except OSError:
-                logging.error("%s: Failed to open %s for writing" %
-                              (__name__, filename))
+                error_string = "%s: Failed to open %s for writing" %\
+                    (__name__, filename)
+                logging.error(error_string)
                 print("Failed to open %s for writing!" % filename)
         return
 
@@ -66,11 +66,25 @@ class GoogleFinance:
         try:
             url_open = urllib.request.urlopen(url_string)
             web_page = url_open.read()
-        except:
+        except urllib.error.URLError:
             print("Failed to get %s" % url_string)
+            error_string = "%s: Failed to get %s" %\
+                           (__name__, url_string)
+            logging.error(error_string)
             return False
 
-        #web_page = web_page.decode('utf-8', 'ignore').encode('ascii', 'ignore')
+        if filename is not None:
+            try:
+                profile = open(filename, "wb")  # open file in binary mode
+                profile.write(web_page)
+                profile.close()
+            except OSError:
+                print("Failed to open %s for writing!" % filename)
+                error_string = "%s: Failed to open %s for writing" %\
+                    (__name__, filename)
+                logging.error(error_string)
+                return False
+
         soup = BeautifulSoup(web_page)
         text = soup.get_text()
         print(type(text))

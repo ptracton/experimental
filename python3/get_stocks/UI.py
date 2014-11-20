@@ -22,7 +22,8 @@ from PyQt4.QtGui import *
 #
 # Our custom imports
 #
-sys.path.append("../Library")
+sys.path.append("c:\\Users\tractp1\\src\\software\\experimental\\python3\\Library\\Finance")
+sys.path.append("..\Library")
 import Finance
 
 

@@ -86,10 +86,6 @@ class GoogleFinance:
                 return False
 
         soup = BeautifulSoup(web_page)
-        text = soup.get_text()
-        print(type(text))
-        print(soup.get_text().encode('ascii', 'ignore'))
-        print(soup.head)
-        print(soup.a)
-        print(soup.b)
+        g_data = soup.find_all("div", {"class": "sfe-section"})
+        print(g_data)
         return False

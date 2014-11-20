@@ -25,6 +25,8 @@ class UI(QDialog, Network_UI.Ui_Dialog):
 
         self.networkInterface = QNetworkInterface()
         list_addr = self.networkInterface.allAddresses()
+        for x in list_addr:
+            print (x.toString())
         self.ipAddressLabel.setText(list_addr[2].toString())
 
 

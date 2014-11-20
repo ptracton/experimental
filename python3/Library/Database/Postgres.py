@@ -83,6 +83,16 @@ class Postgres:
         print(self.table_name)
         return
 
+    def _sql_type_to_python(self, data):
+        if data is None:
+            return None
+        if data is "text":
+            return "%s"
+        if data is "text":
+            return "%d"
+        else:
+            return None
+
     def get_connection(self):
         '''
         Attempt to get a connection to the database, if we do
@@ -111,6 +121,11 @@ class Postgres:
         '''
         Excutes and commits the specified command
         '''
+
+        if command is None:
+            print("%s command is %s" % (__file__, command))
+            return
+        print("Execute and commit: %s" % command)
         try:
             if many:
                 self.cursor.executemany(command, data)
@@ -127,22 +142,22 @@ class Postgres:
             return False
         return True
 
-    def _executemany_and_commit(self, command):
-        '''
-        Excutes and commits the specified command
-        '''
-        try:
-            self.cursor.executemany(command)
-            self.connection.commit()
-        except psycopg2.ProgrammingError as err:
-            self.connection.rollback()
-            print("%s Exception %s " % (__name__, err))
-            return False
-        except psycopg2.InternalError as err:
-            self.connection.rollback()
-            print("%s Exception %s " % (__name__, err))
-            return False
-        return True
+    # def _executemany_and_commit(self, command):
+    #     '''
+    #     Excutes and commits the specified command
+    #     '''
+    #     try:
+    #         self.cursor.executemany(command)
+    #         self.connection.commit()
+    #     except psycopg2.ProgrammingError as err:
+    #         self.connection.rollback()
+    #         print("%s Exception %s " % (__name__, err))
+    #         return False
+    #     except psycopg2.InternalError as err:
+    #         self.connection.rollback()
+    #         print("%s Exception %s " % (__name__, err))
+    #         return False
+    #     return True
 
     def create_table(self, table_name=None, table_dict=None):
         '''
@@ -187,6 +202,20 @@ class Postgres:
 
         return True
 
+    def drop_database(self, database_name=None):
+        '''
+        Drop the specified database
+        '''
+        if database_name is None:
+            return False
+
+        table_string = "drop database " + database_name + ";"
+        if not self._execute_and_commit(table_string):
+            print("Failed to delete table %s" % database_name)
+            return False
+
+        return True
+
     def insert_single_row(self, columns, data):
         '''
         Insert a single row of data into our table.
@@ -217,16 +246,6 @@ class Postgres:
             print("Failed to insert single row into %s" % self._table_name)
             return False
         return True
-
-    def _sql_type_to_python(self, data):
-        if data is None:
-            return None
-        if data is "text":
-            return "%s"
-        if data is "text":
-            return "%d"
-        else:
-            return None
 
     def insert_multiple_rows(self, columns, data):
         '''
@@ -262,4 +281,47 @@ class Postgres:
             print("Failed to insert multiple rows into %s" % self._table_name)
             return False
 
+        return True
+
+    def update_data(self, columns=None, data=None,
+                    qualifier=False, qual=None, qual_data=None):
+        '''
+        Update existing data in database
+        '''
+        if self.cursor is None:
+            return False
+        if columns is None:
+            return False
+        if data is None:
+            return False
+
+        command_string = "update " + self.table_name + " set = \'" +\
+                         str(data) + "\' "
+        if qualifier:
+            command_string += " where " + qual + " = \'" +\
+                              qual_data + "\';"
+
+        print(command_string)
+        if not self._execute_and_commit(command_string):
+            print("Failed to delete row in %s" % self._table_name)
+            return False
+        return True
+
+    def delete_rows(self, columns=None, data=None):
+        '''
+        Deletes the rows that have this data in the specified column
+        '''
+        if self.cursor is None:
+            return False
+        if columns is None:
+            return False
+        if data is None:
+            return False
+
+        command_string = "delete from " + self.table_name + " where " +\
+                         columns + " = \'" + data + "\';"
+        print(command_string)
+        if not self._execute_and_commit(command_string):
+            print("Failed to delete row in %s" % self._table_name)
+            return False
         return True

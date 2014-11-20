@@ -4,7 +4,9 @@
 Nose testing of the Postgres class
 command: nosetests -v Test_Postgres
 '''
-import Postgres
+import sys
+sys.path.append("..\Library")
+import Database
 
 
 class Test_Postgres:
@@ -21,7 +23,7 @@ class Test_Postgres:
         This function is ran before each test case
         '''
         print("Setup")
-        self.dut = Postgres.Postgres()
+        self.dut = Database.Postgres.Postgres()
         self.dut.database = "postgres"
         self.dut.password = "python"
         self.dut.username = "postgres"

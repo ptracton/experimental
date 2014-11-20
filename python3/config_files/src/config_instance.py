@@ -1,18 +1,19 @@
-'''
-Created on Dec 4, 2012
+    '''
+   Created on Dec 4, 2012
 
-@author: ptracton
-'''
+   @author: ptracton
+   '''
 
 import configparser
 
-class config_instance( object ):
+
+class config_instance(object):
+
     '''
     classdocs
     '''
 
-
-    def __init__( self ):
+    def __init__(self):
         '''
         Constructor
         '''

@@ -4,12 +4,16 @@ Testing out the way to use the Postgres class that wraps
 around the psycopg2 modules
 '''
 import sys
-import Postgres
+#
+# Our custom imports
+#
+sys.path.append("..\Library")
+import Database
 
 if __name__ == "__main__":
     print("db_testing")
 
-    DATABASE = Postgres.Postgres()
+    DATABASE = Database.Postgres.Postgres()
     DATABASE.database = "postgres"
     DATABASE.password = "python"
     DATABASE.username = "postgres"
@@ -23,13 +27,14 @@ if __name__ == "__main__":
              }
 
     RETURN_CODE = DATABASE.create_table(table_dict=TABLE)
+    print(RETURN_CODE)
     while not RETURN_CODE:
         DATABASE.drop_table(table_name="stocks2")
         RETURN_CODE = DATABASE.create_table(table_name="stocks2",
                                             table_dict=TABLE)
 
     DATABASE.insert_single_row(TABLE.keys(), ["Medtronic", "MDT"])
-#    DATABASE.insert_single_row(TABLE.keys(), ["Google", "GOOG"])
+    DATABASE.insert_single_row(TABLE.keys(), ["Google", "GOOG"])
 
     MULTIPLE_ROWS = []
     MULTIPLE_ROWS.append(('Amazon', 'AMZ'))
@@ -37,3 +42,4 @@ if __name__ == "__main__":
     MULTIPLE_ROWS.append(('Microsoft', 'MSFT'))
     MULTIPLE_ROWS.append(('MRV', 'MRV'))
     DATABASE.insert_multiple_rows(TABLE, MULTIPLE_ROWS)
+    DATABASE.delete_rows("stock_name", "MRV")

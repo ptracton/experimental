@@ -11,10 +11,10 @@ import GoogleFinance
 
 class Test_GoogleFinance:
 
-    def __init__(self):
-        pass
-
     def setup(self):
+        '''
+        create a GoogleFinance object
+        '''
         start_date = time.strptime("30 October 2014", "%d %B %Y")
         self.google = GoogleFinance.GoogleFinance(
             symbol="goog",
@@ -22,22 +22,27 @@ class Test_GoogleFinance:
         return
 
     def teardown(self):
-        #del self.empty
+        '''
+        delete the GoogleFinance object from this test run
+        '''
         del self.google
         return
 
     def test_ctor(self):
-        #self.empty = GoogleFinance.GoogleFinance()
-        #assert self.empty.symbol == None
+        '''
+        Test the constructor
+        '''
         assert self.google.symbol == "GOOG"
-        #assert self.google.start_date == "30 October 2014"
+        print(self.google.start_date.tm_year)
+        assert self.google.start_date.tm_year == 2014
+        assert self.google.start_date.tm_mon == 10
+        assert self.google.start_date.tm_mday == 30
         return
 
     def test_stock(self):
         '''
         Test case
         '''
-        # self.google.get_historical_stock_data()
         try:
             os.remove("test.csv")
         except FileNotFoundError:

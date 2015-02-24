@@ -1,8 +1,8 @@
 #! /usr/bin/env python3
 
-'''
+"""
 This is the top level GUI component of get_stocks
-'''
+"""
 
 #
 # Python Standard Library imports
@@ -73,10 +73,10 @@ class UI(QDialog):
         pass
 
     def _start_config_file(self):
-        '''
+        """
         Read in our configuration file.  return true if we can open and read it
         return false for anything else
-        '''
+        """
         if os.path.isfile(self.config_file):
             self.configuration = configparser.ConfigParser()
             try:

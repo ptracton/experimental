@@ -164,5 +164,9 @@ module testbench (/*AUTOARG*/ ) ;
       repeat(100)@(posedge clk_tb);
       $finish;
 
-   end
+   end // initial begin
+
+   uart_tasks uart_tasks();
+
+
 endmodule // testbench

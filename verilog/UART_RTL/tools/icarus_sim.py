@@ -36,7 +36,7 @@ if __name__ == '__main__':
         sys.exit(-1)
 
     flow_steps = json_data['flow_steps']
-#    print(flow_steps)
+    print(flow_steps)
 
     for step in sorted(flow_steps.keys()):
         print("Running Step: %s " % step)

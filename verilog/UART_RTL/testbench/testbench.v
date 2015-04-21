@@ -44,6 +44,8 @@ module testbench (/*AUTOARG*/ ) ;
    reg [7:0] tx_byte;
    wire      busy;
    wire [7:0] rx_byte;
+   reg        rx_fifo_pop;
+   wire       tx_fifo_full;
 
    uart_rtl dut(
                 .tx(UART0_TX),
@@ -54,7 +56,9 @@ module testbench (/*AUTOARG*/ ) ;
                 .transmit(transmit),
                 .tx_byte(tx_byte),
                 .busy(busy),
-                .rx_byte(rx_byte)
+                .rx_byte(rx_byte),
+                .rx_fifo_pop(rx_fifo_pop),
+                .tx_fifo_full(tx_fifo_full)
                 ) ;
 
    //
@@ -139,6 +143,7 @@ module testbench (/*AUTOARG*/ ) ;
    initial begin
       tx_byte <= 8'h00;
       transmit <= 1'b0;
+      rx_fifo_pop <= 1'b0;
 
       @(negedge reset_tb);
       $display("RESET RELEASED %d", $time);

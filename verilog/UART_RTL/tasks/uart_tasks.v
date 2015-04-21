@@ -83,10 +83,17 @@ module uart_tasks;
    task uart_write_char;
       input [7:0] char;
       begin
+
+         //
+         // Write the character to the WB UART to send to FPGA UART
+         //
          @(posedge `UART_CLK);
          $display("TASK: UART Write = %c @ %d", char, $time);
          `UART_MASTER0.wb_wr1(32'hFFFF0000,    4'h0, {24'h000000, char});
 
+         //
+         // Wait for FPGA UART to become busy and then stop being busy
+         //
          if (testbench.busy == 0)begin
             @(posedge testbench.busy);
          end
@@ -96,11 +103,21 @@ module uart_tasks;
 
          end
 
+         //
+         // Read the FPGA UART byte and check value
+         //
          if (testbench.rx_byte != char)
            begin
               $display("FAIL: UART Write = 0x%h NOT 0x%h @ %d", testbench.rx_byte, char, $time);
               `test_failed <= 1;
            end
+
+         //
+         // Pop the byte from the FIFO
+         //
+         testbench.rx_fifo_pop <= 1;
+         @(posedge `UART_CLK);
+         testbench.rx_fifo_pop <= 0;
          //         `wait(1`mS);
       end
    endtask // uart_write_char

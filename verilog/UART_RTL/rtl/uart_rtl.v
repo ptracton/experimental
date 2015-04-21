@@ -11,15 +11,21 @@
 
 module uart_rtl (/*AUTOARG*/
    // Outputs
-   tx,
+   tx, irq, busy, rx_byte,
    // Inputs
-   clk, rst, rx
+   clk, rst, rx, transmit, tx_byte
    ) ;
 
    input clk;
    input rst;
    input rx;
-   output tx;
+   input transmit;
+   input [7:0] tx_byte;
+
+   output      tx;
+   output      irq;
+   output      busy;
+   output [7:0] rx_byte;
 
    /*AUTOREG*/
 
@@ -30,11 +36,10 @@ module uart_rtl (/*AUTOARG*/
    wire                 is_transmitting;        // From uart_inst of uart.v
    wire                 received;               // From uart_inst of uart.v
    wire                 recv_error;             // From uart_inst of uart.v
-   wire [7:0]           rx_byte;                // From uart_inst of uart.v
    // End of automatics
 
-   reg                  transmit;
-   reg [7:0]            tx_byte;
+   assign irq = received || recv_error;
+   assign busy = is_receiving || is_transmitting;
 
 
    uart uart_inst(/*AUTOINST*/

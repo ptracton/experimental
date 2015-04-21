@@ -39,12 +39,22 @@ module testbench (/*AUTOARG*/ ) ;
         #1    reset_tb = 1;
         #200  reset_tb = 0;
      end
+   wire uart_irq;
+   reg  transmit;
+   reg [7:0] tx_byte;
+   wire      busy;
+   wire [7:0] rx_byte;
 
    uart_rtl dut(
                 .tx(UART0_TX),
                 .clk(clk_tb),
                 .rst(reset_tb),
-                .rx(UART0_RX)
+                .rx(UART0_RX),
+                .irq(uart_irq),
+                .transmit(transmit),
+                .tx_byte(tx_byte),
+                .busy(busy),
+                .rx_byte(rx_byte)
                 ) ;
 
    //
@@ -127,6 +137,8 @@ module testbench (/*AUTOARG*/ ) ;
    // Test Case
    //
    initial begin
+      tx_byte <= 8'h00;
+      transmit <= 1'b0;
 
       @(negedge reset_tb);
       $display("RESET RELEASED %d", $time);
@@ -138,6 +150,14 @@ module testbench (/*AUTOARG*/ ) ;
       `UART_WRITE_CHAR("B");
       `UART_WRITE_CHAR("C");
 
+      repeat(10)@(posedge clk_tb);
+
+      `UART_READ_CHAR("X");
+      `UART_READ_CHAR("Y");
+      `UART_READ_CHAR("Z");
+
+      repeat(100)@(posedge clk_tb);
+      $finish;
 
    end
 endmodule // testbench

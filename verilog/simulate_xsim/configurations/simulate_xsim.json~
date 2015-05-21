@@ -7,8 +7,8 @@
     ],
     "flow_steps": {
 	"1" : "clean",
-    "2" : "build",
-    "3" : "simulation"
+	"1" : "build",
+	"2" : "simulation"
     },
     "flow" : {
 	"clean" :{
@@ -17,10 +17,10 @@
 	},
 	"build" :{
 	    "executable" : "fuse",
-        "arguments" : "work.glbl work.testbench -L unisims_ver -L unimacro_ver -L xilinxcorelib_ver -prj isim_rtl_sim.f -o simulation.exe"
+	    "arguments" : "work.glbl work.testbench -L unisims_ver -L unimacro_ver -L xilinxcorelib_ver -prj rtl_sim.f -o simulation.exe"
 	},
 	"simulation" : {
-        "executable": "./simulation.exe",
+	    "executable": "simulation.exe",
 	    "arguments" : "-tclbatch simulation.tcl"	
 	},
 	"run" : {

@@ -18,6 +18,13 @@ int main(void)
     __enable_irq();
     
     while(1){
+      // uartPutch('P');
+      // uartPutch('y');
+      // uartPutch('t');
+      // uartPutch('h');
+      // uartPutch('o');
+      // uartPutch('n');
+      // uartPutch('\n');
     }
     
 

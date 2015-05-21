@@ -3,7 +3,8 @@ import sys
 import os
 import ConfigTools
 
-class AppConfig( ConfigTools.ConfigTools ):
+
+class AppConfig(ConfigTools.ConfigTools):
 
     def __init__(self):
         super().__init__()
@@ -11,8 +12,8 @@ class AppConfig( ConfigTools.ConfigTools ):
 
         self.ConfigFile = None
         self.HomeDirectory = os.environ['HOME']
-        self.ConfigDirectory = self.HomeDirectory+"/.app/"
-        self.ConfigFile = self.ConfigDirectory +"app.ini"
+        self.ConfigDirectory = self.HomeDirectory + "/.app/"
+        self.ConfigFile = self.ConfigDirectory + "app.ini"
         self.FileObject = None
         return
 
@@ -37,11 +38,11 @@ class AppConfig( ConfigTools.ConfigTools ):
     def WriteFile(self):
         self.write(self.FileObject)
 
-    def AddSectionAndData(self, section = None, option =None, data = None):
+    def AddSectionAndData(self, section=None, option=None, data=None):
         if (not self.OpenFile()):
             sys.exit(1)
 
-        if not (self.has_section(section)):   
+        if not (self.has_section(section)):
             self.add_section(section)
-            
+
         self.set(section, option, str(data))

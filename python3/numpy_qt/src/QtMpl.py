@@ -1,13 +1,7 @@
-'''
-Created on Apr 8, 2013
 
-@author: tractp1
-'''
-
-from pprint import pprint
 from PyQt4 import QtGui
-import numpy as np
 import matplotlib
+import matplotlib.dates as mdates
 from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg
 
 
@@ -36,7 +30,12 @@ class QtMpl(FigureCanvasQTAgg):
         FigureCanvasQTAgg.updateGeometry(self)
 
     def addLine(self, x, y, title):
-        self.line_list.append(self.axes.plot(x, y, label=title))
+        self.fig.gca().xaxis.set_major_formatter(
+            mdates.DateFormatter('%m/%d/%Y'))
+        self.fig.gca().xaxis.set_major_locator(
+            mdates.DayLocator())
+        self.line_list.append(self.axes.plot_date(x, y, label=title,
+                                                  xdate=True))
         self.axes.legend()
 
         # http://stackoverflow.com/questions/4098131/matplotlib-update-a-plot

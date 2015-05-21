@@ -140,6 +140,10 @@ class Postgres:
             self.connection.rollback()
             print("%s Exception %s " % (__name__, err))
             return False
+        except psycopg2.DataError as err:
+            self.connection.rollback()
+            print("%s Exception %s " % (__name__, err))
+            return False
         return True
 
     # def _executemany_and_commit(self, command):
@@ -237,7 +241,20 @@ class Postgres:
         command_string += ") values ("
 
         for index in data:
-            command_string += "\'" + index + "\',"
+            print ("Index %s is %s" % (index, type(index).__name__))
+            if type(index).__name__ == 'str':
+                print ("STRING HIT")
+                command_string += "\'" + index + "\',"
+            elif type(index).__name__ == 'float':
+                print ("FLOAT HIT")
+                command_string += "\'%f" % index
+                command_string += "\',"
+            elif type(index).__name__ == 'int':
+                print ("INT HIT")
+                command_string += "\'%d" % index
+                command_string += "\',"
+            else:
+                command_string += "\'" + str(index) + "\',"
         command_string = command_string[:-1]
 
         command_string += ");"

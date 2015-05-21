@@ -21,6 +21,4 @@ verilog work ../../rtl/uart.v
 verilog work ../../rtl/uart_rtl.v
 verilog work ../../rtl/fifo.v
 
-verilog work /data/pace/scratch03/tractp1/xilinx/14.7/ISE_DS/PlanAhead/data/verilog/src/glbl.v
-
-
+verilog work ../../rtl/glbl.v

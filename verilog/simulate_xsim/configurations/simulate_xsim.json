@@ -14,19 +14,19 @@
     "flow" : {
 	"clean" :{
 	    "executable" : "rm",
-	    "arguments" : "-f *.log *.pb *~ webtalk* xsim* "
+	    "arguments" : "-rf *.log *.pb *~ webtalk* xsim* "
 	},
 	"xvlog" :{
 	    "executable" : "xvlog",
-        "arguments" : " -f rtl_sim.f"
+        "arguments" : " -prj rtl_sim.f"
 	},
     "xelab" :{
         "executable":"xelab",
-        "arguments" : "work.glbl work.testbench -L unisims_ver -L unimacro_ver -L xilinxcorelib_ver -prj rtl_sim.f"
+        "arguments" : "work.glbl work.testbench -L unisims_ver -L unimacro_ver -L xilinxcorelib_ver -prj rtl_sim.f -log elaborate.log -debug all"
     },
 	"xsim" : {
 	    "executable": "xsim",
-	    "arguments" : " work.glbl#work.testbench"
+	    "arguments" : " -tclbatch testbench.tcl work.glbl#work.testbench -log simulate.log"
 	},
 	"run" : {
 	    "executable" : "./a.out",

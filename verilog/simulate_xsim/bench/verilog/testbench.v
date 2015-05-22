@@ -25,7 +25,9 @@ module testbench;
      end
    
    initial begin
-      #1000 $finish;      
+      #1000;
+      $display("SIMULATION DONE @ %d", $time);      
+      $finish;      
    end
 
    top_level top(

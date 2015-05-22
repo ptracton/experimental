@@ -38,7 +38,7 @@ if __name__ == '__main__':
 
     steps = sorted(json_data['flow_steps'].items())
     for step in steps:
-        print("Running Step: %s " % step[0])
+        print("\n\nRunning Step: %s " % step[0])
         print("Executable: %s " % json_data['flow'][step[1]]['executable'])
         print("Arguments: %s " % json_data['flow'][step[1]]['arguments'])
         executable = json_data['flow'][step[1]]['executable']
@@ -52,3 +52,4 @@ if __name__ == '__main__':
         print(command)
         command = shlex.split(command)
         p = subprocess.Popen(command)
+        p.wait()

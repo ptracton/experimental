@@ -1,0 +1,8 @@
+#+TITLE: Org LaTex Basics
+#+AUTHOR: Phil Tracton
+#+EMAIL: philtracton@g.ucla.edu
+
+#+LaTeX_CLASS_OPTIONS: [article,letterpaper,times,12pt,listings-bw,microtype]
+
+
+Simple \LaTex example

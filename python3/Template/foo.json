@@ -1,0 +1,41 @@
+{
+    "project":"simulate_isim",
+    "installed tools": [
+        "xilinx",
+        "altera",
+        "icarus"
+    ],
+    "flow_steps": {
+	      "1" : "clean",
+        "2" : "ram_hack",
+        "3" : "parse",
+        "4" : "elaborate",
+        "5" : "xsimulation"
+    },
+    "flow" : {
+	      "clean" :{
+	          "executable" : "rm",
+	          "arguments" : "-rf xsim.dir xvlog* xelab.pb webtalk*"
+	      },
+        "ram_hack":{
+            "executable": "../tools/ram_image_hack.py ",
+            "arguments" : " "
+        },        
+	      "parse" :{
+	          "executable" : "xvlog",
+            "arguments" : "-prj rtl_xsim.prj"
+	      },
+	      "elaborate" :{
+	          "executable" : "xelab",
+            "arguments" : "-prj rtl_xsim.prj -debug all  --timescale 1ns/1ns -L unisims_ver -L unimacro_ver work.testbench"
+	      },        
+	      "xsimulation" : {
+	          "executable": "xsim",
+	          "arguments" : " work.testbench -tclbatch simulation.tcl $foo=$bar $defines $ includes "	
+	      },
+	      "run" : {
+	          "executable" : "./a.out",
+	          "arguments"  : " "
+	      }
+    }
+}

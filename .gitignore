@@ -25,3 +25,4 @@ INCA_libs/
 *.vcd
 *wdb
 work/
+outputs/

@@ -2,7 +2,9 @@
 
 import os
 
+
 import googlemaps
+import smopy
 import sodapy
 
 if __name__ == "__main__":
@@ -26,12 +28,15 @@ if __name__ == "__main__":
     DATA_ID = 'nimj-3ivp'
     
     client = sodapy.Socrata(URL, lacity_data_token, username=lacity_data_user_id, password=lacity_data_password)
-    data = client.get(DATA_ID, content_type="json", limit=20)
-    client.get_metadata(DATA_ID, content_type="json")
+    #data = client.get(DATA_ID, content_type="json", limit=20)
+    #client.get_metadata(DATA_ID, content_type="json")
     #client.download_attachments(DATA_ID)
     client.close()
-    print (data)
+    #print (data)
     
-    gmaps = googlemaps.Client(key=google_token)
-    geocode_result = gmaps.geocode('1600 Amphitheatre Parkway, Mountain View, CA')
-    print (geocode_result)
+    #gmaps = googlemaps.Client(key=google_token)
+    #geocode_result = gmaps.geocode('1600 Amphitheatre Parkway, Mountain View, CA')
+    #print (geocode_result)
+    
+    map = smopy.Map((42., -1., 55., 3.), z=4)
+    map.show_ipython()

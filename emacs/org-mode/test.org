@@ -1,0 +1,162 @@
+#+TITLE:     Testing Exports
+#+AUTHOR:    Phil Tracton
+#+EMAIL:     ptracton@gmail.com
+#+DATE:      2016-09-16 Fri
+#+DESCRIPTION: 
+#+KEYWORDS: 
+#+LANGUAGE:  en
+#+OPTIONS:   H:3 num:t toc:t \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+LINK_UP:   
+#+LINK_HOME:
+
+#+latex_header: \usepackage{listings}
+
+\href{http://ehneilsen.net/notebook/orgExamples/org-examples.html}{http://ehneilsen.net/notebook/orgExamples/org-examples.html}
+
+\begin{eqnarray*}
+\hat{f}(x) & \propto & \sum_{\nu} \frac{|F(\nu)H(\nu)|^2}{|N(\nu)|^2}  
+           \frac{G(\nu)}{H(\nu)} e^{\frac{2 \pi i \nu x}{N}}\\
+           & \propto & \sum_{\nu} \frac{|F(\nu)|^2}{|N(\nu)|^2} H(\nu) H^*(\nu) 
+           \frac{G(\nu)}{H(\nu)} e^{\frac{2 \pi i \nu x}{N}}\\
+           & \propto & \sum_{\nu} H^*(\nu) G(\nu) e^{\frac{2 \pi i \nu x}{N}}
+\end{eqnarray*}
+
+
+
+#+BEGIN_SRC python :results output :exports both
+  def times_two(x):
+       y = x*2
+       return y
+  
+  print times_two(5)    
+#+END_SRC
+
+#+RESULTS:
+: 10
+
+
+#+BEGIN_SRC calc :exports both
+fsolve(x*2+x=4,x)
+#+END_SRC
+
+#+results:
+: x = 1.33333333333
+
+
+#+BEGIN_SRC calc :var x=5 :var y=2
+2+a*x**y
+#+END_SRC
+
+#+RESULTS:
+: 25 a + 2
+
+| airmass | zenith_seeing | delivered_seeing |
+|---------+---------------+------------------|
+|     1.3 |          0.95 |        1.1119612 |
+|     1.3 |           1.0 |        1.1704854 |
+|     1.3 |           1.1 |        1.2875340 |
+|     1.3 |           1.2 |        1.4045825 |
+|     1.3 |          1.25 |        1.4631068 |
+|     1.3 |           1.3 |        1.5216311 |
+|     1.3 |           1.5 |        1.7557281 |
+|     1.3 |           1.8 |        2.1068738 |
+|     1.2 |           1.8 |        2.0080811 |
+|     1.3 |           2.0 |        2.3409709 |
+#+TBLFM: $3=$2*($1**0.6)
+
+
+#+BEGIN_SRC ditaa :file ditaa_filename.png :cmdline -r -s 0.8
+    +-----------+        +---------+  
+    |    PLC    |        |         |                
+    |  Network  +<------>+   PLC   +<---=---------+ 
+    |    cRED   |        |  c707   |              | 
+    +-----------+        +----+----+              | 
+                              ^                   | 
+                              |                   | 
+                              |  +----------------|-----------------+
+                              |  |                |                 |
+                              v  v                v                 v
+      +----------+       +----+--+--+      +-------+---+      +-----+-----+       Windows clients
+      |          |       |          |      |           |      |           |      +----+      +----+
+      | Database +<----->+  Shared  +<---->+ Executive +<-=-->+ Operator  +<---->|cYEL| . . .|cYEL|
+      |   c707   |       |  Memory  |      |   c707    |      | Server    |      |    |      |    |
+      +--+----+--+       |{d} cGRE  |      +------+----+      |   c707    |      +----+      +----+
+         ^    ^          +----------+             ^           +-------+---+
+         |    |                                   |                        
+         |    +--------=--------------------------+                    
+         v                                                             
++--------+--------+                                                         
+|                 |                                                         
+| Millwide System |            -------- Data ---------                      
+| cBLU            |            --=----- Signals ---=--                      
++-----------------+
+#+END_SRC 
+
+
+#+begin_src dot :file graphviz_filename.png :cmdline -Kdot -Tpng
+digraph G {
+  size="8,6"
+  ratio=expand
+  edge [dir=both]
+  plcnet [shape=box, label="DIGRAPH PLC Network"]
+  subgraph cluster_wrapline {
+    label="Wrapline Control System DIGRAPH"
+    color=purple
+    subgraph {
+    rank=same
+    exec
+    sharedmem [style=filled, fillcolor=lightgrey, shape=box]
+    }
+    edge[style=dotted, dir=none]
+    exec -> opserver
+    exec -> db
+    plc -> exec
+    edge [style=line, dir=both]
+    exec -> sharedmem
+    sharedmem -> db
+    plc -> sharedmem
+    sharedmem -> opserver
+  }
+  plcnet -> plc [constraint=false]
+  millwide [shape=box, label="Millwide System"]
+  db -> millwide
+
+  subgraph cluster_opclients {
+    color=blue
+    label="Operator Clients"
+    rankdir=LR
+    labelloc=b
+    node[label=client]
+    opserver -> client1
+    opserver -> client2
+    opserver -> client3
+  }
+}
+#+end_src
+
+
+#+begin_src plantuml :file plantuml.png
+title Example Activity Diagram
+note right: Example Function
+(*)--> "Step 1"
+--> "Step 2"
+-> "Step 3"
+--> "Step 4"
+--> === STARTLOOP ===
+note top: For each element in the array
+if "Are we done?" then
+  -> [no] "Do this"
+  -> "Do that"
+  note bottom: Important note\ngoes here
+  -up-> "Increment counters"
+  --> === STARTLOOP ===
+else
+  --> [yes] === ENDLOOP ===
+endif
+--> "Last Step"
+--> (*)
+#+end_src

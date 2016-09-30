@@ -1,0 +1,9 @@
+/*https://dot2tex.readthedocs.io/en/latest/*/
+
+digraph G{
+	label = "Biquad Filter Direct Form II"
+	size = "6,6"
+	a_1 [texlbl="H(z) = g\frac{1+\beta_1 z^-1+\beta_2 z^-2}{1+\alpha_1 z^-1+\alpha_2 z^-2}"];
+
+}
+

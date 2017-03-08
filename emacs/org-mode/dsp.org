@@ -1,0 +1,89 @@
+#+TITLE:     DSP Testing Exports
+#+AUTHOR:    Phil Tracton
+#+EMAIL:     ptracton@gmail.com
+#+DATE:      2016-09-16 Fri
+#+DESCRIPTION: 
+#+KEYWORDS: 
+#+LANGUAGE:  en
+#+OPTIONS:   H:3 num:t toc:t \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+LINK_UP:   
+#+LINK_HOME:
+
+#+latex_header: \usepackage{listings}
+
+Resource: \href{https://ccrma.stanford.edu/~jos/filters/filters.html}{https://ccrma.stanford.edu/~jos/filters/filters.html}
+
+The transfer function of the biquad can be defined as
+\begin{equation}
+H(z) = g\frac{1+\beta_1 z^{-1}+\beta_2 z^{-2}}{1+\alpha_1 z^{-1}+\alpha_2 z^{-2}}
+\end{equation}
+
+
+Direct Form I can be expressed as\\
+\begin{equation}
+ y[n] = \beta_0 * x[n] + \beta_1 * x[n-1] + \beta_2 * x[n-2] + \alpha_1 * y[n-1] + \alpha_2 * y[n-2]    
+\end{equation}
+This can be done as a single sum.
+
+#+BEGIN_SRC ditaa :file biquad_direct_form_I.png :cmdline -r -s 1.0
+                                       +-----------------+
+                                       |                 |             
+ x[n] ----+--------- b_0 ------------->+    SUM          +-------------------------------------> y[n]
+          |                            |                 |             
+          |                            +--+---+---+---+---             
+          v                               ^   ^   ^   ^              
+       +--+---+                           |   |   |   |              +---+--+
+       |      |                           |   |   |   |              |      |
+       |delay |                           |   |   |   |              | delay|
+       |      |                           |   |   |   |              |      |
+       +--+---+                           |   |   |   |              +--+---+
+          |                               |   |   |   |                 |
+          +---------- b_1 -----------------   |   |    --- -a_1 ---------
+          |                                   |   | 
+          v                                   |   | 
+       +--+---+                               |   |                  +--+---+
+       |      |                               |   |                  |      |
+       |delay |                               |   |                  | delay|
+       |      |                               |   |                  |      |
+       +--+---+                               |   |                  +--+---+
+          |                                   |   |                     |
+          |                                   |   |                     |
+          |                                   |   |                     |
+          ------------ b_2 -------------------|   |----------- -a_2 ----
+
+#+END_SRC 
+
+
+Direct Form II can be expressed as\\
+\begin{eqnarray*}
+v[n] = x[n] - \alpha_1*v(n-1) - \alpha_2*v(n-2)\\
+y[n] = \beta_0*v(n) + \beta_1 *v(n-1) +\beta_2 *v(n-2)
+\end{eqnarray*}
+This creates two sum operations.  The first to create v[n] and the second to get the final result of y[n].
+
+#+BEGIN_SRC ditaa :file biquad_direct_form_II.png :cmdline -r -s 1.0
+             +----------+                             +----------+    
+             |   sum    |   v[n]                      |  sum     |
+x[n] ------->+   for    +------------------- b_0----->+  for     +-----------> y[n]
+             |   v[n]   |             |               |  y[n]    |
+             +--+----+--+             |               +--+----+--+    
+                ^    ^                v                  ^    ^
+                |    |            +---+---+              |    |
+                |    |            |       |              |    |
+                |    --- -a_1-----+ DELAY +----b_1 ------|    |
+                |                 |       |                   |
+                |                 +---+---+                   | 
+                |                     |                       |
+                |                     |                       |
+                |                     v                       |
+                |                 +---+----+                  |
+                |                 |        |                  |
+                |------  -a_2-----+ DELAY  +---b_2 ------------
+                                  |        |
+                                  +--------+
+
+#+END_SRC

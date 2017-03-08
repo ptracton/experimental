@@ -1,0 +1,69 @@
+#+TITLE:     Writing Beamer presentations in org-mode
+#+AUTHOR:    Phil Tracton
+#+EMAIL:     ptracton@gmail.com
+#+DATE:      2016-09-16 Fri
+#+DESCRIPTION: 
+#+KEYWORDS: 
+#+LANGUAGE:  en
+#+OPTIONS:   H:3 num:t toc:t \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+LINK_UP:   
+#+LINK_HOME:
+
+#+startup: beamer
+#+LaTeX_CLASS: beamer
+#+LaTeX_CLASS_OPTIONS: [bigger]
+#+latex_header: \mode<beamer>{\usetheme{Madrid}}
+#+latex_header: \definecolor{UCLABlue}{RGB}{83, 104, 149}
+#+latex_header: \definecolor{UCLAGold}{RGB}{254, 187, 54}
+#+latex_header: \usecolortheme[named=UCLABlue]{structure} 
+#+latex_header: \setbeamertemplate{navigation symbols}{}
+#+BEAMER_FRAME_LEVEL: 2
+
+
+
+* A simple slide
+This slide consists of some text with a number of bullet points:
+
+- the first, very @important@, point!
+- the previous point shows the use of the special markup which
+  translates to the Beamer specific /alert/ command for highlighting
+  text.
+
+
+The above list could be numbered or any other type of list and may
+include sub-lists.
+
+* Next Slide with Ditaa
+
+This is our Ditaa example
+
+#+BEGIN_SRC ditaa :file some_filename.png :cmdline -r -s 0.8
+    +-----------+        +---------+  
+    |    PLC    |        |         |                
+    |  Network  +<------>+   PLC   +<---=---------+ 
+    |    cRED   |        |  c707   |              | 
+    +-----------+        +----+----+              | 
+                              ^                   | 
+                              |                   | 
+                              |  +----------------|-----------------+
+                              |  |                |                 |
+                              v  v                v                 v
+      +----------+       +----+--+--+      +-------+---+      +-----+-----+       Windows clients
+      |          |       |          |      |           |      |           |      +----+      +----+
+      | Database +<----->+  Shared  +<---->+ Executive +<-=-->+ Operator  +<---->|cYEL| . . .|cYEL|
+      |   c707   |       |  Memory  |      |   c707    |      | Server    |      |    |      |    |
+      +--+----+--+       |{d} cGRE  |      +------+----+      |   c707    |      +----+      +----+
+         ^    ^          +----------+             ^           +-------+---+
+         |    |                                   |                        
+         |    +--------=--------------------------+                    
+         v                                                             
++--------+--------+                                                         
+|                 |                                                         
+| Millwide System |            -------- Data ---------                      
+| cBLU            |            --=----- Signals ---=--                      
++-----------------+
+#+END_SRC 

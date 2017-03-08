@@ -1,0 +1,16 @@
+// MedDSP Matlab Library File Generation
+// Generated 21-Oct-2009
+// Bitwidth: 16
+// Signed: 1
+0000
+0000
+0000
+0000
+03e8
+00FF
+FF80
+00FF
+FF80
+00FF
+
+

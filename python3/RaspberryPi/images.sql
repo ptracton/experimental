@@ -1,0 +1,8 @@
+DROP TABLE IF EXISTS "images";
+
+CREATE TABLE "images" (
+  id SERIAL PRIMARY KEY,
+  IMAGE BLOB,
+  IMAGE_DATE date,
+  IMAGE_TIME time
+);

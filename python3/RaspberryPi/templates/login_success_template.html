@@ -1,0 +1,48 @@
+<html>
+  <head> Welcome ${username} </head>
+  <body>
+    <%def name="myfunc(x)">
+    this is myfunc, x is ${x}
+</%def>
+
+    
+    <center><b>
+        Welcome User Name ${username} from ${ip_address} <p>
+          <a href = "/">HOME</a>
+    </b></center>
+    <hr>
+    
+    % if x==5:
+    this is some output
+    % endif
+    <hr>
+    <p>
+
+      % for a in ['one', 'two', 'three', 'four', 'five']:
+      % if a[0] == 't':
+      its two or three
+      % elif a[0] == 'f':
+      four/five
+      % else:
+      one
+      % endif
+      % endfor
+      <hr>
+    <p>
+
+      <ul>
+        % for a in ("one", "two", "three"):
+        <li>Item ${loop.index}: ${a}</li>
+        % endfor
+      </ul>
+      <hr>
+    <p>
+
+      ${myfunc(7)}
+      <hr>
+    <p>
+
+      
+    
+  </body>
+</html>

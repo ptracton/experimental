@@ -51,7 +51,7 @@ class DatabaseSensorMessage():
     def __init__(self, table_name=None, sensor_id=None,
                  sensor_data=None,
                  date=None, time=None):
-        
+
         self.table_name = table_name
         self.sensor_id = sensor_id
         self.sensor_data = sensor_data
@@ -74,7 +74,7 @@ class DatabaseImageMessage():
         self.time = time
         return
 
-    
+
 class DatabaseCommand(enum.Enum):
     """
     Command Messages for the database
@@ -142,12 +142,12 @@ class Database (threading.Thread):
         """
         Constructor does.....
         """
-        threading.Thread.__init__ (self)
+        threading.Thread.__init__(self)
         self.database_queue = database_queue
         self.thread_running = True
         self.database_file_name = database_file_name
         self.db = RasPiSqlite.RasPiSqlite(db_file_name=self.database_file_name)
-        self.db.CreateDB()        
+        self.db.CreateDB()
         return
 
     def CreateTableSchema(self, schema_file=None):
@@ -183,7 +183,7 @@ class Database (threading.Thread):
         """
         Main thread loop for handling messages
         """
-        
+
         #logging.info("Database Thread Up and Running")
         print("Database Thread Up and Running")
 
@@ -223,7 +223,6 @@ class Database (threading.Thread):
                     self.db.DeleteTable(table_name=message.message.table_name)
 
                 elif message.command == DatabaseCommand.DB_SELECT_DATA:
-                    print("RUN Select Data")
                     results = self.db.SelectData(
                         table_name=message.message.table_name,
                         field=message.message.field,
@@ -273,7 +272,7 @@ if __name__ == "__main__":
         os.remove("database_test.log")
     except:
         pass
-    
+
     logging.basicConfig(filename="database_test.log",
                         level=logging.DEBUG,
                         format='%(asctime)s,%(levelname)s,%(message)s',
@@ -282,17 +281,16 @@ if __name__ == "__main__":
     logging.info("Database Thread Testing Start")
     db_queue = queue.Queue()
     response_queue = queue.Queue()
-    
+
     db = Database(database_queue=db_queue,
                   database_file_name="test_db_thread.db")
     db_task = threading.Thread(target=db.run)
     db_task.start()
-    
-    
+
     #
     # Create Table via Schema
     #
-    print ("\n\nCreate Table Via Schema")
+    print("\n\nCreate Table Via Schema")
     message_data = DatabaseDataMessage()
     message_data.schema_file = "test_table1.sql"
     message = DatabaseMessage(command=DatabaseCommand.DB_CREATE_TABLE_SCHEMA,
@@ -347,23 +345,35 @@ if __name__ == "__main__":
     del(message)
 
     #
+    # Get Last Row ID
+    #
+    message_data = DatabaseDataMessage(table_name="test",
+                                       caller_queue=response_queue)
+    message = DatabaseMessage(command=DatabaseCommand.DB_GET_LAST_ROW_ID,
+                              message=message_data)
+    db_queue.put(message)
+    db_task.join(timeout=0.65)
+    while not response_queue.empty():
+        print(response_queue.get())
+    del(message_data)
+    del(message)
+
+    #
     # Delete Table
     #
-    #message_data = DatabaseDataMessage(table_name="test")
-    #message = DatabaseMessage(command=DatabaseCommand.DB_DELETE_TABLE,
-    #                          message=message_data)
-    #db_queue.put(message)
-    #del(message_data)
-    #del(message)
+    print("\n\nDelete Table")
+    message_data = DatabaseDataMessage(table_name="test")
+    message = DatabaseMessage(command=DatabaseCommand.DB_DELETE_TABLE,
+                              message=message_data)
+    db_queue.put(message)
+    db_task.join(timeout=0.65)
+    del(message_data)
+    del(message)
 
-    #message_data = DatabaseDataMessage(table_name="test")
-    #message = DatabaseMessage(command=DatabaseCommand.DB_GET_LAST_ROW_ID,
-    #                          message=message_data)
-    #db_queue.put(message)
-    #del(message_data)
-    #del(message)
+    #
+    # Kill thread
+    #
     time.sleep(1)
     message = DatabaseMessage()
     db.kill()
     db_queue.put(message)
-    

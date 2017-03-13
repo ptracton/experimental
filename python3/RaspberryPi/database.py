@@ -14,6 +14,7 @@ You should change this comment to reflect what will be in the file
 #
 import enum
 import logging
+import threading
 import time
 import RasPiSqlite
 
@@ -27,6 +28,7 @@ class DatabaseDataMessage():
     def __init__(self, table_name=None, data_dict=None,
                  schema_file=None, field=None, data=None, date=None,
                  caller_queue=None):
+        self.table_name = table_name
         self.data_dict = data_dict
         self.schema_file = schema_file
         self.caller_queue = caller_queue
@@ -34,6 +36,10 @@ class DatabaseDataMessage():
         self.data = data
         self.date = date
         return
+
+    def __str__(self):
+        string = "Table Name = %{}".format(self.table_name)
+        return string
 
 
 class DatabaseSensorMessage():
@@ -85,7 +91,34 @@ class DatabaseCommand(enum.Enum):
     DB_GET_LAST_ROW_ID = 10
     DB_LIST_TABLE_COLUMNS = 11
 
-    
+
+def DatabaseCommandToString(command):
+    string = "UNKNOWN COMMAND"
+    if command == DatabaseCommand.DB_INSERT_DATA:
+        string = "DB INSERT DATA"
+    elif command == DatabaseCommand.DB_INSERT_SENSOR_DATA:
+        string = "DB INSERT SENSOR DATA"
+    elif command == DatabaseCommand.DB_INSERT_IMAGE_DATA:
+        string = "DB INSERT IMAGE DATA"
+    elif command == DatabaseCommand.DB_CREATE_TABLE_DICT:
+        string = "DB CREATE TABLE DICT"
+    elif command == DatabaseCommand.DB_CREATE_TABLE_SCHEMA:
+        string = "DB CREATE TABLE SCHEMA"
+    elif command == DatabaseCommand.DB_DELETE_TABLE:
+        string = "DB DELETE TABLE"
+    elif command == DatabaseCommand.DB_SELECT_DATA:
+        string = "DB SELECT DATA"
+    elif command == DatabaseCommand.DB_SELECT_ALL_DATA:
+        string = "DB SELECT ALL DATA"
+    elif command == DatabaseCommand.DB_SELECT_TODAYS_DATA:
+        string = "DB SELECT TODAYS DATA"
+    elif command == DatabaseCommand.DB_GET_LAST_ROW_ID:
+        string = "DB GET LAST ROW ID"
+    elif command == DatabaseCommand.DB_LIST_TABLE_COLUMNS:
+        string = "DB LIST TABLE COLUMNS"
+    return string
+
+
 class DatabaseMessage():
     """
     Wrapper class for a database message
@@ -95,8 +128,12 @@ class DatabaseMessage():
         self.message = message
         return
 
+    def __str__(self):
+        string = "Command %s" % DatabaseCommandToString(self.command)
+        return string
 
-class Database ():
+
+class Database (threading.Thread):
     """
     This is the database class for interfacing with the SQLite database
     """
@@ -105,10 +142,12 @@ class Database ():
         """
         Constructor does.....
         """
+        threading.Thread.__init__ (self)
         self.database_queue = database_queue
         self.thread_running = True
-        self.db = RasPiSqlite.RasPiSqlite(db_file_name=database_file_name)
-        self.db.CreateDB()
+        self.database_file_name = database_file_name
+        self.db = RasPiSqlite.RasPiSqlite(db_file_name=self.database_file_name)
+        self.db.CreateDB()        
         return
 
     def CreateTableSchema(self, schema_file=None):
@@ -144,62 +183,72 @@ class Database ():
         """
         Main thread loop for handling messages
         """
+        
+        #logging.info("Database Thread Up and Running")
+        print("Database Thread Up and Running")
 
-        logging.info("Database Thread Up and Running")
         while (self.thread_running):
             if (self.database_queue.empty() is False):
                 message = self.database_queue.get()
-                print(message.message)
-                if message.message == DatabaseMessage.DB_INSERT_DATA:
+                print("Command %s" % str(message))
+                if message.command == DatabaseCommand.DB_INSERT_DATA:
                     self.db.InsertData(table_name=message.message.table_name,
                                        data_dict=message.message.data_dict)
 
-                elif message.message == DatabaseMessage.DB_INSERT_SENSOR_DATA:
-                    self.db.InsertSensorData(table_name=message.message.table_name,
-                                             sensor_id=message.message.sensor_id,
-                                             sensor_data=message.message.sensor_data,
-                                             date=message.message.date,
-                                             time=message.message.time)
+                elif message.command == DatabaseCommand.DB_INSERT_SENSOR_DATA:
+                    self.db.InsertSensorData(
+                        table_name=message.message.table_name,
+                        sensor_id=message.message.sensor_id,
+                        sensor_data=message.message.sensor_data,
+                        date=message.message.date,
+                        time=message.message.time)
 
-                elif message.message == DatabaseMessage.DB_INSERT_IMAGE_DATA:
-                    self.db.InsertImageDateTimeStamp(table_name=message.message.table_name,
-                                                     image=message.message.image,
-                                                     date=message.message.date,
-                                                     time=message.message.time)
+                elif message.command == DatabaseCommand.DB_INSERT_IMAGE_DATA:
+                    self.db.InsertImageDateTimeStamp(
+                        table_name=message.message.table_name,
+                        image=message.message.image,
+                        date=message.message.date,
+                        time=message.message.time)
 
-                elif message.message == DatabaseMessage.DB_CREATE_TABLE_SCHEMA:
+                elif message.command == DatabaseCommand.DB_CREATE_TABLE_SCHEMA:
                     self.db.schema_file_name = message.message.schema_file
                     self.db.CreateTableSchema()
 
-                elif message.message == DatabaseMessage.DB_CREATE_TABLE_DICT:
-                    self.db.CreateTableDictionary(table_name=message.message.table_name,
-                                                  table_dict=message.message.data_dict)
+                elif message.command == DatabaseCommand.DB_CREATE_TABLE_DICT:
+                    self.db.CreateTableDictionary(
+                        table_name=message.message.table_name,
+                        table_dict=message.message.data_dict)
 
-                elif message.message == DatabaseMessage.DB_DELETE_TABLE:
+                elif message.command == DatabaseCommand.DB_DELETE_TABLE:
                     self.db.DeleteTable(table_name=message.message.table_name)
 
-                elif message.message == DatabaseMessage.SELECT_DATA:
-                    results = self.db.SelectData(table_name=message.message.table_name,
-                                                 field=message.message.field,
-                                                 data=message.message.data)
+                elif message.command == DatabaseCommand.DB_SELECT_DATA:
+                    print("RUN Select Data")
+                    results = self.db.SelectData(
+                        table_name=message.message.table_name,
+                        field=message.message.field,
+                        data=message.message.data)
                     if message.message.caller_queue is not None:
                         message.message.caller_queue.put(results)
 
-                elif message.message == DatabaseMessage.DB_SELECT_ALL_DATA:
-                    results = self.db.SelectAllData(table_name=message.message.table_name)
-
-                    if message.message.caller_queue is not None:
-                        message.message.caller_queue.put(results)
-
-                elif message.message == DatabaseMessage.DB_SELECT_TODAYS_DATA:
-                    results = self.db.SelectTodaysData(table_name=message.message.table_name,
-                                                    date=message.message.date)
+                elif message.command == DatabaseCommand.DB_SELECT_ALL_DATA:
+                    results = self.db.SelectAllData(
+                        table_name=message.message.table_name)
 
                     if message.message.caller_queue is not None:
                         message.message.caller_queue.put(results)
 
-                elif message.message == DatabaseMessage.DB_GET_LAST_ROW_ID:
-                    results = self.db.GetLastRowID(table_name=message.message.table_name)
+                elif message.command == DatabaseCommand.DB_SELECT_TODAYS_DATA:
+                    results = self.db.SelectTodaysData(
+                        table_name=message.message.table_name,
+                        date=message.message.date)
+
+                    if message.message.caller_queue is not None:
+                        message.message.caller_queue.put(results)
+
+                elif message.command == DatabaseCommand.DB_GET_LAST_ROW_ID:
+                    results = self.db.GetLastRowID(
+                        table_name=message.message.table_name)
 
                     if message.message.caller_queue is not None:
                         message.message.caller_queue.put(results)
@@ -236,23 +285,27 @@ if __name__ == "__main__":
     
     db = Database(database_queue=db_queue,
                   database_file_name="test_db_thread.db")
-    db_task = threading.Thread()
-
+    db_task = threading.Thread(target=db.run)
+    db_task.start()
+    
+    
     #
     # Create Table via Schema
     #
-    db_task.start()
+    print ("\n\nCreate Table Via Schema")
     message_data = DatabaseDataMessage()
     message_data.schema_file = "test_table1.sql"
     message = DatabaseMessage(command=DatabaseCommand.DB_CREATE_TABLE_SCHEMA,
                               message=message_data)
     db_queue.put(message)
+    db_task.join(timeout=.65)
     del(message_data)
     del(message)
 
     #
     # Insert Data into Table
     #
+    print("\n\nInsert Data into Table")
     NOW = datetime.datetime.now()
     data_dict = {}
     data_dict[0] = ("TEST_TEXT", """ "This is some text to test with" """)
@@ -262,26 +315,55 @@ if __name__ == "__main__":
     data_dict[4] = ("TEST_DATE", """ "{}" """.format(NOW.strftime("%m-%d-%Y")))
     data_dict[5] = ("TEST_TIME", """ time("{}") """.format(
         NOW.strftime("%H:%M:%S")))
-    print(data_dict)
 
     message_data = DatabaseDataMessage(table_name="test",
                                        data_dict=data_dict)
     message = DatabaseMessage(command=DatabaseCommand.DB_INSERT_DATA,
                               message=message_data)
     db_queue.put(message)
+    db_task.join(timeout=.65)
     del(message)
     del(message_data)
 
     #
     # Get Data Back
     #
-
+    print("\n\nGet Data Back")
     message_data = DatabaseDataMessage(table_name="test",
                                        field="TEST_INT",
-                                       data=1234)
+                                       data=1234,
+                                       caller_queue=response_queue)
+
     message = DatabaseMessage(command=DatabaseCommand.DB_SELECT_DATA,
                               message=message_data)
 
     db_queue.put(message)
-    if not response_queue.empty():
+    time.sleep(.5)
+    db_task.join(timeout=0.65)
+
+    while not response_queue.empty():
         print(response_queue.get())
+    del(message_data)
+    del(message)
+
+    #
+    # Delete Table
+    #
+    #message_data = DatabaseDataMessage(table_name="test")
+    #message = DatabaseMessage(command=DatabaseCommand.DB_DELETE_TABLE,
+    #                          message=message_data)
+    #db_queue.put(message)
+    #del(message_data)
+    #del(message)
+
+    #message_data = DatabaseDataMessage(table_name="test")
+    #message = DatabaseMessage(command=DatabaseCommand.DB_GET_LAST_ROW_ID,
+    #                          message=message_data)
+    #db_queue.put(message)
+    #del(message_data)
+    #del(message)
+    time.sleep(1)
+    message = DatabaseMessage()
+    db.kill()
+    db_queue.put(message)
+    

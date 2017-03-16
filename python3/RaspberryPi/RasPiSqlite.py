@@ -176,12 +176,12 @@ class RasPiSqlite():
         Insert data into table with columns and data in dictionary
         """
         print("RasPiSqlite: InsertData {table}".format(table=table_name))
-        
+
         if table_name is None or data_dict is None or self._db_is_ready is False:
             return False
 
-
-        query_string = "INSERT into {table} (".format(table=table_name)
+        query_string = "INSERT into {table} (".format(
+            table=table_name)
 
         for k in sorted(data_dict.keys()):
             query_string += "{}, ".format(data_dict[k][0])
@@ -256,13 +256,15 @@ class RasPiSqlite():
         """
         if table_name is None or field is None or data is None or self._db_is_ready is False:
             return False
-        print("RasPiSqlite: SelectData {} {} {} ".format(table_name, field, data))
+        print("RasPiSqlite: SelectData {} {} {} ".format(
+            table_name, field, data))
 
         query_string = "SELECT * FROM {table} WHERE {field}={data}".format(
             table=table_name,
             field=field, data=data)
         self.ExecuteSQLQuery(query_string)
         results = self.cur.fetchall()
+        print ("RasPiSqlite SelectData: Data = %s" % (str(results)))
         return results
 
     def SelectTodaysData(self, table_name=None, date=None):

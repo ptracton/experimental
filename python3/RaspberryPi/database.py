@@ -148,6 +148,7 @@ class Database (threading.Thread):
         self.database_file_name = database_file_name
         self.db = RasPiSqlite.RasPiSqlite(db_file_name=self.database_file_name)
         self.db.CreateDB()
+        self.active = False
         return
 
     def CreateTableSchema(self, schema_file=None):
@@ -188,9 +189,11 @@ class Database (threading.Thread):
         print("Database Thread Up and Running")
 
         while (self.thread_running):
+            self.active = False
             if (self.database_queue.empty() is False):
                 message = self.database_queue.get()
-                print("Command %s" % str(message))
+                self.active = True
+                #print("Command %s" % str(message))
                 if message.command == DatabaseCommand.DB_INSERT_DATA:
                     self.db.InsertData(table_name=message.message.table_name,
                                        data_dict=message.message.data_dict)
@@ -231,6 +234,7 @@ class Database (threading.Thread):
                         message.message.caller_queue.put(results)
 
                 elif message.command == DatabaseCommand.DB_SELECT_ALL_DATA:
+                    print("COMMAND: DB Select All Data")
                     results = self.db.SelectAllData(
                         table_name=message.message.table_name)
 

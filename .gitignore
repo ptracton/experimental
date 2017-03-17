@@ -30,3 +30,5 @@ outputs/
 *.elfcheck
 isim/
 *.cmd
+*.db
+*.log

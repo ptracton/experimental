@@ -1,12 +1,13 @@
 #! /usr/bin/env python3
 """
-File: template_class.py
-Author: YOUR NAME GOES HERE
+File: twitter.py
+Author: Phil Tracton
 
-This is an example template of how a python program should be structured.
-It is a good starting point for any new coders.
+This is a class for handling the Twitter Stream Queue.
+Run this class in a thread and when the message in the
+command list is recieved it is placed in the sqlite3
+database via another queue
 
-You should change this comment to reflect what will be in the file
 """
 
 #
@@ -85,7 +86,7 @@ class TwitterStreamer (twython.TwythonStreamer):
         print(status_code)
 
 
-class TwitterThread(threading.Thread):
+class TwitterThread():
     """
     Thread for handling receiving tweets
     """
@@ -95,8 +96,6 @@ class TwitterThread(threading.Thread):
         """
         Constructor for this class
         """
-
-        threading.Thread.__init__(self)
         user_id = getpass.getuser()
         config = configparser.RawConfigParser()
         config.read("/home/%s/.ucla.cfg" % user_id)
@@ -244,7 +243,6 @@ if __name__ == "__main__":
         
     twitter_thread.join()
     twitter_task.kill()
-
 
     print("ALL DONE")
     sys.exit(0)

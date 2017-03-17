@@ -1,12 +1,13 @@
 #! /usr/bin/env python3
 """
-File: template_class.py
-Author: YOUR NAME GOES HERE
+File: sms.py
+Author: Philip Tracton
 
-This is an example template of how a python program should be structured.
-It is a good starting point for any new coders.
+This file has the SMSReceiverThread class.  This class extends
+the threading.Thread class.  The run method which waits for
+an SMS message to be recieved and then stores the message
+in the sqlite3 database via the queue to it's thread
 
-You should change this comment to reflect what will be in the file
 """
 
 #
@@ -18,7 +19,8 @@ import threading
 from twilio.rest import TwilioRestClient
 import database
 
-class SMSReceiverThread (threading.Thread):
+
+class SMSReceiverThread ():
     """
     This class handles receiving messages via SMS and communicating
     with the Web Server about it
@@ -28,18 +30,23 @@ class SMSReceiverThread (threading.Thread):
         """
         Constructor for class.
         """
-        threading.Thread.__init__(self)
         self.response_queue = response_queue
         self.db_queue = db_queue
         self.thread_running = False
+        self.message_received = False
+
+        # Handle the config file and read parameters we need from it
         config = configparser.RawConfigParser()
         config.read(config_file)
         self.account_sid = config.get("TWILIO", "SID")
         self.auth_token = config.get("TWILIO", "TOKEN")
         self.twilio_phone = config.get("TWILIO", "PHONE_NUMBER")
-        self.client = TwilioRestClient(self.account_sid, self.auth_token)
         self.command_list = config.get("COMMANDS", "TERMS")
-        self.message_received = False
+
+        # Create an instance of teh TwilioRestClient needed to get
+        # the SMS messages
+        self.client = TwilioRestClient(self.account_sid, self.auth_token)
+
         return
 
     def kill(self):
@@ -53,26 +60,29 @@ class SMSReceiverThread (threading.Thread):
         """
         Main thread loop for handling messages
         """
+        
         self.thread_running = True
         twilio_response_string = "Sent from your Twilio trial account - Hello from Twilio!"
         print("SMS Thread Running")
+
+        # Main loop of thread that does not end until "kill" is called and a
+        # message is received
         while(self.thread_running):
             self.message_received = False
             for message in self.client.messages.list():
-                #print("New TEXT Message!")
-                #print(message.body)
-                #print(message.date_sent)
-                #print("\n")
-
                 if message.body != twilio_response_string:
+                    # Create the dictionary to send to the database
+                    # which will take it back apart and store it
                     data_dict = {}
                     NOW = datetime.datetime.now()
-                    data_dict[0] = ("SMS_TEXT", """ "{}" """.format(message.body))
+                    data_dict[0] = (
+                        "SMS_TEXT", """ "{}" """.format(message.body))
                     data_dict[1] = ("SMS_DATE", """ "{}" """.format(
                         NOW.strftime("%m-%d-%Y")))
                     data_dict[2] = ("SMS_TIME", """ time("{}") """.format(
                         NOW.strftime("%H:%M:%S")))
 
+                    # Send the message to the database
                     db_message_data = database.DatabaseDataMessage(
                         table_name="sms",
                         data_dict=data_dict)
@@ -80,6 +90,9 @@ class SMSReceiverThread (threading.Thread):
                         command=database.DatabaseCommand.DB_INSERT_DATA,
                         message=db_message_data)
                     db_queue.put(db_message)
+
+                    # Wait for it to finish and delete the instances
+                    # and structures used to send the message
                     db_task.join(timeout=.65)
                     del(db_message)
                     del(db_message_data)
@@ -133,7 +146,6 @@ if __name__ == "__main__":
     sms_thread = threading.Thread(target=sms_task.run, daemon=True)
 
     sms_thread.start()
-    #sms_thread.join()
     #
     # You need to send a text message to trigger the next step
     #
@@ -144,7 +156,6 @@ if __name__ == "__main__":
         #
         # Get Last Row ID
         #
-        #print("DBG: 0")
         while last_row_id == last_row:
             response_queue = queue.Queue()
             message_data = database.DatabaseDataMessage(
@@ -157,18 +168,16 @@ if __name__ == "__main__":
             db_task.join(timeout=0.65)
             if response_queue.empty() is False:
                 last_row = response_queue.get()
-                #print("Type of last_row %s is %s" % (type(last_row), str(last_row)))
                 if last_row > last_row_id:
                     print(last_row)
                     print(last_row_id)
-                    
-        #print("DBG: 3")
+
         last_row_id = last_row
-        
+
         del(message_data)
         del(message)
         del(response_queue)
-        
+
         #
         # Get Data Back
         #
@@ -178,15 +187,12 @@ if __name__ == "__main__":
                                                     field="ID",
                                                     data=last_row_id,
                                                     caller_queue=response_queue)
-        #print("DBG: 4")
+
         message = database.DatabaseMessage(
             command=database.DatabaseCommand.DB_SELECT_DATA,
             message=message_data)
-        #print("DBG: 5")
         db_queue.put(message)
-        #print("DBG: 6")
         time.sleep(.5)
-        #print("DBG: 7")
 
         while response_queue.empty():
             pass

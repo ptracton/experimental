@@ -31,7 +31,7 @@ class SMSReceiverThread (threading.Thread):
         threading.Thread.__init__(self)
         self.response_queue = response_queue
         self.db_queue = db_queue
-        self.thread_running = True
+        self.thread_running = False
         config = configparser.RawConfigParser()
         config.read(config_file)
         self.account_sid = config.get("TWILIO", "SID")
@@ -53,6 +53,7 @@ class SMSReceiverThread (threading.Thread):
         """
         Main thread loop for handling messages
         """
+        self.thread_running = True
         twilio_response_string = "Sent from your Twilio trial account - Hello from Twilio!"
         print("SMS Thread Running")
         while(self.thread_running):
@@ -106,7 +107,7 @@ if __name__ == "__main__":
                         format='%(asctime)s,%(levelname)s,%(message)s',
                         datefmt='%m/%d/%Y %I:%M:%S %p')
 
-    logging.info("Database Thread Testing Start")
+    logging.info("SMS Thread Testing Start")
     db_queue = queue.Queue()
     response_queue = queue.Queue()
     sms_task = SMSReceiverThread(  #config_file="/user/tractp1/.ucla.cfg",

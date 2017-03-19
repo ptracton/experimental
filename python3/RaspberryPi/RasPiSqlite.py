@@ -93,13 +93,14 @@ class RasPiSqlite():
         """
         With the specified schema table create the table in teh database
         """
-        print("RasPiSqlite: Create Table Schema")
+        print("RasPiSqlite: Create Table Schema %s" % (self.schema_file_name))
 
         try:
             f = open(self.schema_file_name, 'r')
             schema = f.read()
             self.conn.executescript(schema)
             self.conn.commit()
+            f.close()
         except:
             exc_type, exc_value, exc_traceback = sys.exc_info()
             print("*** print_tb:")
@@ -121,7 +122,6 @@ class RasPiSqlite():
             print("*** format_tb:")
             print(repr(traceback.format_tb(exc_traceback)))
             print("*** tb_lineno:", exc_traceback.tb_lineno)
-            
             print("Failed to execute schema {}".format(self.schema_file_name))
             return False
 
@@ -264,7 +264,7 @@ class RasPiSqlite():
             field=field, data=data)
         self.ExecuteSQLQuery(query_string)
         results = self.cur.fetchall()
-        print ("RasPiSqlite SelectData: Data = %s" % (str(results)))
+        print("RasPiSqlite SelectData: Data = %s" % (str(results)))
         return results
 
     def SelectTodaysData(self, table_name=None, date=None):

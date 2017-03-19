@@ -15,10 +15,10 @@ database via another queue
 #
 import configparser
 import datetime
-import getpass
 import logging
 import queue
 import threading
+import time 
 import twython
 import database
 
@@ -48,7 +48,7 @@ class TwitterStreamer (twython.TwythonStreamer):
         message = ""
         user_name = ""
         screen_name = ""
-
+        print(data)
         if 'text' in data:
             message = data['text']
         if 'user' in data:
@@ -81,9 +81,10 @@ class TwitterStreamer (twython.TwythonStreamer):
         self.message_received = True
         return
 
-    def on_error(self, status_code, data):
-        self.disconnect()
-        print(status_code)
+#    def on_error(self, status_code, data):
+#        self.disconnect()
+#        print("Twitter On Error!")
+#        print(status_code)
 
 
 class TwitterThread():
@@ -96,10 +97,8 @@ class TwitterThread():
         """
         Constructor for this class
         """
-        user_id = getpass.getuser()
         config = configparser.RawConfigParser()
-        config.read("/home/%s/.ucla.cfg" % user_id)
-        #config.read("/user/%s/.ucla.cfg" % user_id)
+        config.read(config_file)
 
         self.CONSUMER_KEY = config.get("TWITTER", "CONSUMER_KEY")
         self.CONSUMER_SECRET = config.get("TWITTER", "CONSUMER_SECRET")
@@ -123,11 +122,15 @@ class TwitterThread():
         """
         Thread entry point
         """
-        logging.info("Twitter Thread Starting")
-
+        logging.info("Twitter Thread Starting %s" % (time.ctime()))
+        print("Twitter Thread Starting %s" % (time.ctime()))
         while(self.thread_running):
             try:
-                print("Waiting on Tweet.....")
+                # print("Waiting on Tweet.....")
+                # Don't check constantly or you will get a 420 error that you
+                # are accessing twitter too often
+                time.sleep(60)
+                print("Checking Tweet %s" % (time.ctime()))
                 stream = TwitterStreamer(app_key=self.CONSUMER_KEY,
                                          app_secret=self.CONSUMER_SECRET,
                                          oauth_token=self.ACCESS_TOKEN,
@@ -176,9 +179,10 @@ if __name__ == "__main__":
     db_task.join(timeout=.65)
     del(message_data)
     del(message)
-    
+
     twitter_queue = queue.Queue()
-    twitter_task = TwitterThread(response_queue=response_queue,
+    twitter_task = TwitterThread(config_file="/home/ptracton/.ucla.cfg",
+                                 response_queue=response_queue,
                                  db_queue=db_queue)
     twitter_thread = threading.Thread(target=twitter_task.run, daemon=True)
     twitter_thread.start()

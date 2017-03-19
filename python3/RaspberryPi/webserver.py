@@ -12,15 +12,24 @@ You should change this comment to reflect what will be in the file
 #
 # Imports go here
 #
+import configparser
 import os
+import queue
 import socket
+import sys
+import threading
 import time
 import bottle
 import mako
 import mako.template
 import mako.lookup
 from beaker.middleware import SessionMiddleware
+import twilio
+from twilio import twiml
+import twilio.rest
 
+import database
+import twitter
 
 #
 # Global Variable
@@ -33,6 +42,23 @@ session_opts = {
     'session.auto': True
 }
 app = SessionMiddleware(bottle.app(), session_opts)
+
+# copy in your Twilio Account SID and Auth Token from Twilio Console
+config_file = "/home/ptracton/.ucla.cfg",
+config = configparser.RawConfigParser()
+config.read(config_file)
+account_sid = config.get("TWILIO", "SID")
+auth_token = config.get("TWILIO", "TOKEN")
+TwilioClient = twilio.rest.TwilioRestClient(account_sid, auth_token)
+
+#
+# Database and Queue global variables for use in bottle application
+#
+db_queue = queue.Queue()
+db = database.Database(database_queue=db_queue,
+                       database_file_name="test_webserver_thread.db")
+
+response_queue = queue.Queue()
 
 
 def get_ip_address():
@@ -51,10 +77,55 @@ def check_login(username=None, password=None):
     Check username and password against database to see
     if user is authorized
     """
-    if username == "ptracton" and password == "ucla":
-        return True
+    print("check_login: username=%s password=%s" % (username, password))
+    cl_response_queue = queue.Queue()
+    message_data = database.DatabaseDataMessage(
+        table_name="webserver",
+        field=""" "{}" """.format("WEBSERVER_USER_NAME"),
+        data=""" "{}" """.format(username),
+        caller_queue=cl_response_queue)
+    message = database.DatabaseMessage(
+        command=database.DatabaseCommand.DB_SELECT_DATA,
+        message=message_data)
+    db_queue.put(message)
+    db_task.join(timeout=0.65)
+
+    print("check_login: Wait on password response")
+    while cl_response_queue.empty() is True:
+        pass
+
+    print("check_login: Got password response")
+    user_response = cl_response_queue.get()
+    print(user_response)
+
+    # Make sure there is some sort of response before
+    # parsing it.
+    if len(user_response):
+        db_username = user_response[0][1]
+        db_password = user_response[0][2]
+        print("DB Username = %s" % (db_username))
+        print("DB Password = %s" % (db_password))
+        return (db_username == username and db_password == password)
     else:
+        # There was no response so no chance of logging in or parsing
+        # the response
         return False
+
+
+@bottle.post('/twilio')
+def inbound_sms():
+    twiml_response = twiml.Response()
+    # obtain message body from the request. could also get the "To" and
+    # "From" phone numbers as well from parameters with those names
+    inbound_message = bottle.request.forms.get("Body")
+    response_message = "I don't understand what you meant...need more code!"
+    # we can use the incoming message text in a condition statement
+    if inbound_message == "Hello":
+        response_message = "Well, hello right back at ya!"
+    twiml_response.message(response_message)
+    # we return back the mimetype because Twilio needs an XML response
+    bottle.response.content_type = "application/xml"
+    return str(twiml_response)
 
 
 @bottle.route('/delete')
@@ -84,17 +155,17 @@ def login():
     Front page of the web site
     """
     template_dir = os.getcwd() + '/templates/'
-    mylookup = mako.lookup.TemplateLookup(directories=[template_dir])
+    mako.lookup.TemplateLookup(directories=[template_dir])
     login_template = mako.template.Template(
         filename='templates/login_form.html')
-    
+
     mysession = bottle.request.environ.get('beaker.session')
     print(mysession)
 
     if 'logged_in' not in mysession:
         mysession['logged_in'] = False
         mysession.save()
-    
+
     if mysession['logged_in'] is True:
         username = mysession['username']
         remote_address = mysession['remote_address']
@@ -148,7 +219,7 @@ def do_login():
     password = bottle.request.forms.get('password')
     remote_address = bottle.request.environ.get('REMOTE_ADDR')
     template_dir = os.getcwd() + '/templates/'
-    mylookup = mako.lookup.TemplateLookup(directories=[template_dir])    
+    mako.lookup.TemplateLookup(directories=[template_dir])
     print(remote_address)
     mysession = bottle.request.environ.get('beaker.session')
     if check_login(username, password):
@@ -167,9 +238,6 @@ def do_login():
 
 if __name__ == "__main__":
     import logging
-    import queue
-    import threading
-    import database
 
     try:
         os.remove("webserver_test.log")
@@ -177,27 +245,57 @@ if __name__ == "__main__":
     except:
         pass
 
+    print("Starting Logging")
     logging.basicConfig(filename="webserver_test.log",
                         level=logging.DEBUG,
                         format='%(asctime)s,%(levelname)s,%(message)s',
                         datefmt='%m/%d/%Y %I:%M:%S %p')
 
-    db_queue = queue.Queue()
-    db = database.Database(database_queue=db_queue,
-                           database_file_name="test_webserver_thread.db")
+    print("Creating and Starting DB Thread")
     db_task = threading.Thread(target=db.run)
     db_task.start()
 
+    print("Creating Twitter Thread")
+    twitter_queue = queue.Queue()
+    twitter_task = twitter.TwitterThread(config_file=config_file,
+                                         response_queue=response_queue,
+                                         db_queue=db_queue)
+    twitter_thread = threading.Thread(target=twitter_task.run, daemon=True)
+    twitter_thread.start()
+
+    print("Creating Database")
     message_data = database.DatabaseDataMessage()
     message_data.schema_file = "webserver_table.sql"
     message = database.DatabaseMessage(
         command=database.DatabaseCommand.DB_CREATE_TABLE_SCHEMA,
         message=message_data)
     db_queue.put(message)
-    db_task.join(timeout=.65)
-    del(message_data)
-    del(message)
+#    db_task.join(timeout=.65)
 
-    ip_address = get_ip_address()
-    print("Running Server on IP Address %s" % ip_address)
-    bottle.run(app=app, host=ip_address, port=8080, debug=True,  reloader=True)
+    print("Create SMS Table")
+    message_data = database.DatabaseDataMessage()
+    message_data.schema_file = "sms_table.sql"
+    message = database.DatabaseMessage(
+        command=database.DatabaseCommand.DB_CREATE_TABLE_SCHEMA,
+        message=message_data)
+    db_queue.put(message)
+#    db_task.join(timeout=.65)
+
+    print("Create Twitter Table")
+    message_data = database.DatabaseDataMessage()
+    message_data.schema_file = "twitter_table.sql"
+    message = database.DatabaseMessage(
+        command=database.DatabaseCommand.DB_CREATE_TABLE_SCHEMA,
+        message=message_data)
+    db_queue.put(message)
+#    db_task.join(timeout=.65)
+
+    print("Run bottle")
+    try:
+        bottle.run(app=app, host="127.0.0.1", port=8080,
+                   debug=True,
+                   reloader=True)
+    except KeyboardInterrupt:
+        db.kill()
+        os.system("killall python3")
+        sys.exit(0)

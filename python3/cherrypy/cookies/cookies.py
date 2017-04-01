@@ -3,6 +3,10 @@
 import cherrypy
 
 
+def error_page_404(status, message, traceback, version):
+    return "404 Error!"
+
+
 class MyCookieApp(object):
     @cherrypy.expose
     def set(self):
@@ -25,4 +29,5 @@ class MyCookieApp(object):
 if __name__ == '__main__':
     #http://127.0.0.1:8080/cookie/read
     #http://127.0.0.1:8080/cookie/set
+    cherrypy.config.update({'error_page.404': error_page_404})
     cherrypy.quickstart(MyCookieApp(), '/cookie')

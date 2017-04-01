@@ -13,6 +13,7 @@ You should change this comment to reflect what will be in the file
 # Imports go here
 #
 import configparser
+import logging
 import os
 import queue
 import socket
@@ -24,6 +25,8 @@ import mako
 import mako.template
 import mako.lookup
 from beaker.middleware import SessionMiddleware
+import cherrypy
+import tornado
 import twilio
 from twilio import twiml
 import twilio.rest
@@ -237,8 +240,6 @@ def do_login():
 
 
 if __name__ == "__main__":
-    import logging
-
     try:
         os.remove("webserver_test.log")
         os.remove("test_webserver_thread.db")
@@ -255,13 +256,13 @@ if __name__ == "__main__":
     db_task = threading.Thread(target=db.run)
     db_task.start()
 
-    print("Creating Twitter Thread")
-    twitter_queue = queue.Queue()
-    twitter_task = twitter.TwitterThread(config_file=config_file,
-                                         response_queue=response_queue,
-                                         db_queue=db_queue)
-    twitter_thread = threading.Thread(target=twitter_task.run, daemon=True)
-    twitter_thread.start()
+    # print("Creating Twitter Thread")
+    # twitter_queue = queue.Queue()
+    # twitter_task = twitter.TwitterThread(config_file=config_file,
+    #                                      response_queue=response_queue,
+    #                                      db_queue=db_queue)
+    # twitter_thread = threading.Thread(target=twitter_task.run, daemon=True)
+    # twitter_thread.start()
 
     print("Creating Database")
     message_data = database.DatabaseDataMessage()
@@ -270,29 +271,27 @@ if __name__ == "__main__":
         command=database.DatabaseCommand.DB_CREATE_TABLE_SCHEMA,
         message=message_data)
     db_queue.put(message)
-#    db_task.join(timeout=.65)
 
-    print("Create SMS Table")
-    message_data = database.DatabaseDataMessage()
-    message_data.schema_file = "sms_table.sql"
-    message = database.DatabaseMessage(
-        command=database.DatabaseCommand.DB_CREATE_TABLE_SCHEMA,
-        message=message_data)
-    db_queue.put(message)
-#    db_task.join(timeout=.65)
+    # print("Create SMS Table")
+    # message_data = database.DatabaseDataMessage()
+    # message_data.schema_file = "sms_table.sql"
+    # message = database.DatabaseMessage(
+    #     command=database.DatabaseCommand.DB_CREATE_TABLE_SCHEMA,
+    #     message=message_data)
+    # db_queue.put(message)
 
-    print("Create Twitter Table")
-    message_data = database.DatabaseDataMessage()
-    message_data.schema_file = "twitter_table.sql"
-    message = database.DatabaseMessage(
-        command=database.DatabaseCommand.DB_CREATE_TABLE_SCHEMA,
-        message=message_data)
-    db_queue.put(message)
-#    db_task.join(timeout=.65)
+    # print("Create Twitter Table")
+    # message_data = database.DatabaseDataMessage()
+    # message_data.schema_file = "twitter_table.sql"
+    # message = database.DatabaseMessage(
+    #     command=database.DatabaseCommand.DB_CREATE_TABLE_SCHEMA,
+    #     message=message_data)
+    # db_queue.put(message)
 
     print("Run bottle")
     try:
         bottle.run(app=app, host="127.0.0.1", port=8080,
+                   server="cherrypy",
                    debug=True,
                    reloader=True)
     except KeyboardInterrupt:

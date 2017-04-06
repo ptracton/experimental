@@ -1,15 +1,13 @@
 #! /usr/bin/env python3
 
 import queue
-import sys
 import threading
 
 import SystemState
-
+        
 if __name__ == "__main__":
-
-    print("Testing SystemState")
-
+    import sys
+    
     SystemStateQueue = queue.Queue()
     response_queue = queue.Queue()
     SystemStateInst = SystemState.SystemStateThread(
@@ -68,5 +66,9 @@ if __name__ == "__main__":
     
     response = response_queue.get()
     print(str(response))
-    
+
+    SystemStateInst.kill()
+    SystemStateQueue.put(message)
+    SystemStateThread.join()
+    print("Thread State: {}".format(SystemStateThread.is_alive()))
     sys.exit(0)

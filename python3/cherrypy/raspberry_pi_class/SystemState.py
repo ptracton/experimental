@@ -52,12 +52,15 @@ class SystemStateThread():
         self.SystemStateQueue = SystemStateQueue
         self.SystemState = SystemState()
         self.thread_running = True
+        self.__DEBUG__ = False
         return
 
     def kill(self):
         """
         Terminate the thread
         """
+        if self.__DEBUG__ is True:
+            print("SystemStateThread.kill() thread ready to be killed")
         self.thread_running = False
         return
 
@@ -67,9 +70,14 @@ class SystemStateThread():
         """
         print("SystemState Thread Running.....")
         while(self.thread_running):
+            if self.__DEBUG__ is True:
+                print("SystemStateThread.run() Waiting on Queue")
             if self.SystemStateQueue.empty() is False:
+                if self.__DEBUG__ is True:
+                    print("SystemStateThread.run() Received Message")
                 message = self.SystemStateQueue.get()
-                print("SystemState Command {}".format(message.command))
+                if self.__DEBUG__ is True:
+                    print("SystemState Command {}".format(message.command))
                 if message.command == SystemStateCommand.SYSTEM_STATE_SystemEnabled:
                     self.SystemState.SystemEnabled = message.data
                 elif message.command == SystemStateCommand.SYSTEM_STATE_LED:

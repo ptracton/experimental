@@ -35,7 +35,7 @@ class DatabaseDataMessage():
         return
 
     def __str__(self):
-        string = "Table Name = %{}".format(self.table_name)
+        string = "Table Name = {}".format(self.table_name)
         return string
 
 
@@ -148,26 +148,11 @@ class Database ():
         self.__DEBUG__ = False
         return
 
-    def CreateTableSchema(self, schema_file=None):
-        """
-        Create a new table based on a schema
-        """
-        self.db.schema_file_name = schema_file
-        self.db.CreateTableSchema()
-        return
-
-    def CreateTableDictionary(self, table_name=None, table_dict=None):
-        """
-        Create a new table based on a dictionary
-        """
-        self.db.CreateTableDictionary(table_name=table_name,
-                                      table_dict=table_dict)
-        return
-
     def clean_up_thread(self):
         """
         Clean up actions when thread ends
         """
+        print("Database: clean_up_thread")
         return
 
     def kill(self):
@@ -190,7 +175,7 @@ class Database ():
                 message = self.database_queue.get()
                 self.active = True
                 if self.__DEBUG__:
-                    print("Command {}".format(message))
+                    print("Database.run() {}".format(message))
                 if message.command == DatabaseCommand.DB_INSERT_DATA:
                     self.db.InsertData(table_name=message.message.table_name,
                                        data_dict=message.message.data_dict)
@@ -227,14 +212,14 @@ class Database ():
                         table_name=message.message.table_name,
                         field=message.message.field,
                         data=message.message.data)
+                    print("COMMAND: DB_SELECT_DATA {}".format(results))
                     if message.message.caller_queue is not None:
                         message.message.caller_queue.put(results)
 
                 elif message.command == DatabaseCommand.DB_SELECT_ALL_DATA:
-                    print("COMMAND: DB Select All Data")
                     results = self.db.SelectAllData(
                         table_name=message.message.table_name)
-
+                    print("COMMAND: DB Select All Data {}".format(results))
                     if message.message.caller_queue is not None:
                         message.message.caller_queue.put(results)
 
@@ -253,6 +238,12 @@ class Database ():
                     if message.message.caller_queue is not None:
                         message.message.caller_queue.put(results)
 
+                elif message.command == DatabaseCommand.DB_LIST_TABLE_COLUMNS:
+                    results = self.db.ListTableColumns(
+                        table_name=message.message.table_name)
+
+                    if message.message.caller_queue is not None:
+                        message.message.caller_queue.put(results)
                 else:
                     print("MESSAGE ERROR: %s" % (message.message))
             else:
@@ -260,5 +251,3 @@ class Database ():
 
         self.clean_up_thread()
         return
-
-

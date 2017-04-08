@@ -254,17 +254,19 @@ class RasPiSqlite():
         Select data from this table where field and data match.
         Returns all rows!
         """
-        if table_name is None or field is None or data is None or self._db_is_ready is False:
-            return False
+
         print("RasPiSqlite: SelectData {} {} {} ".format(
             table_name, field, data))
-
+        
+        if table_name is None or field is None or data is None or self._db_is_ready is False:
+            return False
+       
         query_string = "SELECT * FROM {table} WHERE {field}={data}".format(
             table=table_name,
             field=field, data=data)
         self.ExecuteSQLQuery(query_string)
         results = self.cur.fetchall()
-        print("RasPiSqlite SelectData: Data = %s" % (str(results)))
+        print("RasPiSqlite SelectData: Data = {}".format(results))
         return results
 
     def SelectTodaysData(self, table_name=None, date=None):

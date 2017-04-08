@@ -3,10 +3,31 @@
 import datetime
 import logging
 import os
+import queue
+import sys
 import time
 import threading
-import queue
+import unittest
+
 import database
+
+
+class TestDatabase(unittest.TestCase):
+
+    def test_DatabaseDataMessageDefaultValues(self):
+        message = database.DatabaseDataMessage()
+        self.assertIsNone(message.table_name)
+        self.assertIsNone(message.data_dict)
+        self.assertIsNone(message.schema_file)
+        self.assertIsNone(message.caller_queue)
+        self.assertIsNone(message.field)
+        self.assertIsNone(message.data)
+        self.assertIsNone(message.date)
+
+    def test_DatabaseMessageDefaultValues(self):
+        message = database.DatabaseMessage()
+        self.assertIsNone(message.message)
+        self.assertIsNone(message.command)
 
 if __name__ == "__main__":
     
@@ -23,6 +44,9 @@ if __name__ == "__main__":
                         datefmt='%m/%d/%Y %I:%M:%S %p')
 
     logging.info("Database Thread Testing Start")
+    
+    unittest.main()
+    sys.exit(0)
     db_queue = queue.Queue()
     response_queue = queue.Queue()
 

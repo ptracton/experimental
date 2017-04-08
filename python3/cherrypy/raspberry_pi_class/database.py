@@ -12,7 +12,6 @@ with an sqlite3 database
 # Imports go here
 #
 import enum
-import logging
 import time
 import RasPiSqlite
 
@@ -140,13 +139,13 @@ class Database ():
         """
         Constructor does.....
         """
-        #threading.Thread.__init__(self)
         self.database_queue = database_queue
         self.thread_running = True
         self.database_file_name = database_file_name
         self.db = RasPiSqlite.RasPiSqlite(db_file_name=self.database_file_name)
         self.db.CreateDB()
         self.active = False
+        self.__DEBUG__ = False
         return
 
     def CreateTableSchema(self, schema_file=None):
@@ -183,7 +182,6 @@ class Database ():
         Main thread loop for handling messages
         """
 
-        #logging.info("Database Thread Up and Running")
         print("Database Thread Up and Running")
 
         while (self.thread_running):
@@ -191,7 +189,8 @@ class Database ():
             if (self.database_queue.empty() is False):
                 message = self.database_queue.get()
                 self.active = True
-                #print("Command %s" % str(message))
+                if self.__DEBUG__:
+                    print("Command {}".format(message))
                 if message.command == DatabaseCommand.DB_INSERT_DATA:
                     self.db.InsertData(table_name=message.message.table_name,
                                        data_dict=message.message.data_dict)

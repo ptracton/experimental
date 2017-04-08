@@ -93,4 +93,6 @@ class SystemStateThread():
                     print("SystemState Thread Error")
             else:
                 time.sleep(1)
+        if self.__DEBUG__ is True:
+            print("SystemStateThread Terminate")
         return

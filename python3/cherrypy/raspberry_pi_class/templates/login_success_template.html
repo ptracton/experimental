@@ -1,9 +1,7 @@
 <html>
   <head> Welcome ${username} </head>
   <body>
-    <%def name="myfunc(x)">
-    this is myfunc, x is ${x}
-</%def>
+
 
     
     <center><b>
@@ -11,37 +9,25 @@
           <a href = "/">HOME</a>
     </b></center>
     <hr>
-    
-    % if x==5:
-    this is some output
-    % endif
-    <hr>
-    <p>
 
-      % for a in ['one', 'two', 'three', 'four', 'five']:
-      % if a[0] == 't':
-      its two or three
-      % elif a[0] == 'f':
-      four/five
-      % else:
-      one
-      % endif
-      % endfor
-      <hr>
-    <p>
-
-      <ul>
-        % for a in ("one", "two", "three"):
-        <li>Item ${loop.index}: ${a}</li>
-        % endfor
-      </ul>
-      <hr>
-    <p>
-
-      ${myfunc(7)}
-      <hr>
-    <p>
-
+<table border="1">
+<tr>
+<td>System Enabled</td>
+<td>${SystemEnabled}</td>
+</tr>
+<tr>
+<td>LED On</td>
+<td>${LED}</td>
+</tr>
+<tr>
+<td>Motion Sensor Enabled</td>
+<td>${MotionSensor}</td>
+</tr>
+<tr>
+<td>LCD</td>
+<td>${LCD}</td>
+</tr>
+</table>
       
     <a href="logout">logout</a>
   </body>

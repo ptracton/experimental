@@ -24,6 +24,7 @@ import twilio.rest
 LOCAL LIBRARIES
 """
 import database
+import SystemState
 import twitter
 
 """
@@ -31,7 +32,7 @@ GLOBALS
 """
 db_queue = queue.Queue()
 db = database.Database(database_queue=db_queue,
-                       database_file_name="test_webserver_thread.db")
+                       database_file_name="webserver_thread.db")
 
 response_queue = queue.Queue()
 
@@ -43,6 +44,10 @@ account_sid = config.get("TWILIO", "SID")
 auth_token = config.get("TWILIO", "TOKEN")
 TwilioClient = twilio.rest.TwilioRestClient(account_sid, auth_token)
 
+SystemStateQueue = queue.Queue()
+SystemStateInst = SystemState.SystemStateThread(
+    SystemStateQueue=SystemStateQueue)
+
 
 def get_ip_address():
     """
@@ -53,6 +58,23 @@ def get_ip_address():
     ip = (s.getsockname()[0])
     s.close()
     return ip
+
+
+def get_SystemState():
+    """
+    Get the current System State
+    """
+    message = SystemState.SystemStateMessage(
+        command=SystemState.SystemStateCommand.SYSTEM_STATE_GetState,
+        response_queue=response_queue)
+
+    SystemStateQueue.put(message)
+
+    while response_queue.empty():
+        pass
+
+    response = response_queue.get()
+    return response
 
 
 def check_login(username=None, password=None):
@@ -114,6 +136,7 @@ class Root(object):
         template_dir = os.getcwd() + '/templates/'
         mako.lookup.TemplateLookup(directories=[template_dir])
         address = get_ip_address()
+        system_state = get_SystemState()
         if 'logged_in' in cherrypy.session:
             print(cherrypy.session['logged_in'])
             if cherrypy.session['logged_in'] is True:
@@ -122,7 +145,11 @@ class Root(object):
                 html = login_template.render(
                     username=cherrypy.session['username'],
                     x=100,
-                    address=address)
+                    address=address,
+                    SystemEnabled=system_state.SystemEnabled,
+                    LED=system_state.LED,
+                    MotionSensor=system_state.MotionSensor,
+                    LCD=system_state.LCD)
             else:
                 if check_login(username=username, password=password):
                     cherrypy.session['logged_in'] = True
@@ -130,7 +157,11 @@ class Root(object):
                     login_template = mako.template.Template(
                         filename='templates/login_success_template.html')
                     html = login_template.render(username=username, x=100,
-                                                 address=address)
+                                                 address=address,
+                                                 SystemEnabled=system_state.SystemEnabled,
+                                                 LED=system_state.LED,
+                                                 MotionSensor=system_state.MotionSensor,
+                                                 LCD=system_state.LCD)
                 else:
                     print("14")
                     cherrypy.session['logged_in'] = False
@@ -152,7 +183,11 @@ class Root(object):
                 login_template = mako.template.Template(
                     filename='templates/login_success_template.html')
                 html = login_template.render(username=username, x=100,
-                                             address=address)
+                                             address=address,
+                                             SystemEnabled=system_state.SystemEnabled,
+                                             LED=system_state.LED,
+                                             MotionSensor=system_state.MotionSensor,
+                                             LCD=system_state.LCD)
             else:
                 cherrypy.session['logged_in'] = False
                 cherrypy.session['username'] = None
@@ -168,6 +203,11 @@ if __name__ == '__main__':
     db_task = threading.Thread(target=db.run)
     db_task.start()
 
+    print("Creating System State Thread")
+    SystemStateThread = threading.Thread(target=SystemStateInst.run,
+                                         daemon=True)
+    SystemStateThread.start()
+    
     print("Creating Twitter Thread")
     twitter_queue = queue.Queue()
     twitter_task = twitter.TwitterThread(config_file=config_file,

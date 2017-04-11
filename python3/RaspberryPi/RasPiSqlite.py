@@ -123,6 +123,7 @@ class RasPiSqlite():
             print(repr(traceback.format_tb(exc_traceback)))
             print("*** tb_lineno:", exc_traceback.tb_lineno)
             print("Failed to execute schema {}".format(self.schema_file_name))
+            f.close()
             return False
 
         return True
@@ -193,7 +194,7 @@ class RasPiSqlite():
 
         query_string = query_string[:-2]
         query_string += ")"
-        print(query_string)
+        print("RasPiSqlite InsertData %s" % (query_string))
         self.ExecuteSQLQuery(query_string)
         return True
 

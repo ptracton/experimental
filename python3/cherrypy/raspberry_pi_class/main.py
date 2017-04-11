@@ -37,7 +37,7 @@ db = database.Database(database_queue=db_queue,
 response_queue = queue.Queue()
 
 # copy in your Twilio Account SID and Auth Token from Twilio Console
-config_file = "/home/ptracton/.ucla.cfg",
+config_file = "/home/pi/.ucla.cfg",
 config = configparser.RawConfigParser()
 config.read(config_file)
 account_sid = config.get("TWILIO", "SID")
@@ -121,6 +121,39 @@ class Root(object):
     """
     Our cherrypy webserver
     """
+    
+    @cherrypy.expose
+    def MotionSensorEnabledButton(self, MotionSensorEnabledButton=None):
+        html = MotionSensorEnabledButton
+        return html
+
+    @cherrypy.expose
+    def LEDButton(self, LEDButton=None):
+        print("LED Button Pressed! {}".format(LEDButton))
+        message = SystemState.SystemStateMessage(
+            command=SystemState.SystemStateCommand.SYSTEM_STATE_LED,
+            response_queue=None)
+        
+        SystemStateQueue.put(message)
+        raise cherrypy.HTTPRedirect("/")
+        return 
+
+    @cherrypy.expose
+    def LCDButton(self, LCDString=None):
+        html = LCDString
+        return html
+    
+    @cherrypy.expose
+    def SystemEnabledButton(self, SystemEnabledButton=None):
+        print("System Enabled Button Pressed! {}".format(SystemEnabledButton))
+        message = SystemState.SystemStateMessage(
+            command=SystemState.SystemStateCommand.SYSTEM_STATE_SystemEnabled,
+            response_queue=None)
+        
+        SystemStateQueue.put(message)        
+        raise cherrypy.HTTPRedirect("/")
+        return
+    
     @cherrypy.expose
     def logout(self):
         address = get_ip_address()
@@ -244,6 +277,7 @@ if __name__ == '__main__':
                             'tools.sessions.timeout': 10
                         })
     cherrypy.config.update({'server.socket_port': 5000})
+    cherrypy.config.update({'server.socket_host': get_ip_address()})
     try:
         cherrypy.quickstart(Root(), '/')
     except:

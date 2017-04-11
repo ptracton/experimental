@@ -194,6 +194,7 @@ class Database (threading.Thread):
                 self.active = True
                 #print("Command %s" % str(message))
                 if message.command == DatabaseCommand.DB_INSERT_DATA:
+                    print("DB COMMAND: DB_INSERT_DATA")
                     self.db.InsertData(table_name=message.message.table_name,
                                        data_dict=message.message.data_dict)
 
@@ -214,7 +215,9 @@ class Database (threading.Thread):
 
                 elif message.command == DatabaseCommand.DB_CREATE_TABLE_SCHEMA:
                     self.db.schema_file_name = message.message.schema_file
-                    self.db.CreateTableSchema()
+                    results = self.db.CreateTableSchema()
+                    if message.message.caller_queue is not None:
+                        message.message.caller_queue.put(results)                    
 
                 elif message.command == DatabaseCommand.DB_CREATE_TABLE_DICT:
                     self.db.CreateTableDictionary(

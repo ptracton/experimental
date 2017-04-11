@@ -14,18 +14,42 @@
 <tr>
 <td>System Enabled</td>
 <td>${SystemEnabled}</td>
+<td>
+  <form action="/SystemEnabledButton/", method="post">
+    <input name="SystemEnabledButton" value="System Enabled" type="submit">
+  </form>
+</td>
+
 </tr>
 <tr>
 <td>LED On</td>
 <td>${LED}</td>
+<td>
+  <form action="/LEDButton/", method="post">
+    <input name="LEDButton" value="LED" type="submit">
+  </form>
+</td>
+
 </tr>
 <tr>
 <td>Motion Sensor Enabled</td>
 <td>${MotionSensor}</td>
+<td>
+  <form action="/MotionSensorEnabledButton/", method="post">
+    <input name="MotionSensorEnabledButton" value="Motion Sensor Enabled" type="submit">
+  </form>
+</td>
+
 </tr>
 <tr>
 <td>LCD</td>
 <td>${LCD}</td>
+<td>
+  <form action="/LCDButton/", method="post">    
+    <input name="LCDButton" value="Update LCD" type="submit">
+    <input name ="LCDString" type="text">
+  </form>
+</td>
 </tr>
 </table>
       

@@ -3,6 +3,7 @@
 import enum
 import time
 
+import RasPiHardware
    
 class SystemStateCommand(enum.Enum):
     """
@@ -34,6 +35,7 @@ class SystemState():
         self.LED = False
         self.LCD = ""
         self.MotionSensor = False
+        self.Hardware = RasPiHardware.RasPiHardware()
         return
     
     def __str__(self):
@@ -79,9 +81,14 @@ class SystemStateThread():
                 if self.__DEBUG__ is True:
                     print("SystemState Command {}".format(message.command))
                 if message.command == SystemStateCommand.SYSTEM_STATE_SystemEnabled:
-                    self.SystemState.SystemEnabled = message.data
+                    self.SystemState.SystemEnabled = not self.SystemState.SystemEnabled
                 elif message.command == SystemStateCommand.SYSTEM_STATE_LED:
-                    self.SystemState.LED = message.data
+                    if self.SystemState:
+                        print("SystemCommand: LED !")
+                        self.SystemState.LED = message.data
+                    else:
+                        print("System NOT enabled for LED command")
+                    self.SystemState.Hardware.LED.toggle()
                 elif message.command == SystemStateCommand.SYSTEM_STATE_LCD:
                     self.SystemState.LCD = message.data
                 elif message.command == SystemStateCommand.SYSTEM_STATE_MotionSensor:

@@ -86,9 +86,9 @@ class SystemStateThread():
                     if self.SystemState:
                         print("SystemCommand: LED !")
                         self.SystemState.LED = message.data
+                        self.SystemState.Hardware.LED.toggle()
                     else:
                         print("System NOT enabled for LED command")
-                    self.SystemState.Hardware.LED.toggle()
                 elif message.command == SystemStateCommand.SYSTEM_STATE_LCD:
                     self.SystemState.LCD = message.data
                 elif message.command == SystemStateCommand.SYSTEM_STATE_MotionSensor:

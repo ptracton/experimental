@@ -180,7 +180,7 @@ class Root(object):
                     x=100,
                     address=address,
                     SystemEnabled=system_state.SystemEnabled,
-                    LED=system_state.LED,
+                    LED=system_state.Hardware.LED.state,
                     MotionSensor=system_state.MotionSensor,
                     LCD=system_state.LCD)
             else:
@@ -192,7 +192,7 @@ class Root(object):
                     html = login_template.render(username=username, x=100,
                                                  address=address,
                                                  SystemEnabled=system_state.SystemEnabled,
-                                                 LED=system_state.LED,
+                                                 LED=system_state.Hardware.LED.state,
                                                  MotionSensor=system_state.MotionSensor,
                                                  LCD=system_state.LCD)
                 else:
@@ -218,7 +218,7 @@ class Root(object):
                 html = login_template.render(username=username, x=100,
                                              address=address,
                                              SystemEnabled=system_state.SystemEnabled,
-                                             LED=system_state.LED,
+                                             LED=system_state.Hardware.LED.state,
                                              MotionSensor=system_state.MotionSensor,
                                              LCD=system_state.LCD)
             else:

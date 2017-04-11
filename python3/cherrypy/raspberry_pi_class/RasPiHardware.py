@@ -21,7 +21,7 @@ class LEDClass():
         """
         print("LEDClass Init")
         self.POWER_PIN = 23
-        self.state = True
+        self.state = False
         GPIO.setwarnings(False)
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(self.POWER_PIN, GPIO.OUT)
@@ -31,9 +31,9 @@ class LEDClass():
     def toggle(self):
         """
         """
-        print("LED Toggle")
-        self.state = ~self.state
-        GPIO.output(self.POWER_PIN, False)
+        self.state = not self.state
+        print("LED Toggle {}".format(self.state))
+        GPIO.output(self.POWER_PIN, self.state)
         return
 
 class LCDClass():

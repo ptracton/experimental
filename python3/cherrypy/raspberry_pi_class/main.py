@@ -277,7 +277,7 @@ if __name__ == '__main__':
                             'tools.sessions.timeout': 10
                         })
     cherrypy.config.update({'server.socket_port': 5000})
-    cherrypy.config.update({'server.socket_host': get_ip_address()})
+    #cherrypy.config.update({'server.socket_host': get_ip_address()})
     try:
         cherrypy.quickstart(Root(), '/')
     except:

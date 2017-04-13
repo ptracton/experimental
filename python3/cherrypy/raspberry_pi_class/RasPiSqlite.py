@@ -232,13 +232,13 @@ class RasPiSqlite():
                              [row_id, sensor_id, sensor_data, date, time])
         return
 
-    def InsertImageDateTimeStamp(self, table_name=None, image=None,
+    def InsertImageDateTimeStamp(self, table_name=None, image_name=None,
                                  date=None, time=None):
         """
         Insert an image with date and time stamp
         """
 
-        if table_name is None or image is None or date is None or time is None or self._db_is_ready is False:
+        if table_name is None or image_name is None or date is None or time is None or self._db_is_ready is False:
             return
 
         row_id = self.GetLastRowID(table_name)
@@ -246,7 +246,7 @@ class RasPiSqlite():
 
         query_string = "INSERT INTO {table} VALUES(?, ?, ?, ?)".format(
             table=table_name)
-        self.ExecuteSQLQuery(query_string, [row_id, image, date, time])
+        self.ExecuteSQLQuery(query_string, [row_id, image_name, date, time])
         return
 
     def SelectData(self, table_name=None, field=None, data=None):

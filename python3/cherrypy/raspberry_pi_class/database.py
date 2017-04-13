@@ -61,12 +61,12 @@ class DatabaseImageMessage():
     """
     """
 
-    def __init__(self, table_name=None, image=None,
+    def __init__(self, table_name=None, image_name=None,
                  date=None, time=None):
         """
         """
         self.table_name = table_name
-        self.image = image
+        self.image_name = image_name
         self.date = date
         self.time = time
         return
@@ -191,7 +191,7 @@ class Database ():
                 elif message.command == DatabaseCommand.DB_INSERT_IMAGE_DATA:
                     self.db.InsertImageDateTimeStamp(
                         table_name=message.message.table_name,
-                        image=message.message.image,
+                        image_name=message.message.image_name,
                         date=message.message.date,
                         time=message.message.time)
 

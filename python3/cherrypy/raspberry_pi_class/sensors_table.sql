@@ -1,4 +1,6 @@
-CREATE TABLE "Sensors" (
+DROP TABLE IF EXISTS "sensors";
+
+CREATE TABLE "sensors" (
   ID INTEGER PRIMARY KEY,
   SENSOR integer NULL,
   DATA integer NULL,

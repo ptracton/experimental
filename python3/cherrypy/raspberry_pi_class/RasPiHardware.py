@@ -11,12 +11,31 @@ class MotionSensorClass():
     """
     """
 
-    def __init__(self):
+    def __init__(self, db_queue=None, power_pin=None):
+        self.db_queue=db_queue
         self.MotionInputPin = 16
+        self.PowerPin = power_pin
         GPIO.setup(self.MotionInputPin, GPIO.IN)
         GPIO.add_event_detect(self.MotionInputPin, GPIO.RISING, callback=self.MotionSensorCallBack)
+        self.state = False
         return
 
+    def Enable(self):
+        """
+        """
+        self.state=True
+        GPIO.setup(self.PowerPin, GPIO.OUT)
+        GPIO.output(self.PowerPin, self.state)
+        return
+
+    def Disable(self):
+        """
+        """
+        self.state=False
+        GPIO.setup(self.PowerPin, GPIO.OUT)
+        GPIO.output(self.PowerPin, self.state)
+        return
+    
     def MotionSensorCallBack(self, channel):
         now = datetime.datetime.now()
         print("MotionSensorClass: MotionSensorCallBack {}".format(channel,
@@ -24,12 +43,39 @@ class MotionSensorClass():
         # Trigger camera to take picture
         return
 
-class LCD():
+class LCDClass():
     """
     """
 
-    def __init__(self, db_queue=None):
+    def __init__(self, db_queue=None, power_pin=None):
         self.db_queue = db_queue
+        self.PowerPin = power_pin
+        self.state=False
+        return
+
+    def Enable(self):
+        """
+        """
+        self.state=True
+        GPIO.setup(self.PowerPin, GPIO.OUT)
+        GPIO.output(self.PowerPin, self.state)
+        return
+
+    def Disable(self):
+        """
+        """
+        self.state=False
+        GPIO.setup(self.PowerPin, GPIO.OUT)
+        GPIO.output(self.PowerPin, self.state)
+        return
+
+    def WriteDisplay(self, string=None):
+        if string is None:
+            return
+        print("LCDClass: WriteDisplay {}".format(string))
+        lcd = CharLCD(0x27)
+        lcd.clear()
+        lcd.write_string(string)
         return
     
 class LEDClass():
@@ -58,7 +104,8 @@ class LEDClass():
 class PushButtonClass():
     """
     """
-    def __init__(self, InputPin=18):
+    def __init__(self, db_queue=None, InputPin=18):
+        self.db_queue=db_queue
         self.InputPin = InputPin
         GPIO.setup(self.InputPin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
         GPIO.add_event_detect(self.InputPin, GPIO.FALLING, callback=self.ButtonCallBack, bouncetime=200)
@@ -79,25 +126,20 @@ class RasPiHardware():
     def __init__(self, db_queue=None):
         self.db_queue = db_queue
 
-        self.MotionSensorPowerPin = 24
-        self.LCDPowerPin = 25
+        MotionSensorPowerPin = 24
+        LCDPowerPin = 14
 
         GPIO.setwarnings(False)
         GPIO.setmode(GPIO.BCM)
         
-        GPIO.setup(self.MotionSensorPowerPin, GPIO.OUT)
-        GPIO.output(self.MotionSensorPowerPin, False)
+     
         
-        GPIO.setup(self.LCDPowerPin, GPIO.OUT)
-        GPIO.output(self.LCDPowerPin, False)
-        
-        self.LED = LEDClass()
-        self.PushButton = PushButtonClass()
-        #self.LCD = PiLCD.PiLCD()
-        self.lcd = CharLCD(0x27)
-        self.lcd.write_string("Booting...")
-
-        self.MotionSensor = MotionSensorClass()
+        self.LED = LEDClass(db_queue)
+        self.PushButton = PushButtonClass(db_queue)
+        self.LCD=LCDClass(db_queue=db_queue, power_pin=LCDPowerPin)
+        self.LCD.Disable()
+        self.MotionSensor = MotionSensorClass(db_queue=db_queue, power_pin=MotionSensorPowerPin)
+        self.MotionSensor.Disable()
         return
 
     def __del__(self):

@@ -46,7 +46,7 @@ TwilioClient = twilio.rest.TwilioRestClient(account_sid, auth_token)
 
 SystemStateQueue = queue.Queue()
 SystemStateInst = SystemState.SystemStateThread(
-    SystemStateQueue=SystemStateQueue)
+    SystemStateQueue=SystemStateQueue, db_queue=db_queue)
 
 
 def get_ip_address():
@@ -139,9 +139,15 @@ class Root(object):
         return 
 
     @cherrypy.expose
-    def LCDButton(self, LCDString=None):
-        html = LCDString
-        return html
+    def LCDButton(self, LCDButton=None, LCDString=None):
+        print("LCDButton {}".format(LCDString))
+        message = SystemState.SystemStateMessage(
+            command=SystemState.SystemStateCommand.SYSTEM_STATE_LCD,
+            data=LCDString,
+            response_queue=None)        
+        SystemStateQueue.put(message)        
+        raise cherrypy.HTTPRedirect("/")
+        return 
     
     @cherrypy.expose
     def SystemEnabledButton(self, SystemEnabledButton=None):
@@ -181,8 +187,8 @@ class Root(object):
                     address=address,
                     SystemEnabled=system_state.SystemEnabled,
                     LED=system_state.Hardware.LED.state,
-                    MotionSensor=system_state.MotionSensor,
-                    LCD=system_state.LCD)
+                    MotionSensor=system_state.Hardware.MotionSensor.state,
+                    LCD=system_state.Hardware.LCD.state)
             else:
                 if check_login(username=username, password=password):
                     cherrypy.session['logged_in'] = True
@@ -193,8 +199,8 @@ class Root(object):
                                                  address=address,
                                                  SystemEnabled=system_state.SystemEnabled,
                                                  LED=system_state.Hardware.LED.state,
-                                                 MotionSensor=system_state.MotionSensor,
-                                                 LCD=system_state.LCD)
+                                                 MotionSensor=system_state.Hardware.MotionSensor.state,
+                                                 LCD=system_state.Hardware.LCD.state)
                 else:
                     print("14")
                     cherrypy.session['logged_in'] = False
@@ -219,8 +225,8 @@ class Root(object):
                                              address=address,
                                              SystemEnabled=system_state.SystemEnabled,
                                              LED=system_state.Hardware.LED.state,
-                                             MotionSensor=system_state.MotionSensor,
-                                             LCD=system_state.LCD)
+                                             MotionSensor=system_state.Hardware.MotionSensor.state,
+                                             LCD=system_state.Hardware.LCD.state)
             else:
                 cherrypy.session['logged_in'] = False
                 cherrypy.session['username'] = None
@@ -273,11 +279,36 @@ if __name__ == '__main__':
         message=message_data)
     db_queue.put(message)
 
+    print("Create Sensor Table")
+    message_data = database.DatabaseDataMessage()
+    message_data.schema_file = "sensors_table.sql"
+    message = database.DatabaseMessage(
+        command=database.DatabaseCommand.DB_CREATE_TABLE_SCHEMA,
+        message=message_data)
+    db_queue.put(message)
+
+    print("Create Button Table")
+    message_data = database.DatabaseDataMessage()
+    message_data.schema_file = "buttons_table.sql"
+    message = database.DatabaseMessage(
+        command=database.DatabaseCommand.DB_CREATE_TABLE_SCHEMA,
+        message=message_data)
+    db_queue.put(message)
+    
+    print("Create Images Table")
+    message_data = database.DatabaseDataMessage()
+    message_data.schema_file = "images_table.sql"
+    message = database.DatabaseMessage(
+        command=database.DatabaseCommand.DB_CREATE_TABLE_SCHEMA,
+        message=message_data)
+    db_queue.put(message)
+
+    
     cherrypy.config.update({'tools.sessions.on': True,
                             'tools.sessions.timeout': 10
                         })
     cherrypy.config.update({'server.socket_port': 5000})
-    #cherrypy.config.update({'server.socket_host': get_ip_address()})
+    cherrypy.config.update({'server.socket_host': get_ip_address()})
     try:
         cherrypy.quickstart(Root(), '/')
     except:

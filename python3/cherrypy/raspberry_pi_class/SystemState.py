@@ -14,6 +14,7 @@ class SystemStateCommand(enum.Enum):
     SYSTEM_STATE_LCD = 3
     SYSTEM_STATE_MotionSensor = 4
     SYSTEM_STATE_GetState = 5
+    SYSTEM_STATE_Picture = 6
 
 
 class SystemStateMessage():
@@ -108,6 +109,8 @@ class SystemStateThread():
                 elif message.command == SystemStateCommand.SYSTEM_STATE_GetState:
                     if message.response_queue is not None:
                         message.response_queue.put(self.SystemState)
+                elif message.command == SystemStateCommand.SYSTEM_STATE_Picture:
+                    self.SystemState.Hardware.TakePicture(0, "SMS")
                 else:
                     print("SystemState Thread Error")
             else:

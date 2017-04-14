@@ -20,7 +20,6 @@ import mako.lookup
 import twilio
 from twilio import twiml
 import twilio.rest
-#from twilio.twiml.messaging_response import MessagingResponse
 
 """
 LOCAL LIBRARIES
@@ -132,7 +131,8 @@ class Root(object):
         db_data = {}
         db_data[0] = ('SMS_FROM', """ "{}" """.format(message_from))
         db_data[1] = ('SMS_TEXT', """ "{}" """.format(message_body))
-        db_data[2] = ('SMS_DATE', """ "{}" """.format(now.strftime("%m-%d-%Y")))
+        db_data[2] = ('SMS_DATE', """ "{}" """.format(
+            now.strftime("%m-%d-%Y")))
         db_data[3] = ('SMS_TIME', """time("{}")""".format(
             now.strftime("%H:%M:%S")))
         print("StoreSMSMessage {}".format(db_data))
@@ -149,17 +149,30 @@ class Root(object):
     def process_sms_message(self, message_body=None):
         """
         """
-        print("ProcessSMSMessage {}".format(message_body))
+        print("ProcessSMSMessage {} {}".format(message_body,
+                                               len(message_body)))
         if message_body is None:
             return
-        
-        if message_body not in command_list:
-            return
+        message_body_list = message_body.split(" ")
+        message_body_upper = message_body_list[0].upper()
+        data = ""
+        print("BODY LIST {}".format(message_body_list))
+        print("BODY UPPER {}".format(message_body_upper))
 
-        if message_body.upper() == "RasPi-LED".upper():
+        if message_body_upper == "RASPI-LED":
             command = SystemState.SystemStateCommand.SYSTEM_STATE_LED
+            print("SMSL_COMMAND = {}".format(command))
 
-        message = SystemState.SystemStateMessage(command=command)
+        elif message_body_upper == "RASPI-LCD":
+            command = SystemState.SystemStateCommand.SYSTEM_STATE_Picture
+            data = message_body_list[1:]
+            print("SMSD_COMMAND = {}".format(command))
+            
+        elif message_body_upper == "RASPI-PICTURE":
+            command = SystemState.SystemStateCommand.SYSTEM_STATE_Picture
+            print("SMSP_COMMAND = {}".format(command))
+
+        message = SystemState.SystemStateMessage(command=command, data=data)
         SystemStateQueue.put(message)
         return
     

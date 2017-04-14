@@ -169,15 +169,13 @@ class RasPiHardware():
         self.MotionSensor.Disable()
         GPIO.cleanup()
         return
-
-    def ButtonCallBack(self, channel):
+    
+    def TakePicture(self, channel=None, name=None):
+        """
+        """
         now = datetime.datetime.now()
-        now_string = now.strftime("%m-%d-%Y_%H:%M:%S")
-        print("PushButtonCallBack {}".format(
-            channel,
-            now.strftime("%m-%d-%Y %H:%M:%S")))
-        # Trigger camera to take picture
-        filename = "images/push_button_image_"+now_string+".jpg"
+        now_string = now.strftime("%m-%d-%Y %H:%M:%S")
+        filename = "images/"+name+"_"+now_string+".jpg"
         self.Camera.simple_picture(filename=filename)
 
         image_message = database.DatabaseImageMessage(
@@ -188,6 +186,15 @@ class RasPiHardware():
             command=database.DatabaseCommand.DB_INSERT_IMAGE_DATA,
             message=image_message)
         self.db_queue.put(message)
+        return
+
+    def ButtonCallBack(self, channel):
+        now = datetime.datetime.now()
+        print("PushButtonCallBack {}".format(
+            channel,
+            now.strftime("%m-%d-%Y %H:%M:%S")))
+        # Trigger camera to take picture
+        self.TakePicture(channel, "push_button")
 
         sensor_message = database.DatabaseSensorMessage(
             table_name="buttons",
@@ -202,22 +209,7 @@ class RasPiHardware():
         return
 
     def MotionSensorCallBack(self, channel):
-        now = datetime.datetime.now()
-        now_string = now.strftime("%m-%d-%Y %H:%M:%S")
-        print("MotionSensorClass: MotionSensorCallBack {}".format(
-            channel,
-            now.strftime("%m-%d-%Y %H:%M:%S")))
+        print("MotionSensorClass: MotionSensorCallBack {}".format(channel))
+        self.TakePicture(channel, "motion_sensor")
 
-        # Trigger camera to take picture
-        filename = "images/motion_sensor_image_"+now_string+".jpg"
-        self.Camera.simple_picture(filename=filename)
-
-        image_message = database.DatabaseImageMessage(
-            table_name="images", image_name=filename,
-            date=now.strftime("%m-%d-%Y"),
-            time=now.strftime("%H:%M:%S"))
-        message = database.DatabaseMessage(
-            command=database.DatabaseCommand.DB_INSERT_IMAGE_DATA,
-            message=image_message)
-        self.db_queue.put(message)
         return

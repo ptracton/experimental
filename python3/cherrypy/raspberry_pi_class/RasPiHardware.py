@@ -190,7 +190,7 @@ class RasPiHardware():
         self.db_queue.put(message)
 
         sensor_message = database.DatabaseSensorMessage(
-            table_name="buttons", 
+            table_name="buttons",
             sensor_id=channel, sensor_data=True,
             date=now.strftime("%m-%d-%Y"),
             time=now.strftime("%H:%M:%S"))

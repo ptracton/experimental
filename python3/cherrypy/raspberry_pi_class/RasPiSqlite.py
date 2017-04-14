@@ -49,6 +49,8 @@ class RasPiSqlite():
         if query is None or self._db_is_ready is False:
             return False
         logging.info("RasPiSqlite: ExecuteQuery {}".format(query))
+        print("RasPiSqlite: ExecuteQuery {}".format(query))
+        
         try:
             self.cur.execute(query, data)
             self.conn.commit()
@@ -178,7 +180,7 @@ class RasPiSqlite():
 
         if table_name is None or data_dict is None or self._db_is_ready is False:
             return False
-
+        print("InsertData {}".format(data_dict))
         query_string = "INSERT into {table} (".format(
             table=table_name)
 

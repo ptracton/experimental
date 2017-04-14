@@ -4,6 +4,7 @@
 DEFAULT LIBRARIES
 """
 import configparser
+import datetime
 import os
 import queue
 import socket
@@ -41,6 +42,7 @@ response_queue = queue.Queue()
 config_file = "/home/pi/.ucla.cfg",
 config = configparser.RawConfigParser()
 config.read(config_file)
+command_list = config.get("COMMANDS", "TERMS")
 account_sid = config.get("TWILIO", "SID")
 auth_token = config.get("TWILIO", "TOKEN")
 TwilioClient = twilio.rest.TwilioRestClient(account_sid, auth_token)
@@ -118,23 +120,71 @@ def check_login(username=None, password=None):
         return False
 
 
-def process_sms_message(message=None):
-    """
-    """
-    return
-
-
 class Root(object):
     """
     Our cherrypy webserver
     """
 
+    def store_sms_message(self, message_from=None, message_body=None):
+        if message_from is None or message_body is None:
+            return
+        now = datetime.datetime.now()
+        db_data = {}
+        db_data[0] = ('SMS_FROM', """ "{}" """.format(message_from))
+        db_data[1] = ('SMS_TEXT', """ "{}" """.format(message_body))
+        db_data[2] = ('SMS_DATE', """ "{}" """.format(now.strftime("%m-%d-%Y")))
+        db_data[3] = ('SMS_TIME', """time("{}")""".format(
+            now.strftime("%H:%M:%S")))
+        print("StoreSMSMessage {}".format(db_data))
+        data_message = database.DatabaseDataMessage(
+            table_name="sms", data_dict=db_data
+        )
+        message = database.DatabaseMessage(
+            command=database.DatabaseCommand.DB_INSERT_DATA,
+            message=data_message)
+        db_queue.put(message)
+
+        return
+    
+    def process_sms_message(self, message_body=None):
+        """
+        """
+        print("ProcessSMSMessage {}".format(message_body))
+        if message_body is None:
+            return
+        
+        if message_body not in command_list:
+            return
+
+        if message_body.upper() == "RasPi-LED".upper():
+            command = SystemState.SystemStateCommand.SYSTEM_STATE_LED
+
+        message = SystemState.SystemStateMessage(command=command)
+        SystemStateQueue.put(message)
+        return
+    
     @cherrypy.expose
     def twilio(self, **params):
+        """
+        TODO: check if the 'From' is a valid phone we want to act on
+        """
+        
         print("\n\nTWILIO: {}".format(params.keys()))
+        if 'From' in params.keys():
+            message_from = params['From']
+        else:
+            message_from = "Unknown"
+
         if 'Body' in params.keys():
-            body = params['Body']
-            print(body)
+            message_body = params['Body']
+        else:
+            message_body = "Unknown"
+
+        self.store_sms_message(message_from, message_body)
+        self.process_sms_message(message_body)
+#        if 'Body' in params.keys():
+#            body = params['Body']
+#            print(body)
         response_message = "ACK!"
         twiml_response = twiml.Response()
         twiml_response.message(response_message)

@@ -3,9 +3,9 @@
 import enum
 import time
 
-import database
 import RasPiHardware
-   
+
+
 class SystemStateCommand(enum.Enum):
     """
     """
@@ -15,7 +15,7 @@ class SystemStateCommand(enum.Enum):
     SYSTEM_STATE_MotionSensor = 4
     SYSTEM_STATE_GetState = 5
 
-    
+
 class SystemStateMessage():
     """
     """
@@ -25,7 +25,7 @@ class SystemStateMessage():
         self.response_queue = response_queue
         return
 
-    
+
 class SystemState():
     """
     This class is used to keep track of the state of the various
@@ -33,21 +33,22 @@ class SystemState():
     """
     def __init__(self, db_queue=None):
         self.SystemEnabled = False
-        self.db_queue=db_queue
+        self.db_queue = db_queue
 #        self.LED = False
 #        self.LCD = ""
 #        self.MotionSensor = False
         self.Hardware = RasPiHardware.RasPiHardware(db_queue)
         return
-    
+
     def __str__(self):
         string = "SystemEnabled = {}\n".format(self.SystemEnabled)
         string += "LED = {}\n".format(self.Hardware.LED.state)
         string += "LCD = {}\n".format(self.Hardware.LCD.state)
-        string += "MotionSensor = {}\n".format(self.Hardware.MotionSensor.state)
+        string += "MotionSensor = {}\n".format(
+            self.Hardware.MotionSensor.state)
         return string
 
-    
+
 class SystemStateThread():
     """
     Thread for managing the system state class

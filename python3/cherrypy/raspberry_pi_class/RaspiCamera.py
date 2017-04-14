@@ -12,17 +12,18 @@ import sys
 import time
 import picamera
 
+
 class RaspiCamera():
     """
     Class for dealing with the camera on a Raspberry Pi
     """
 
-    def __init__(self, x=1920,y=1280):
+    def __init__(self, x=1920, y=1280):
         """
         Constructor to make camera instance
         """
         self.camera = picamera.PiCamera()
-        self.camera.resolution = (x,y)
+        self.camera.resolution = (x, y)
         return
 
     def simple_picture(self, filename=None):
@@ -34,8 +35,6 @@ class RaspiCamera():
         time.sleep(2)
         self.camera.capture(filename)
 
-      
-        
 
 if __name__ == "__main__":
     """
@@ -43,7 +42,7 @@ if __name__ == "__main__":
     """
     print("\nTesting RaspiCamera Class\n")
     camera = RaspiCamera()
-    
+
     """
     TEST 1: Simple image capture and storing
     """
@@ -56,7 +55,6 @@ if __name__ == "__main__":
         print("Test 1 FAILED to create %s" % filename)
         sys.exit(-1)
 
-
     """
     TEST 2: Take picture and resize
     """
@@ -64,11 +62,10 @@ if __name__ == "__main__":
     filename = "test2_image.png"
     if os.path.exists(filename):
         os.remove(filename)
-    #camera.picture_resize(filename, 1024, 768)
+#   camera.picture_resize(filename, 1024, 768)
     if not os.path.exists(filename):
         print("Test 2 FAILED to create %s" % filename)
         sys.exit(-1)
-
 
     camera.camera.close()
     print ("Done")

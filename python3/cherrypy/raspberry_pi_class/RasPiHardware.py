@@ -1,31 +1,30 @@
 #! /usr/bin/env python3
 
 import datetime
-import logging
 import time
 import picamera
 import RPi.GPIO as GPIO
-import RPLCD.common
 from RPLCD.i2c import CharLCD
 import database
+
 
 class MotionSensorClass():
     """
     """
 
     def __init__(self, db_queue=None, power_pin=None):
-        self.db_queue=db_queue
+        self.db_queue = db_queue
         self.MotionInputPin = 16
         self.PowerPin = power_pin
         GPIO.setup(self.MotionInputPin, GPIO.IN)
-        
+
         self.state = False
         return
 
     def Enable(self):
         """
         """
-        self.state=True
+        self.state = True
         GPIO.setup(self.PowerPin, GPIO.OUT)
         GPIO.output(self.PowerPin, self.state)
         return
@@ -33,11 +32,12 @@ class MotionSensorClass():
     def Disable(self):
         """
         """
-        self.state=False
+        self.state = False
         GPIO.setup(self.PowerPin, GPIO.OUT)
         GPIO.output(self.PowerPin, self.state)
         return
-    
+
+
 class LCDClass():
     """
     """
@@ -45,13 +45,13 @@ class LCDClass():
     def __init__(self, db_queue=None, power_pin=None):
         self.db_queue = db_queue
         self.PowerPin = power_pin
-        self.state=False
+        self.state = False
         return
 
     def Enable(self):
         """
         """
-        self.state=True
+        self.state = True
         GPIO.setup(self.PowerPin, GPIO.OUT)
         GPIO.output(self.PowerPin, self.state)
         return
@@ -59,7 +59,7 @@ class LCDClass():
     def Disable(self):
         """
         """
-        self.state=False
+        self.state = False
         GPIO.setup(self.PowerPin, GPIO.OUT)
         GPIO.output(self.PowerPin, self.state)
         return
@@ -72,7 +72,8 @@ class LCDClass():
         lcd.clear()
         lcd.write_string(string)
         return
-    
+
+
 class LEDClass():
     """
     """
@@ -96,6 +97,7 @@ class LEDClass():
         GPIO.output(self.LEDPin, self.state)
         return
 
+
 class PushButtonClass():
     """
     """
@@ -112,13 +114,13 @@ class CameraClass():
     Class for dealing with the camera on a Raspberry Pi
     """
 
-    def __init__(self, db_queue=None, x=1920,y=1280):
+    def __init__(self, db_queue=None, x=1920, y=1280):
         """
         Constructor to make camera instance
         """
         self.db_queue = db_queue
         self.camera = picamera.PiCamera()
-        self.camera.resolution = (x,y)
+        self.camera.resolution = (x, y)
         return
 
     def simple_picture(self, filename=None):
@@ -129,7 +131,8 @@ class CameraClass():
             return
         time.sleep(2)
         self.camera.capture(filename)
-    
+
+
 class RasPiHardware():
     """
     """
@@ -142,20 +145,21 @@ class RasPiHardware():
 
         GPIO.setwarnings(False)
         GPIO.setmode(GPIO.BCM)
-        
-     
+
         self.Camera = CameraClass(db_queue)
         self.LED = LEDClass(db_queue)
         self.PushButton = PushButtonClass(db_queue)
 
-        self.LCD=LCDClass(db_queue=db_queue, power_pin=LCDPowerPin)
+        self.LCD = LCDClass(db_queue=db_queue, power_pin=LCDPowerPin)
         self.LCD.Disable()
-        
-        self.MotionSensor = MotionSensorClass(db_queue=db_queue, power_pin=MotionSensorPowerPin)
+
+        self.MotionSensor = MotionSensorClass(db_queue=db_queue,
+                                              power_pin=MotionSensorPowerPin)
         self.MotionSensor.Disable()
-        
-        GPIO.add_event_detect(18, GPIO.FALLING, callback=self.ButtonCallBack, bouncetime=200)     
-        #GPIO.add_event_detect(16, GPIO.RISING, callback=self.MotionSensorCallBack)        
+
+        GPIO.add_event_detect(18, GPIO.FALLING, callback=self.ButtonCallBack,
+                              bouncetime=200)
+#       GPIO.add_event_detect(16, GPIO.RISING, callback=self.MotionSensorCallBack)        
         return
 
     def __del__(self):
@@ -168,35 +172,41 @@ class RasPiHardware():
     def ButtonCallBack(self, channel):
         now = datetime.datetime.now()
         now_string = now.strftime("%m-%d-%Y_%H:%M:%S")
-        print("PushButtonCallBack {}".format(channel,
-                                                               now.strftime("%m-%d-%Y %H:%M:%S")))
+        print("PushButtonCallBack {}".format(
+            channel,
+            now.strftime("%m-%d-%Y %H:%M:%S")))
         # Trigger camera to take picture
         filename = "images/push_button_image_"+now_string+".jpg"
         self.Camera.simple_picture(filename=filename)
 
-        image_message = database.DatabaseImageMessage(table_name="images", image_name=filename,
-                                                      date=now.strftime("%m-%d-%Y"),
-                                                      time=now.strftime("%H:%M:%S"))
-        message= database.DatabaseMessage(command=database.DatabaseCommand.DB_INSERT_IMAGE_DATA,
-                                          message=image_message)
+        image_message = database.DatabaseImageMessage(
+            table_name="images", image_name=filename,
+            date=now.strftime("%m-%d-%Y"),
+            time=now.strftime("%H:%M:%S"))
+        message = database.DatabaseMessage(
+            command=database.DatabaseCommand.DB_INSERT_IMAGE_DATA,
+            message=image_message)
         self.db_queue.put(message)
-        
+
         return
-    
+
     def MotionSensorCallBack(self, channel):
         now = datetime.datetime.now()
         now_string = now.strftime("%m-%d-%Y %H:%M:%S")
-        print("MotionSensorClass: MotionSensorCallBack {}".format(channel,
-                                                               now.strftime("%m-%d-%Y %H:%M:%S")))
-       
+        print("MotionSensorClass: MotionSensorCallBack {}".format(
+            channel,
+            now.strftime("%m-%d-%Y %H:%M:%S")))
+
         # Trigger camera to take picture
         filename = "images/motion_sensor_image_"+now_string+".jpg"
         self.Camera.simple_picture(filename=filename)
 
-        image_message = database.DatabaseImageMessage(table_name="images", image_name=filename,
-                                                      date=now.strftime("%m-%d-%Y"),
-                                                      time=now.strftime("%H:%M:%S"))
-        message= database.DatabaseMessage(command=database.DatabaseCommand.DB_INSERT_IMAGE_DATA,
-                                          message=image_message)
-        self.db_queue.put(message)        
+        image_message = database.DatabaseImageMessage(
+            table_name="images", image_name=filename,
+            date=now.strftime("%m-%d-%Y"),
+            time=now.strftime("%H:%M:%S"))
+        message = database.DatabaseMessage(
+            command=database.DatabaseCommand.DB_INSERT_IMAGE_DATA,
+            message=image_message)
+        self.db_queue.put(message)
         return

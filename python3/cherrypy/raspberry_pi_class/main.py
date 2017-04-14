@@ -121,7 +121,7 @@ class Root(object):
     """
     Our cherrypy webserver
     """
-    
+
     @cherrypy.expose
     def MotionSensorEnabledButton(self, MotionSensorEnabledButton=None):
         html = MotionSensorEnabledButton
@@ -133,10 +133,10 @@ class Root(object):
         message = SystemState.SystemStateMessage(
             command=SystemState.SystemStateCommand.SYSTEM_STATE_LED,
             response_queue=None)
-        
+
         SystemStateQueue.put(message)
         raise cherrypy.HTTPRedirect("/")
-        return 
+        return
 
     @cherrypy.expose
     def LCDButton(self, LCDButton=None, LCDString=None):
@@ -144,22 +144,22 @@ class Root(object):
         message = SystemState.SystemStateMessage(
             command=SystemState.SystemStateCommand.SYSTEM_STATE_LCD,
             data=LCDString,
-            response_queue=None)        
-        SystemStateQueue.put(message)        
+            response_queue=None)
+        SystemStateQueue.put(message)
         raise cherrypy.HTTPRedirect("/")
-        return 
-    
+        return
+
     @cherrypy.expose
     def SystemEnabledButton(self, SystemEnabledButton=None):
         print("System Enabled Button Pressed! {}".format(SystemEnabledButton))
         message = SystemState.SystemStateMessage(
             command=SystemState.SystemStateCommand.SYSTEM_STATE_SystemEnabled,
             response_queue=None)
-        
-        SystemStateQueue.put(message)        
+
+        SystemStateQueue.put(message)
         raise cherrypy.HTTPRedirect("/")
         return
-    
+
     @cherrypy.expose
     def logout(self):
         address = get_ip_address()
@@ -246,7 +246,7 @@ if __name__ == '__main__':
     SystemStateThread = threading.Thread(target=SystemStateInst.run,
                                          daemon=True)
     SystemStateThread.start()
-    
+
     print("Creating Twitter Thread")
     twitter_queue = queue.Queue()
     twitter_task = twitter.TwitterThread(config_file=config_file,
@@ -294,7 +294,7 @@ if __name__ == '__main__':
         command=database.DatabaseCommand.DB_CREATE_TABLE_SCHEMA,
         message=message_data)
     db_queue.put(message)
-    
+
     print("Create Images Table")
     message_data = database.DatabaseDataMessage()
     message_data.schema_file = "images_table.sql"
@@ -303,7 +303,6 @@ if __name__ == '__main__':
         message=message_data)
     db_queue.put(message)
 
-    
     cherrypy.config.update({'tools.sessions.on': True,
                             'tools.sessions.timeout': 10
                         })
@@ -313,4 +312,3 @@ if __name__ == '__main__':
         cherrypy.quickstart(Root(), '/')
     except:
         db.kill()
-

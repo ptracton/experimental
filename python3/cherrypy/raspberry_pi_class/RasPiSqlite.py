@@ -8,7 +8,6 @@ It is part of a Raspberry Pi Project
 
 """
 
-import datetime
 import logging
 import os
 import sys
@@ -257,10 +256,10 @@ class RasPiSqlite():
 
         print("RasPiSqlite: SelectData {} {} {} ".format(
             table_name, field, data))
-        
+
         if table_name is None or field is None or data is None or self._db_is_ready is False:
             return False
-       
+
         query_string = "SELECT * FROM {table} WHERE {field}={data}".format(
             table=table_name,
             field=field, data=data)
@@ -285,4 +284,3 @@ class RasPiSqlite():
         self.ExecuteSQLQuery(query_string)
         results = self.cur.fetchall()
         return results
-

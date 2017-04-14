@@ -102,9 +102,9 @@ class PushButtonClass():
     """
     """
     def __init__(self, db_queue=None, InputPin=18):
-        self.db_queue=db_queue
+        self.db_queue = db_queue
         self.InputPin = InputPin
-        GPIO.setup(self.InputPin, GPIO.IN, pull_up_down=GPIO.PUD_UP)       
+        GPIO.setup(self.InputPin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
         self.state = False
         return
 
@@ -159,7 +159,8 @@ class RasPiHardware():
 
         GPIO.add_event_detect(18, GPIO.FALLING, callback=self.ButtonCallBack,
                               bouncetime=200)
-#       GPIO.add_event_detect(16, GPIO.RISING, callback=self.MotionSensorCallBack)        
+        GPIO.add_event_detect(16, GPIO.RISING,
+                              callback=self.MotionSensorCallBack)
         return
 
     def __del__(self):
@@ -186,6 +187,16 @@ class RasPiHardware():
         message = database.DatabaseMessage(
             command=database.DatabaseCommand.DB_INSERT_IMAGE_DATA,
             message=image_message)
+        self.db_queue.put(message)
+
+        sensor_message = database.DatabaseSensorMessage(
+            table_name="buttons", 
+            sensor_id=channel, sensor_data=True,
+            date=now.strftime("%m-%d-%Y"),
+            time=now.strftime("%H:%M:%S"))
+        message = database.DatabaseMessage(
+            command=database.DatabaseCommand.DB_INSERT_SENSOR_DATA,
+            message=sensor_message)
         self.db_queue.put(message)
 
         return

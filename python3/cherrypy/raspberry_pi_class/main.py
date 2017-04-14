@@ -19,6 +19,7 @@ import mako.lookup
 import twilio
 from twilio import twiml
 import twilio.rest
+#from twilio.twiml.messaging_response import MessagingResponse
 
 """
 LOCAL LIBRARIES
@@ -117,15 +118,32 @@ def check_login(username=None, password=None):
         return False
 
 
+def process_sms_message(message=None):
+    """
+    """
+    return
+
+
 class Root(object):
     """
     Our cherrypy webserver
     """
 
     @cherrypy.expose
+    def twilio(self, **params):
+        print("\n\nTWILIO: {}".format(params.keys()))
+        if 'Body' in params.keys():
+            body = params['Body']
+            print(body)
+        response_message = "ACK!"
+        twiml_response = twiml.Response()
+        twiml_response.message(response_message)
+        return str(twiml_response)
+
+    @cherrypy.expose
     def MotionSensorEnabledButton(self, MotionSensorEnabledButton=None):
-        html = MotionSensorEnabledButton
-        return html
+        raise cherrypy.HTTPRedirect("/")
+        return
 
     @cherrypy.expose
     def LEDButton(self, LEDButton=None):
@@ -237,7 +255,12 @@ class Root(object):
         return html
 
 if __name__ == '__main__':
-
+    print("Creating images directory")
+    try:
+        os.mkdir("images")
+    except:
+        pass
+    
     print("Creating and Starting DB Thread")
     db_task = threading.Thread(target=db.run)
     db_task.start()
@@ -307,7 +330,7 @@ if __name__ == '__main__':
                             'tools.sessions.timeout': 10
                         })
     cherrypy.config.update({'server.socket_port': 5000})
-    cherrypy.config.update({'server.socket_host': get_ip_address()})
+#    cherrypy.config.update({'server.socket_host': get_ip_address()})
     try:
         cherrypy.quickstart(Root(), '/')
     except:

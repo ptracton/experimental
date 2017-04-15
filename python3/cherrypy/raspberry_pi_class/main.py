@@ -338,6 +338,7 @@ if __name__ == '__main__':
     twitter_queue = queue.Queue()
     twitter_task = twitter.TwitterThread(config_file=config_file,
                                          response_queue=response_queue,
+                                         system_queue=SystemStateQueue,
                                          db_queue=db_queue)
     twitter_thread = threading.Thread(target=twitter_task.run, daemon=True)
     twitter_thread.start()

@@ -19,6 +19,7 @@ import logging
 import time
 import twython
 import database
+import SystemState
 
 
 class TwitterStreamer (twython.TwythonStreamer):
@@ -29,7 +30,7 @@ class TwitterStreamer (twython.TwythonStreamer):
     """
     def __init__(self, app_key=None, app_secret=None, oauth_token=None,
                  oauth_token_secret=None, response_queue=None,
-                 filter_list=None, db_queue=None):
+                 filter_list=None, db_queue=None, system_queue=None):
         """
         Create our instance of the TwythonStreamer
         """
@@ -39,11 +40,41 @@ class TwitterStreamer (twython.TwythonStreamer):
         self.db_queue = db_queue
         self.filter_list = filter_list
         self.message_received = False
+        self.SystemQueue = system_queue
         return
 
+    def process_twitter_message(self, message_body=None):
+        if message_body is None:
+            return
+        message_body_list = message_body.split(" ")
+        message_body_upper = message_body_list[0].upper()
+        data = ""
+        
+        print("BODY LIST {}".format(message_body_list))
+        print("BODY UPPER {}".format(message_body_upper))
+
+        if message_body_upper == "RASPI-LED":
+            command = SystemState.SystemStateCommand.SYSTEM_STATE_LED
+            print("TWITL_COMMAND = {}".format(command))
+
+        elif message_body_upper == "RASPI-LCD":
+            command = SystemState.SystemStateCommand.SYSTEM_STATE_LCD
+            list1 = message_body_list[1:]
+            data = ' '.join(str(e) for e in list1)
+            print("TWITD_COMMAND = {}".format(command))
+            
+        elif message_body_upper == "RASPI-PICTURE":
+            command = SystemState.SystemStateCommand.SYSTEM_STATE_Picture
+            print("TWITP_COMMAND = {}".format(command))
+        
+        message = SystemState.SystemStateMessage(command=command, data=data)
+        self.SystemQueue.put(message)
+        return
+    
     def on_success(self, data):
         """
         Come here when we receive a tweet with the right value
+        TODO: only act if from the correct user account!
         """
         message = ""
         user_name = ""
@@ -78,6 +109,7 @@ class TwitterStreamer (twython.TwythonStreamer):
         del(db_message)
         del(db_message_data)
         self.message_received = True
+        self.process_twitter_message(message)
         return
 
 
@@ -86,7 +118,8 @@ class TwitterThread():
     Thread for handling receiving tweets
     """
 
-    def __init__(self, config_file=None, response_queue=None, db_queue=None):
+    def __init__(self, config_file=None, response_queue=None, db_queue=None,
+                 system_queue=None):
 
         """
         Constructor for this class
@@ -103,6 +136,7 @@ class TwitterThread():
         self.thread_running = True
         self.response_queue = response_queue
         self.db_queue = db_queue
+        self.SystemQueue = system_queue
         return
 
     def kill(self):
@@ -131,6 +165,7 @@ class TwitterThread():
                                          oauth_token_secret=self.ACCESS_SECRET,
                                          response_queue=self.response_queue,
                                          db_queue=self.db_queue,
+                                         system_queue = self.SystemQueue,
                                          filter_list=self.command_list)
                 stream.statuses.filter(track=self.command_list)
             except:

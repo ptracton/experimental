@@ -164,8 +164,9 @@ class Root(object):
             print("SMSL_COMMAND = {}".format(command))
 
         elif message_body_upper == "RASPI-LCD":
-            command = SystemState.SystemStateCommand.SYSTEM_STATE_Picture
-            data = message_body_list[1:]
+            command = SystemState.SystemStateCommand.SYSTEM_STATE_LCD
+            list1 = message_body_list[1:]
+            data = ' '.join(str(e) for e in list1)
             print("SMSD_COMMAND = {}".format(command))
             
         elif message_body_upper == "RASPI-PICTURE":

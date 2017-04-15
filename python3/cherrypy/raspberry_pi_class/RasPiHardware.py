@@ -70,7 +70,7 @@ class LCDClass():
         print("LCDClass: WriteDisplay {}".format(string))
         lcd = CharLCD(0x27)
         lcd.clear()
-        lcd.write_string(string)
+        lcd.write_string(str(string))
         return
 
 

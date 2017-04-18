@@ -174,8 +174,8 @@ class RasPiHardware():
         """
         """
         now = datetime.datetime.now()
-        now_string = now.strftime("%m-%d-%Y %H:%M:%S")
-        filename = "images/"+name+"_"+now_string+".jpg"
+        now_string = now.strftime("%m-%d-%Y_%H-%M-%S")
+        filename = "./images/"+name+"_"+now_string+".jpg"
         print("TakePicture {}".format(filename))
         self.Camera.simple_picture(filename=filename)
 

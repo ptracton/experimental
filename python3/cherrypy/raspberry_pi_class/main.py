@@ -282,8 +282,13 @@ class Root(object):
         mako.lookup.TemplateLookup(directories=[template_dir])
         address = get_ip_address()
         system_state = get_SystemState()
-        #images_data = get_TableData("images")
-        last_image = "No Images Yet"
+        images_data = get_TableData("images")
+        if len(images_data) == 0:
+            last_image = "No Images Yet"
+        else:
+            address = get_ip_address()
+            #last_image = "http://"+address+":5000/"+images_data[len(images_data)-1][1]
+            last_image = images_data[len(images_data)-1][1]
         twitter_data = get_TableData("twitter")
         if len(twitter_data) == 0:
             last_twitter = [0, 0, 0, 0, 0, 0]

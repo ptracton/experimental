@@ -194,7 +194,7 @@ class RasPiSqlite():
 
         query_string = query_string[:-2]
         query_string += ")"
-        print(query_string)
+        print("RasPiSqlite: InsertData: {}".format(query_string))
         self.ExecuteSQLQuery(query_string)
         return True
 

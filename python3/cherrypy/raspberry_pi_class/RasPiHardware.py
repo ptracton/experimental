@@ -158,7 +158,7 @@ class RasPiHardware():
         self.MotionSensor.Disable()
 
         GPIO.add_event_detect(18, GPIO.FALLING, callback=self.ButtonCallBack,
-                              bouncetime=200)
+                              bouncetime=400)
         GPIO.add_event_detect(16, GPIO.RISING,
                               callback=self.MotionSensorCallBack)
         return
@@ -176,6 +176,7 @@ class RasPiHardware():
         now = datetime.datetime.now()
         now_string = now.strftime("%m-%d-%Y %H:%M:%S")
         filename = "images/"+name+"_"+now_string+".jpg"
+        print("TakePicture {}".format(filename))
         self.Camera.simple_picture(filename=filename)
 
         image_message = database.DatabaseImageMessage(
@@ -190,14 +191,14 @@ class RasPiHardware():
 
     def ButtonCallBack(self, channel):
         now = datetime.datetime.now()
-        print("PushButtonCallBack {}".format(
+        print("PushButtonCallBack {} {}".format(
             channel,
             now.strftime("%m-%d-%Y %H:%M:%S")))
         # Trigger camera to take picture
         self.TakePicture(channel, "push_button")
 
         sensor_message = database.DatabaseSensorMessage(
-            table_name="buttons",
+            table_name="button",
             sensor_id=channel, sensor_data=True,
             date=now.strftime("%m-%d-%Y"),
             time=now.strftime("%H:%M:%S"))

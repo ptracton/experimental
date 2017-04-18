@@ -74,11 +74,30 @@ Last Image: <img src=${last_image} >
 
 <hr>
 <center>Last Tweet</center>
-Last Tweet: ${last_twitter}
+<table border=1>
+  <tr><td>ID</td><td>Twitter</td><td>User Name</td><td>Screen Name</td><td>Date</td><td>Time</td></tr>
+  
+  <tr>
+    % for a in last_twitter: 
+    <td>${a}</td>
+    % endfor
+    
+  </tr>
+</table>
 
 <hr>
 <center>Last SMS</center>
-Last SMS: ${last_sms}
+<table border=1>
+  <tr><td>Text</td><td>From</td><td>Date</td><td>Time</td></tr>
+  
+  <tr>
+    % for a in last_sms: 
+    <td>${a}</td>
+    % endfor
+    
+  </tr>
+</table>
+
 
 <hr>
 <center>

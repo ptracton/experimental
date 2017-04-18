@@ -284,12 +284,19 @@ class Root(object):
         system_state = get_SystemState()
         #images_data = get_TableData("images")
         last_image = "No Images Yet"
-        #twitter_data = get_TableData("twitter")
-        last_twitter = "No Tweets Yet"
-        #sms_data = get_TableData("sms")
-        last_sms = "No SMS Yet"
+        twitter_data = get_TableData("twitter")
+        if len(twitter_data) == 0:
+            last_twitter = [0, 0, 0, 0, 0, 0]
+        else:
+            last_twitter = twitter_data[len(twitter_data)-1]
+            
+        sms_data = get_TableData("sms")
+        if len(sms_data) == 0:
+            last_sms = [0, 0, 0, 0]
+        else:
+            last_sms = sms_data[len(sms_data)-1]
+
         button_data = get_TableData("button")
-        print("button_data {} length {}".format(button_data, len(button_data)))
         if len(button_data) == 0:
             last_button = [0, 0, 0, 0, 0]
         else:

@@ -8,8 +8,10 @@
         Welcome User Name ${username} from ${address} <p>
           <a href = "/">HOME</a>
     </b></center>
-    <hr>
 
+    
+ <hr>
+ <center>System Console</center>
 <table border="1">
 <tr>
 <td>System Enabled</td>
@@ -52,7 +54,35 @@
 </td>
 </tr>
 </table>
-      
-    <a href="logout">logout</a>
+<hr>
+<center>Button Pressed</center>
+<table border=1>
+  <tr><td>ID</td><td>Sensor</td><td>Data</td><td>Date</td><td>Time</td></tr>
+  
+  <tr>
+    % for a in last_button: 
+    <td>${a}</td>
+    % endfor
+    
+  </tr>
+</table>
+
+
+<hr>
+<center>Last Image</center>
+Last Image: <img src=${last_image} >
+
+<hr>
+<center>Last Tweet</center>
+Last Tweet: ${last_twitter}
+
+<hr>
+<center>Last SMS</center>
+Last SMS: ${last_sms}
+
+<hr>
+<center>
+  <a href="logout">logout</a>
+  </center>
   </body>
 </html>

@@ -62,6 +62,30 @@ def get_ip_address():
     return ip
 
 
+def get_TableData(table=None):
+    """
+    Get all data from the specified table
+    """
+    if table is None:
+        return
+    
+    print("get_TableData: {}".format(table))
+    td_response_queue = queue.Queue()
+    message_data = database.DatabaseDataMessage(
+        table_name=table,
+        caller_queue=td_response_queue)
+    message = database.DatabaseMessage(
+        command=database.DatabaseCommand.DB_SELECT_ALL_DATA,
+        message=message_data)
+    db_queue.put(message)
+
+    while td_response_queue.empty() is True:
+        pass
+    td_response = td_response_queue.get()
+    print("get_TableData: {}".format(td_response))
+    return td_response
+
+
 def get_SystemState():
     """
     Get the current System State
@@ -95,7 +119,7 @@ def check_login(username=None, password=None):
         command=database.DatabaseCommand.DB_SELECT_DATA,
         message=message_data)
     db_queue.put(message)
-    db_task.join(timeout=0.65)
+#    db_task.join(timeout=0.65)
 
     print("check_login: Wait on password response")
     while cl_response_queue.empty() is True:
@@ -258,6 +282,19 @@ class Root(object):
         mako.lookup.TemplateLookup(directories=[template_dir])
         address = get_ip_address()
         system_state = get_SystemState()
+        #images_data = get_TableData("images")
+        last_image = "No Images Yet"
+        #twitter_data = get_TableData("twitter")
+        last_twitter = "No Tweets Yet"
+        #sms_data = get_TableData("sms")
+        last_sms = "No SMS Yet"
+        button_data = get_TableData("button")
+        print("button_data {} length {}".format(button_data, len(button_data)))
+        if len(button_data) == 0:
+            last_button = [0, 0, 0, 0, 0]
+        else:
+            last_button = button_data[len(button_data)-1]
+        #sensor_data = get_TableData("sensors")
         if 'logged_in' in cherrypy.session:
             print(cherrypy.session['logged_in'])
             if cherrypy.session['logged_in'] is True:
@@ -265,8 +302,11 @@ class Root(object):
                     filename='templates/login_success_template.html')
                 html = login_template.render(
                     username=cherrypy.session['username'],
-                    x=100,
                     address=address,
+                    last_button=last_button,
+                    last_sms=last_sms,
+                    last_twitter=last_twitter,
+                    last_image=last_image,
                     SystemEnabled=system_state.SystemEnabled,
                     LED=system_state.Hardware.LED.state,
                     MotionSensor=system_state.Hardware.MotionSensor.state,
@@ -277,8 +317,12 @@ class Root(object):
                     cherrypy.session['username'] = username
                     login_template = mako.template.Template(
                         filename='templates/login_success_template.html')
-                    html = login_template.render(username=username, x=100,
+                    html = login_template.render(username=username,
                                                  address=address,
+                                                 last_button=last_button,
+                                                 last_sms=last_sms,
+                                                 last_twitter=last_twitter,
+                                                 last_image=last_image,
                                                  SystemEnabled=system_state.SystemEnabled,
                                                  LED=system_state.Hardware.LED.state,
                                                  MotionSensor=system_state.Hardware.MotionSensor.state,
@@ -303,8 +347,12 @@ class Root(object):
                 cherrypy.session['username'] = username
                 login_template = mako.template.Template(
                     filename='templates/login_success_template.html')
-                html = login_template.render(username=username, x=100,
+                html = login_template.render(username=username,
                                              address=address,
+                                             last_button=last_button,
+                                             last_sms=last_sms,
+                                             last_twitter=last_twitter,
+                                             last_image=last_image,
                                              SystemEnabled=system_state.SystemEnabled,
                                              LED=system_state.Hardware.LED.state,
                                              MotionSensor=system_state.Hardware.MotionSensor.state,

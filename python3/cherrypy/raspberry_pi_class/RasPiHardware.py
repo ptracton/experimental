@@ -114,7 +114,7 @@ class CameraClass():
     Class for dealing with the camera on a Raspberry Pi
     """
 
-    def __init__(self, db_queue=None, x=1920, y=1280):
+    def __init__(self, db_queue=None, x=1024, y=768):
         """
         Constructor to make camera instance
         """
@@ -175,7 +175,7 @@ class RasPiHardware():
         """
         now = datetime.datetime.now()
         now_string = now.strftime("%m-%d-%Y_%H-%M-%S")
-        filename = "./images/"+name+"_"+now_string+".jpg"
+        filename = "images/"+name+"_"+now_string+".jpg"
         print("TakePicture {}".format(filename))
         self.Camera.simple_picture(filename=filename)
 

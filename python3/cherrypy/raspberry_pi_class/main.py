@@ -287,14 +287,13 @@ class Root(object):
             last_image = "No Images Yet"
         else:
             address = get_ip_address()
-            #last_image = "http://"+address+":5000/"+images_data[len(images_data)-1][1]
             last_image = images_data[len(images_data)-1][1]
         twitter_data = get_TableData("twitter")
         if len(twitter_data) == 0:
             last_twitter = [0, 0, 0, 0, 0, 0]
         else:
             last_twitter = twitter_data[len(twitter_data)-1]
-            
+
         sms_data = get_TableData("sms")
         if len(sms_data) == 0:
             last_sms = [0, 0, 0, 0]
@@ -306,7 +305,6 @@ class Root(object):
             last_button = [0, 0, 0, 0, 0]
         else:
             last_button = button_data[len(button_data)-1]
-        #sensor_data = get_TableData("sensors")
         if 'logged_in' in cherrypy.session:
             print(cherrypy.session['logged_in'])
             if cherrypy.session['logged_in'] is True:
@@ -452,11 +450,23 @@ if __name__ == '__main__':
     db_queue.put(message)
 
     cherrypy.config.update({'tools.sessions.on': True,
-                            'tools.sessions.timeout': 10
+                            'tools.sessions.timeout': 10,
+                            'server.socket_port': 5000,
                         })
-    cherrypy.config.update({'server.socket_port': 5000})
+    file_path = os.getcwd()+"/images"
+    print(file_path)
+    config = {
+        "/": {
+            "tools.staticdir.root": os.getcwd()
+        },
+        "/images": {
+            "tools.staticdir.on": True,
+            "tools.staticdir.dir": "images",
+        }
+    }
+    #cherrypy.config.update(config)
 #    cherrypy.config.update({'server.socket_host': get_ip_address()})
     try:
-        cherrypy.quickstart(Root(), '/')
+        cherrypy.quickstart(Root(), '/', config)
     except:
         db.kill()

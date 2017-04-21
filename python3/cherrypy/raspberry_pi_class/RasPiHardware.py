@@ -2,6 +2,7 @@
 
 import datetime
 import time
+import cv2
 import picamera
 import RPi.GPIO as GPIO
 from RPLCD.i2c import CharLCD
@@ -123,6 +124,34 @@ class CameraClass():
         self.camera.resolution = (x, y)
         return
 
+    def FacialDetection(self, filename=None):
+        if filename is None:
+            return None
+
+        dir_path = "/usr/local/share/OpenCV/haarcascades/"
+        xml_filename = "haarcascade_frontalface_default.xml"
+        model_path = dir_path + "/" + xml_filename
+        clf = cv2.CascadeClassifier(model_path)
+        image = cv2.imread(filename)
+        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        # Detect faces on image
+        faces = clf.detectMultiScale(
+            gray,
+            scaleFactor=1.1,
+            minNeighbors=5,
+            minSize=(60, 60),
+            flags=cv2.CASCADE_SCALE_IMAGE
+        )
+
+        print("FacialDetection: Found {0} faces!".format(len(faces)))
+
+        # Draw a rectangle around the faces
+        for (x, y, w, h) in faces:
+            cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 0), 2)
+
+        cv2.imwrite(filename, image)
+        return 
+    
     def simple_picture(self, filename=None):
         """
         Take an immediate picture and save to filename
@@ -158,7 +187,7 @@ class RasPiHardware():
         self.MotionSensor.Disable()
 
         GPIO.add_event_detect(18, GPIO.FALLING, callback=self.ButtonCallBack,
-                              bouncetime=400)
+                              bouncetime=800)
         GPIO.add_event_detect(16, GPIO.RISING,
                               callback=self.MotionSensorCallBack)
         return
@@ -169,7 +198,7 @@ class RasPiHardware():
         self.MotionSensor.Disable()
         GPIO.cleanup()
         return
-    
+
     def TakePicture(self, channel=None, name=None):
         """
         """
@@ -178,7 +207,7 @@ class RasPiHardware():
         filename = "images/"+name+"_"+now_string+".jpg"
         print("TakePicture {}".format(filename))
         self.Camera.simple_picture(filename=filename)
-
+        self.Camera.FacialDetection(filename=filename)
         image_message = database.DatabaseImageMessage(
             table_name="images", image_name=filename,
             date=now.strftime("%m-%d-%Y"),

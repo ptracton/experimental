@@ -10,14 +10,14 @@ class SignalOperation_UI(QtGui.QDialog):
         super(SignalOperation_UI, self).__init__(parent)
 
         self.top_vbox = QtGui.QVBoxLayout()
-        
+
         optionsList = ["ADD", "SUB", "MULT", "CONV", "FFT"]
         self.operations = LabelAndComboBox.LabelAndComboBox(
             label="Operations", optionsList=optionsList
         )
 
         self.executeButton = QtGui.QPushButton("Execute")
-        
+
         self.top_vbox.addLayout(self.operations.getLayout())
         self.top_vbox.addWidget(self.executeButton)
         return

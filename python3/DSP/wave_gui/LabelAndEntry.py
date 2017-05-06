@@ -13,12 +13,12 @@ class LabelAndEntry(QtGui.QWidget):
 
         self.label = QtGui.QLabel(label)
         self.label.setAlignment(QtCore.Qt.AlignRight)
-        
+
         self.entry = QtGui.QLineEdit(str(lineDefault))
         self.entry.setFixedWidth(150)
         self.entry.setMaximumWidth(150)
         self.entry.setAlignment(QtCore.Qt.AlignRight)
-        
+
         self.top_hbox.addWidget(self.label)
         self.top_hbox.addWidget(self.entry)
         return
@@ -28,4 +28,3 @@ class LabelAndEntry(QtGui.QWidget):
         Return our layout for easy GUI integration
         """
         return self.top_hbox
-    

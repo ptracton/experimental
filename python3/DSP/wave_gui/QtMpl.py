@@ -1,7 +1,6 @@
 
 from PyQt4 import QtGui
 import matplotlib
-import matplotlib.dates as mdates
 from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg
 
 
@@ -29,7 +28,7 @@ class QtMpl(FigureCanvasQTAgg):
         # notify the system of updated policy
         FigureCanvasQTAgg.updateGeometry(self)
         return
-    
+
     def addLine(self, x, y, title):
         self.line_list.append(self.axes.plot(x, y, label=title))
         self.axes.legend()

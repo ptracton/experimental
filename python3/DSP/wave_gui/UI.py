@@ -27,8 +27,8 @@ class UI(QtGui.QMainWindow):
         aboutAction = QtGui.QAction('&About', self)
         aboutAction.setShortcut('Ctrl+A')
         aboutAction.setStatusTip('About')
-        #aboutAction.triggered.connect(self.aboutAction)
-        #helpMenu.addAction(aboutAction)
+        # aboutAction.triggered.connect(self.aboutAction)
+        # helpMenu.addAction(aboutAction)
 
         self.toolbar = self.addToolBar('Exit')
         self.toolbar.addAction(exitAction)
@@ -37,5 +37,5 @@ class UI(QtGui.QMainWindow):
         self.setCentralWidget(self.central)
         self.setWindowTitle('Waveform Demo')
         self.show()
-        
+
         return

@@ -12,7 +12,7 @@ class SignalConfig_UI(QtGui.QDialog):
         super(SignalConfig_UI, self).__init__(parent)
 
         self.top_vbox = QtGui.QVBoxLayout()
-        
+
         self.sample_time_start = LabelAndEntry.LabelAndEntry(
             label="Sample Time Start", lineDefault=-np.pi)
 
@@ -37,7 +37,7 @@ class SignalConfig_UI(QtGui.QDialog):
         )
 
         self.displayButton = QtGui.QPushButton("Display")
-        
+
         self.top_vbox.addLayout(self.sample_time_start.getLayout())
         self.top_vbox.addLayout(self.sample_time_stop.getLayout())
         self.top_vbox.addLayout(self.number_of_samples.getLayout())

@@ -13,10 +13,10 @@ class LabelAndComboBox(QtGui.QWidget):
 
         self.label = QtGui.QLabel(label)
         self.label.setAlignment(QtCore.Qt.AlignRight)
-        
+
         self.entry = QtGui.QComboBox()
         self.entry.addItems(optionsList)
-        
+
         self.top_hbox.addWidget(self.label)
         self.top_hbox.addWidget(self.entry)
         return
@@ -26,4 +26,3 @@ class LabelAndComboBox(QtGui.QWidget):
         Return our layout for easy GUI integration
         """
         return self.top_hbox
-    

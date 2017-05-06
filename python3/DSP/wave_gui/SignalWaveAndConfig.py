@@ -15,7 +15,7 @@ class SignalWaveAndConfig(QtGui.QWidget):
 
     def __init__(self, parent=None, label="Default"):
         super(SignalWaveAndConfig, self).__init__(parent)
-                
+
         self.top_hbox = QtGui.QHBoxLayout()
 
         self.signalConfig = SignalConfig_UI.SignalConfig_UI()
@@ -24,11 +24,11 @@ class SignalWaveAndConfig(QtGui.QWidget):
         self.top_hbox.addWidget(self.mplGraph)
 
         self.Signal = Signal.Signal()
-        
+
         self.connect(self.signalConfig.displayButton,
                      QtCore.SIGNAL("clicked()"),
                      self.displayButtonClicked)
-        
+
         return
 
     def getLayout(self):
@@ -36,7 +36,7 @@ class SignalWaveAndConfig(QtGui.QWidget):
         Return our layout for easy GUI integration
         """
         return self.top_hbox
-    
+
     def displayButtonClicked(self):
         print("Display Button Clicked")
 
@@ -44,7 +44,7 @@ class SignalWaveAndConfig(QtGui.QWidget):
         if not start_time.isdecimal():
             start_time = -1 * np.pi
         print("Start Time {}".format(start_time))
-        
+
         stop_time = self.signalConfig.sample_time_stop.entry.text()
         if not stop_time.isdecimal():
             stop_time = np.pi
@@ -78,7 +78,7 @@ class SignalWaveAndConfig(QtGui.QWidget):
         self.Signal.offset = float(offset)
         self.Signal.sample_times = np.linspace(start_time, stop_time,
                                                int(number_of_samples))
-        
+
         self.Signal.calculateAll()
 
         data = []

@@ -1,0 +1,18 @@
+#+TITLE: Python Babel Testing
+
+
+# blank lines not OK in indented blocks, and don't use return()
+# Source block is passed directly to interactive python;
+# value is value of _ at end.
+
+#+begin_src python :session
+def foo(x):
+  if x>0:
+    return x+1
+  else:
+    return x-1
+
+foo(1)
+#+end_src
+
+#+RESULTS:

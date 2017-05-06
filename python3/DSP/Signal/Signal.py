@@ -45,7 +45,7 @@ class Signal():
             self.offset)
 
     def calculateSawtoothWave(self):
-        self.squareWave = self.amplitude*signal.sawtooth((
+        self.sawtoothWave = self.amplitude*signal.sawtooth((
             self.sample_times*self.frequency) +
             self.offset)
 
@@ -71,3 +71,7 @@ class Signal():
     @property
     def getSawtoothWave(self):
         return self.sawtoothWave
+
+    def __str__(self):
+        string = "\nSample Times {}".format(self.sample_times)
+        return string

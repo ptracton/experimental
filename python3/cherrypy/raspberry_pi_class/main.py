@@ -376,6 +376,7 @@ class Root(object):
 
         return html
 
+    
 if __name__ == '__main__':
     print("Creating images directory")
     try:

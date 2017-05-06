@@ -32,11 +32,11 @@
        y = x*2
        return y
   
-  print times_two(5)    
+  print times_two(10)    
 #+END_SRC
 
 #+RESULTS:
-: 10
+: 
 
 
 #+BEGIN_SRC calc :exports both

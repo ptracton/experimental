@@ -1,5 +1,4 @@
 #! /usr/bin/env python3
-
 """
 DEFAULT LIBRARIES
 """
@@ -9,7 +8,6 @@ import os
 import queue
 import socket
 import threading
-
 """
 THIRD PARTY LIBRARIES
 """
@@ -20,20 +18,18 @@ import mako.lookup
 import twilio
 from twilio import twiml
 import twilio.rest
-
 """
 LOCAL LIBRARIES
 """
 import database
 import SystemState
 import twitter
-
 """
 GLOBALS
 """
 db_queue = queue.Queue()
-db = database.Database(database_queue=db_queue,
-                       database_file_name="webserver_thread.db")
+db = database.Database(
+    database_queue=db_queue, database_file_name="webserver_thread.db")
 
 response_queue = queue.Queue()
 
@@ -68,12 +64,11 @@ def get_TableData(table=None):
     """
     if table is None:
         return
-    
+
     print("get_TableData: {}".format(table))
     td_response_queue = queue.Queue()
     message_data = database.DatabaseDataMessage(
-        table_name=table,
-        caller_queue=td_response_queue)
+        table_name=table, caller_queue=td_response_queue)
     message = database.DatabaseMessage(
         command=database.DatabaseCommand.DB_SELECT_ALL_DATA,
         message=message_data)
@@ -116,10 +111,9 @@ def check_login(username=None, password=None):
         data=""" "{}" """.format(username),
         caller_queue=cl_response_queue)
     message = database.DatabaseMessage(
-        command=database.DatabaseCommand.DB_SELECT_DATA,
-        message=message_data)
+        command=database.DatabaseCommand.DB_SELECT_DATA, message=message_data)
     db_queue.put(message)
-#    db_task.join(timeout=0.65)
+    #    db_task.join(timeout=0.65)
 
     print("check_login: Wait on password response")
     while cl_response_queue.empty() is True:
@@ -155,26 +149,25 @@ class Root(object):
         db_data = {}
         db_data[0] = ('SMS_FROM', """ "{}" """.format(message_from))
         db_data[1] = ('SMS_TEXT', """ "{}" """.format(message_body))
-        db_data[2] = ('SMS_DATE', """ "{}" """.format(
-            now.strftime("%m-%d-%Y")))
-        db_data[3] = ('SMS_TIME', """time("{}")""".format(
-            now.strftime("%H:%M:%S")))
+        db_data[2] = ('SMS_DATE',
+                      """ "{}" """.format(now.strftime("%m-%d-%Y")))
+        db_data[3] = ('SMS_TIME',
+                      """time("{}")""".format(now.strftime("%H:%M:%S")))
         print("StoreSMSMessage {}".format(db_data))
         data_message = database.DatabaseDataMessage(
-            table_name="sms", data_dict=db_data
-        )
+            table_name="sms", data_dict=db_data)
         message = database.DatabaseMessage(
             command=database.DatabaseCommand.DB_INSERT_DATA,
             message=data_message)
         db_queue.put(message)
 
         return
-    
+
     def process_sms_message(self, message_body=None):
         """
         """
-        print("ProcessSMSMessage {} {}".format(message_body,
-                                               len(message_body)))
+        print("ProcessSMSMessage {} {}".format(message_body, len(
+            message_body)))
         if message_body is None:
             return
         message_body_list = message_body.split(" ")
@@ -192,7 +185,7 @@ class Root(object):
             list1 = message_body_list[1:]
             data = ' '.join(str(e) for e in list1)
             print("SMSD_COMMAND = {}".format(command))
-            
+
         elif message_body_upper == "RASPI-PICTURE":
             command = SystemState.SystemStateCommand.SYSTEM_STATE_Picture
             print("SMSP_COMMAND = {}".format(command))
@@ -200,13 +193,13 @@ class Root(object):
         message = SystemState.SystemStateMessage(command=command, data=data)
         SystemStateQueue.put(message)
         return
-    
+
     @cherrypy.expose
     def twilio(self, **params):
         """
         TODO: check if the 'From' is a valid phone we want to act on
         """
-        
+
         print("\n\nTWILIO: {}".format(params.keys()))
         if 'From' in params.keys():
             message_from = params['From']
@@ -220,9 +213,9 @@ class Root(object):
 
         self.store_sms_message(message_from, message_body)
         self.process_sms_message(message_body)
-#        if 'Body' in params.keys():
-#            body = params['Body']
-#            print(body)
+        #        if 'Body' in params.keys():
+        #            body = params['Body']
+        #            print(body)
         response_message = "ACK!"
         twiml_response = twiml.Response()
         twiml_response.message(response_message)
@@ -287,24 +280,24 @@ class Root(object):
             last_image = "No Images Yet"
         else:
             address = get_ip_address()
-            last_image = images_data[len(images_data)-1][1]
+            last_image = images_data[len(images_data) - 1][1]
         twitter_data = get_TableData("twitter")
         if len(twitter_data) == 0:
             last_twitter = [0, 0, 0, 0, 0, 0]
         else:
-            last_twitter = twitter_data[len(twitter_data)-1]
+            last_twitter = twitter_data[len(twitter_data) - 1]
 
         sms_data = get_TableData("sms")
         if len(sms_data) == 0:
             last_sms = [0, 0, 0, 0]
         else:
-            last_sms = sms_data[len(sms_data)-1]
+            last_sms = sms_data[len(sms_data) - 1]
 
         button_data = get_TableData("button")
         if len(button_data) == 0:
             last_button = [0, 0, 0, 0, 0]
         else:
-            last_button = button_data[len(button_data)-1]
+            last_button = button_data[len(button_data) - 1]
         if 'logged_in' in cherrypy.session:
             print(cherrypy.session['logged_in'])
             if cherrypy.session['logged_in'] is True:
@@ -327,16 +320,17 @@ class Root(object):
                     cherrypy.session['username'] = username
                     login_template = mako.template.Template(
                         filename='templates/login_success_template.html')
-                    html = login_template.render(username=username,
-                                                 address=address,
-                                                 last_button=last_button,
-                                                 last_sms=last_sms,
-                                                 last_twitter=last_twitter,
-                                                 last_image=last_image,
-                                                 SystemEnabled=system_state.SystemEnabled,
-                                                 LED=system_state.Hardware.LED.state,
-                                                 MotionSensor=system_state.Hardware.MotionSensor.state,
-                                                 LCD=system_state.Hardware.LCD.state)
+                    html = login_template.render(
+                        username=username,
+                        address=address,
+                        last_button=last_button,
+                        last_sms=last_sms,
+                        last_twitter=last_twitter,
+                        last_image=last_image,
+                        SystemEnabled=system_state.SystemEnabled,
+                        LED=system_state.Hardware.LED.state,
+                        MotionSensor=system_state.Hardware.MotionSensor.state,
+                        LCD=system_state.Hardware.LCD.state)
                 else:
                     print("14")
                     cherrypy.session['logged_in'] = False
@@ -357,16 +351,17 @@ class Root(object):
                 cherrypy.session['username'] = username
                 login_template = mako.template.Template(
                     filename='templates/login_success_template.html')
-                html = login_template.render(username=username,
-                                             address=address,
-                                             last_button=last_button,
-                                             last_sms=last_sms,
-                                             last_twitter=last_twitter,
-                                             last_image=last_image,
-                                             SystemEnabled=system_state.SystemEnabled,
-                                             LED=system_state.Hardware.LED.state,
-                                             MotionSensor=system_state.Hardware.MotionSensor.state,
-                                             LCD=system_state.Hardware.LCD.state)
+                html = login_template.render(
+                    username=username,
+                    address=address,
+                    last_button=last_button,
+                    last_sms=last_sms,
+                    last_twitter=last_twitter,
+                    last_image=last_image,
+                    SystemEnabled=system_state.SystemEnabled,
+                    LED=system_state.Hardware.LED.state,
+                    MotionSensor=system_state.Hardware.MotionSensor.state,
+                    LCD=system_state.Hardware.LCD.state)
             else:
                 cherrypy.session['logged_in'] = False
                 cherrypy.session['username'] = None
@@ -376,29 +371,30 @@ class Root(object):
 
         return html
 
-    
+
 if __name__ == '__main__':
     print("Creating images directory")
     try:
         os.mkdir("images")
     except:
         pass
-    
+
     print("Creating and Starting DB Thread")
     db_task = threading.Thread(target=db.run)
     db_task.start()
 
     print("Creating System State Thread")
-    SystemStateThread = threading.Thread(target=SystemStateInst.run,
-                                         daemon=True)
+    SystemStateThread = threading.Thread(
+        target=SystemStateInst.run, daemon=True)
     SystemStateThread.start()
 
     print("Creating Twitter Thread")
     twitter_queue = queue.Queue()
-    twitter_task = twitter.TwitterThread(config_file=config_file,
-                                         response_queue=response_queue,
-                                         system_queue=SystemStateQueue,
-                                         db_queue=db_queue)
+    twitter_task = twitter.TwitterThread(
+        config_file=config_file,
+        response_queue=response_queue,
+        system_queue=SystemStateQueue,
+        db_queue=db_queue)
     twitter_thread = threading.Thread(target=twitter_task.run, daemon=True)
     twitter_thread.start()
 
@@ -450,11 +446,12 @@ if __name__ == '__main__':
         message=message_data)
     db_queue.put(message)
 
-    cherrypy.config.update({'tools.sessions.on': True,
-                            'tools.sessions.timeout': 10,
-                            'server.socket_port': 5000,
-                        })
-    file_path = os.getcwd()+"/images"
+    cherrypy.config.update({
+        'tools.sessions.on': True,
+        'tools.sessions.timeout': 10,
+        'server.socket_port': 5000,
+    })
+    file_path = os.getcwd() + "/images"
     print(file_path)
     config = {
         "/": {
@@ -466,7 +463,7 @@ if __name__ == '__main__':
         }
     }
     #cherrypy.config.update(config)
-#    cherrypy.config.update({'server.socket_host': get_ip_address()})
+    #    cherrypy.config.update({'server.socket_host': get_ip_address()})
     try:
         cherrypy.quickstart(Root(), '/', config)
     except:

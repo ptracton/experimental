@@ -1,10 +1,8 @@
 #! /usr/bin/env python3
-
 '''
 This class is designed to pull down the history of a stock
 from Google's Finance Web Site
 '''
-
 
 import urllib.request
 import datetime
@@ -13,7 +11,6 @@ from bs4 import BeautifulSoup
 
 
 class GoogleFinance:
-
     '''
     This is a class to manage pulling down a stock's history from Google's
     Finance web site
@@ -39,7 +36,8 @@ class GoogleFinance:
         url_string += "&startdate=%s-%s-%s" % (self.start_date.tm_year,
                                                self.start_date.tm_mon,
                                                self.start_date.tm_mday)
-        url_string += "&enddate=%s-%s-%s" % (today.year, today.month, today.day)
+        url_string += "&enddate=%s-%s-%s" % (today.year, today.month,
+                                             today.day)
         url_string += "&output=csv"
 
         url_data = urllib.request.urlopen(url_string)

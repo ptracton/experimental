@@ -28,26 +28,22 @@ class Signal():
         return
 
     def calculateSineWave(self):
-        self.sineWave = self.amplitude*np.sin((
-            self.sample_times*self.frequency) +
-            self.offset)
+        self.sineWave = self.amplitude * np.sin((self.sample_times *
+                                                 self.frequency) + self.offset)
         return
 
     def calculateCosineWave(self):
-        self.cosineWave = self.amplitude*np.cos((
-            self.sample_times*self.frequency) +
-            self.offset)
+        self.cosineWave = self.amplitude * np.cos((
+            self.sample_times * self.frequency) + self.offset)
         return
 
     def calculateSquareWave(self):
-        self.squareWave = self.amplitude*signal.square((
-            self.sample_times*self.frequency) +
-            self.offset)
+        self.squareWave = self.amplitude * signal.square((
+            self.sample_times * self.frequency) + self.offset)
 
     def calculateSawtoothWave(self):
-        self.sawtoothWave = self.amplitude*signal.sawtooth((
-            self.sample_times*self.frequency) +
-            self.offset)
+        self.sawtoothWave = self.amplitude * signal.sawtooth((
+            self.sample_times * self.frequency) + self.offset)
 
     def calculateAll(self):
         self.calculateCosineWave()

@@ -1,5 +1,4 @@
 #! /usr/bin/env python3
-
 """
 This is a simple demo program to show the various ways to get stock data
 from Google or Yahoo

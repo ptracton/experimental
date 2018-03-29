@@ -2,41 +2,32 @@
 
 import os
 
-
-import googlemaps
-import smopy
 import sodapy
 
 if __name__ == "__main__":
-    lacity_data_user_id = os.environ['LACITY_DATA_USER_ID']
-    lacity_data_token = os.environ['LACITY_DATA_TOKEN']
-    lacity_data_password = os.environ['LACITY_DATA_PASSWORD']
+    lacity_app_token = os.environ['LA_CITY_APP_TOKEN']
+    lacity_secret_token = os.environ['LA_CITY_SECRET_TOKEN']
+    lacity_password = os.environ['LA_CITY_PASSWORD']
+    lacity_user_name = "ptracton@hotmail.com"
 
-    google_token = os.environ['GOOGLE_TOKEN']
-    google_user_id = os.environ['GOOGLE_USER_ID']
+    #print("SECRET {}".format(lacity_secret_token))
+    #print("TOKEN {}".format(lacity_app_token))
+    #print("PASSWORD {}".format(lacity_password))
 
-    #URL = 'data.lacity.org'
-    # Library Performance Metrics
-    #DATA_ID = 'kkby-9hji'
-    # LAPD-Crime-and-Collision-Raw-Data-for-2015
-    #DATA_ID = 'ttiz-7an8'
+    #https://data.lacity.org/A-Livable-and-Sustainable-City/Library-Branches/a4nt-4gca
+    URL = 'data.lacity.org'
+    DATA_ID = 'a4nt-4gca'
     
-    #URL = 'controllerdata.lacity.org'
-    #DATA_ID = 'anqa-iu8a'
-    
-    URL = 'sandbox.demo.socrata.com'    
-    DATA_ID = 'nimj-3ivp'
-    
-    client = sodapy.Socrata(URL, lacity_data_token, username=lacity_data_user_id, password=lacity_data_password)
-    #data = client.get(DATA_ID, content_type="json", limit=20)
-    #client.get_metadata(DATA_ID, content_type="json")
+    #URL = 'sandbox.demo.socrata.com'
+    #DATA_ID = 'e8ey-y5bm'
+
+    client = sodapy.Socrata(
+        domain=URL,
+        app_token=lacity_app_token,
+        username=lacity_user_name,
+        password=lacity_password)
+    data = client.get(DATA_ID)
+    #client.get_metadata(DATA_ID)
     #client.download_attachments(DATA_ID)
     client.close()
-    #print (data)
-    
-    #gmaps = googlemaps.Client(key=google_token)
-    #geocode_result = gmaps.geocode('1600 Amphitheatre Parkway, Mountain View, CA')
-    #print (geocode_result)
-    
-    map = smopy.Map((42., -1., 55., 3.), z=4)
-    map.show_ipython()
+    print(data)

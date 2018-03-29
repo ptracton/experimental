@@ -25,6 +25,6 @@ class People(base):
     Region = sqlalchemy.Column(sqlalchemy.String)
     Zip = sqlalchemy.Column(sqlalchemy.String)
     Country = sqlalchemy.Column(sqlalchemy.String)
-    Pin = sqlalchemy.Column(sqlalchemy.Integer)
+    Pin = sqlalchemy.Column(sqlalchemy.String)
     Date = sqlalchemy.Column(sqlalchemy.String)
     Email = sqlalchemy.Column(sqlalchemy.String)

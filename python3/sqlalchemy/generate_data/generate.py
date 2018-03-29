@@ -6,6 +6,7 @@ import sqlalchemy.ext.declarative
 import sqlalchemy.orm
 import ORM
 
+
 if __name__ == "__main__":
 
     json_file = open("dataMar-23-2018.json")
@@ -28,16 +29,17 @@ if __name__ == "__main__":
             person.StreetAddress = x[3]
             person.City = x[4]
             person.Region = x[5]
-            person.Zip = x[5]
-            person.Country = x[6]
-            person.Pin = x[7]
-            person.Date = x[8]
-            person.Email = x[9]
+            person.Zip = x[6]
+            person.Country = x[7]
+            person.Pin = x[8]
+            person.Date = str(x[9])
+            person.Email = x[10]
             try:
                 session.add(person)
                 session.commit()
             except:
                 print("FAIL on {}".format(x))
+
             del (person)
         index = index + 1
 

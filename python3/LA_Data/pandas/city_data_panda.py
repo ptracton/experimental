@@ -17,7 +17,7 @@ if __name__ == "__main__":
     json_file = "test.json"
 
     if not os.path.isfile(json_file):
-        query = ("https://data.lacity.org/resource/kh8g-6365.json")
+        query = ("https://data.lacity.org/resource/a4nt-4gca.json")
         raw_data = pandas.read_json(query)
         f = open('test.json', 'w')
         json.dump(pandas.DataFrame.to_json(raw_data), f)

@@ -1,4 +1,3 @@
-
 import json
 import sqlalchemy
 import sqlalchemy.ext.declarative
@@ -16,7 +15,6 @@ import tools
 
 
 class UI(PyQt5.QtWidgets.QMainWindow):
-
     def __init__(self, parent=None):
         """
         """
@@ -28,8 +26,7 @@ class UI(PyQt5.QtWidgets.QMainWindow):
         ORM.base.metadata.create_all(ORM.db)
 
         exitAction = PyQt5.QtWidgets.QAction(
-            PyQt5.QtGui.QIcon('src/application-exit.png'),
-            '&Exit', self)
+            PyQt5.QtGui.QIcon('src/application-exit.png'), '&Exit', self)
         exitAction.setShortcut('Ctrl+Q')
         exitAction.setStatusTip('Exit application')
         exitAction.triggered.connect(PyQt5.QtWidgets.qApp.quit)
@@ -42,12 +39,10 @@ class UI(PyQt5.QtWidgets.QMainWindow):
         helpMenu.addAction(aboutAction)
 
         self.central = UI_CentralWidget.UI_CentralWidget()
-        self.central.CityComboBox.currentIndexChanged.connect(
-            self.CityComboBoxCurrentIndexChanged)
-        self.central.DataSelectionComboBox.currentIndexChanged.connect(
-            self.DataSelectionComboBoxCurrentIndexChanged)
         self.central.GetDataButton.clicked.connect(
             self.GetDataPushButtonClicked)
+        self.central.ViewDataButton.clicked.connect(
+            self.ViewDataPushButtonClicked)
 
         self.setCentralWidget(self.central)
         self.statusBar().showMessage('Status Bar')
@@ -55,14 +50,38 @@ class UI(PyQt5.QtWidgets.QMainWindow):
         self.setWindowTitle('QT GUI and Stuff')
         self.show()
 
-    def CityComboBoxCurrentIndexChanged(self, selection):
-        #print(selection)
-        #print(self.central.CityComboBox.currentText())
-        return
+    def ViewDataPushButtonClicked(self):
+        city = self.central.CityComboBox.currentText()
+        database = self.central.DataSelectionComboBox.currentText()
+        validCity = False
 
-    def DataSelectionComboBoxCurrentIndexChanged(self, selection):
-        #print(selection)
-        #print(self.central.DataSelectionComboBox.currentText())
+        if city == 'Los Angeles':
+            validCity = True
+            columns = ORM.LALibraryBranches.__table__.columns.keys()
+            query = self.session.query(ORM.LALibraryBranches).all()
+
+        if city == 'Queens':
+            validCity = True
+            columns = ORM.QueensLibraryBranches.__table__.columns.keys()
+            query = self.session.query(ORM.QueensLibraryBranches).all()
+
+        if city == "Chicago":
+            validCity = True
+            columns = ORM.ChicagoLibraryBranches.__table__.columns.keys()
+            query = self.session.query(ORM.ChicagoLibraryBranches).all()
+
+        self.central.TableWidget.setColumnCount(len(columns))
+        self.central.TableWidget.setVerticalHeaderLabels(["H1"])
+        print(columns)
+
+        col = 0
+        for x in columns:
+            print("Column = {} Value = {}".format(col, str(x)))
+            tw = PyQt5.QtWidgets.QTableWidgetItem(str(x))
+            self.central.TableWidget.setItem(1, col, tw)
+            del (tw)
+            col = col + 1
+
         return
 
     def GetDataPushButtonClicked(self):
@@ -82,7 +101,8 @@ class UI(PyQt5.QtWidgets.QMainWindow):
                 branch.PhoneNumber = library['phone_number']
                 branch.Email = library['email']
                 branch.CouncilDistrict = library['council_district']
-                human_address = json.loads(library['location']['human_address'])
+                human_address = json.loads(
+                    library['location']['human_address'])
                 branch.Address = human_address['address']
                 branch.City = human_address['city']
                 branch.State = human_address['state']
@@ -94,7 +114,7 @@ class UI(PyQt5.QtWidgets.QMainWindow):
                     print("Failed On {}".format(library['branch_name']))
                     self.session.rollback()
                 del (branch)
-        
+
             self.statusBar().showMessage('Done LA Data')
 
         if city == 'Queens':
@@ -113,20 +133,21 @@ class UI(PyQt5.QtWidgets.QMainWindow):
                     branch.CommunityCouncil = library['community_council']
                 except:
                     branch.CommunityCouncil = 0
-                    
+
                 try:
                     self.session.add(branch)
                     self.session.commit()
                 except:
                     self.session.rollback()
-                del (branch)                
+                del (branch)
 
                 #print(tools.remove_non_ascii(library['name'].encode('utf-8')))
             self.statusBar().showMessage('Done Queens Data')
 
         if city == 'Chicago':
             self.statusBar().showMessage('Getting Chicago Data')
-            ChicagoLibraryBranches = ChicagoCityData.ChcagoCityData('x8fc-8rcq')
+            ChicagoLibraryBranches = ChicagoCityData.ChcagoCityData(
+                'x8fc-8rcq')
             ChicagoLibraryBranches.get_data()
             #print(ChicagoLibraryBranches.data)
             for library in ChicagoLibraryBranches.data:
@@ -143,9 +164,8 @@ class UI(PyQt5.QtWidgets.QMainWindow):
                 except:
                     print("Chicago Failed {} ".format(library))
                     self.session.rollback()
-                del(branch)
-                
+                del (branch)
+
             self.statusBar().showMessage('Done Chicago Data')
-            
 
         return

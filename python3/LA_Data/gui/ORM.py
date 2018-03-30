@@ -3,7 +3,19 @@ import sqlalchemy.ext.declarative
 import sqlalchemy.orm
 
 # Global Setup
-db_string = 'sqlite:///sqlalchemy_example.db'
+user = "postgres"
+password = "python"
+host = "localhost"
+port = 5432
+database = "postgres"
+url = 'postgresql://{}:{}@{}:{}/{}'
+
+# For Postgresql
+db_string = url.format(user, password, host, port, database)
+
+# For SQlite3
+#db_string = 'sqlite:///sqlalchemy_example.db'
+
 db = sqlalchemy.create_engine(db_string)
 base = sqlalchemy.ext.declarative.declarative_base()
 

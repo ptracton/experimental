@@ -11,10 +11,10 @@ database = "postgres"
 url = 'postgresql://{}:{}@{}:{}/{}'
 
 # For Postgresql
-db_string = url.format(user, password, host, port, database)
+#db_string = url.format(user, password, host, port, database)
 
 # For SQlite3
-#db_string = 'sqlite:///sqlalchemy_example.db'
+db_string = 'sqlite:///sqlalchemy_example.db'
 
 db = sqlalchemy.create_engine(db_string)
 base = sqlalchemy.ext.declarative.declarative_base()

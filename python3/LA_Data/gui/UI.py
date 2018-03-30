@@ -74,14 +74,15 @@ class UI(PyQt5.QtWidgets.QMainWindow):
         self.central.TableWidget.setVerticalHeaderLabels(["H1"])
         print(columns)
 
-        col = 0
-        for x in columns:
-            print("Column = {} Value = {}".format(col, str(x)))
+        self.central.TableWidget.setHorizontalHeaderLabels(columns)
+        
+        row = 0
+        for x in query:
+            print("Column = {} Row = {} Value = {}".format(0, row, str(x.BranchName)))
             tw = PyQt5.QtWidgets.QTableWidgetItem(str(x))
-            self.central.TableWidget.setItem(1, col, tw)
+            self.central.TableWidget.setItem(row, 0, tw)
             del (tw)
-            col = col + 1
-
+            row = row + 1
         return
 
     def GetDataPushButtonClicked(self):

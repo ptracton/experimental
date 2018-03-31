@@ -75,13 +75,23 @@ class UI(PyQt5.QtWidgets.QMainWindow):
         print(columns)
 
         self.central.TableWidget.setHorizontalHeaderLabels(columns)
+        self.central.TableWidget.setRowCount(len(query))
+        self.central.TableWidget.setColumnCount(len(columns))
         
         row = 0
         for x in query:
-            print("Column = {} Row = {} Value = {}".format(0, row, str(x.BranchName)))
-            tw = PyQt5.QtWidgets.QTableWidgetItem(str(x))
-            self.central.TableWidget.setItem(row, 0, tw)
-            del (tw)
+            print("ROW {} Branch {} PhoneNumber {} Email {} Council {} Adresss {} City {} State {} Zip {}".format(row, x.BranchName, x.PhoneNumber, x.Email, x.CouncilDistrict, x.Address, x.City, x.State, x.Zip))
+            
+            self.central.TableWidget.setItem(row, 0, PyQt5.QtWidgets.QTableWidgetItem(x.BranchName))
+            self.central.TableWidget.setItem(row, 1, PyQt5.QtWidgets.QTableWidgetItem(x.PhoneNumber))
+            self.central.TableWidget.setItem(row, 2, PyQt5.QtWidgets.QTableWidgetItem(x.Email))
+            self.central.TableWidget.setItem(row, 3, PyQt5.QtWidgets.QTableWidgetItem(x.CouncilDistrict))
+            self.central.TableWidget.setItem(row, 4, PyQt5.QtWidgets.QTableWidgetItem(x.Address))
+            self.central.TableWidget.setItem(row, 5, PyQt5.QtWidgets.QTableWidgetItem(x.City))
+            self.central.TableWidget.setItem(row, 6, PyQt5.QtWidgets.QTableWidgetItem(x.State))
+            self.central.TableWidget.setItem(row, 7, PyQt5.QtWidgets.QTableWidgetItem(x.Zip))
+            
+            
             row = row + 1
         return
 

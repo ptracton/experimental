@@ -36,6 +36,12 @@ class OpenMovie():
         """
         Download the poster for this title and save with the same name
         """
+
+        if 'poster' not in self.movie:
+            self.posterFileName= "NO POSTER"
+            logging.error("No poster for {}".format(self.title))
+            return False
+        
         poster_url = self.movie['poster']
 
         try:
@@ -46,6 +52,10 @@ class OpenMovie():
             logging.error(traceback.format_exc())
             return False
 
+        self.title = self.title.replace("/", " ")
+        self.title = self.title.replace("?", " ")
+        self.title = self.title.replace(":", " ")
+        self.title = self.title.replace(" ", "_")
         self.posterFileName = "Posters/"+self.title+".jpg"
         try:
             open(self.posterFileName, 'wb').write(r.content)

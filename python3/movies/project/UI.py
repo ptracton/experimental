@@ -9,6 +9,7 @@ import logging
 import PyQt5
 import PyQt5.QtWidgets
 
+import OpenMovie
 import ORM
 import UI_CentralWindow
 
@@ -49,8 +50,10 @@ class UI(PyQt5.QtWidgets.QMainWindow):
 
         # If no movies have this title, log it and return since we are done processing the request
         if (len(movieTitleInstance) == 0):
-            logging.info("enterMoviePushButtonClicked Movie {} not in database".format(movieTitle))
-            return 
+            logging.info(
+                "enterMoviePushButtonClicked Movie {} not in database".format(
+                    movieTitle))
+            return
 
         #There must be at least 1 movie with this title, look up the credits for this title.
         movieCreditsInstance = ORM.session.query(
@@ -61,14 +64,39 @@ class UI(PyQt5.QtWidgets.QMainWindow):
             cast = json.loads(movieCreditsInstance[0].cast)
             crew = json.loads(movieCreditsInstance[0].crew)
         except:
-            logging.error("enterMoviePushButtonClicked: Failed to retrieve movie or credits")
+            logging.error(
+                "enterMoviePushButtonClicked: Failed to retrieve movie or credits"
+            )
             return
 
         director = "NONE"
         for x in crew:
             if x['job'] == 'Director':
                 director = x['name']
-                
-        for x in movieTitleInstance:
-            print("FILM: {:20} TAGLINE: {:40} STARING {:15} DIRECTOR {:15} ".format(x.title, x.tagline, cast[0]['name'], director ))
+
+        #for x in movieTitleInstance:
+        #    print("FILM: {:20} TAGLINE: {:40} STARING {:15} DIRECTOR {:15} ".format(x.title, x.tagline, cast[0]['name'], director ))
+
+        self.centralWidget.directorInformation.infoLabel.setText(director)
+        self.centralWidget.actorInformation.infoLabel.setText(cast[0]['name'])
+        self.centralWidget.releaseDateInformation.infoLabel.setText(
+            movieTitleInstance[0].release_date)
+        self.centralWidget.budgetInformation.infoLabel.setText(
+            "{:,}".format(movieTitleInstance[0].budget))
+        self.centralWidget.revenueInformation.infoLabel.setText(
+            "{:,}".format(movieTitleInstance[0].revenue))
+        self.centralWidget.runTimeInformation.infoLabel.setNum(
+            movieTitleInstance[0].runtime)
+        self.centralWidget.voteCountInformation.infoLabel.setText(
+            "{:,}".format(movieTitleInstance[0].vote_count))
+        self.centralWidget.voteAverageInformation.infoLabel.setText(
+            "{:,}".format(movieTitleInstance[0].vote_average))
+        self.centralWidget.statusInformation.infoLabel.setText(
+            movieTitleInstance[0].status)
+
+        openMovie = OpenMovie.OpenMovie(title=movieTitle)
+
+        if (openMovie.getPoster() is False):
+            return
+        self.centralWidget.updatePoster(openMovie.posterFileName)
         return

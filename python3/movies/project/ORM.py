@@ -23,7 +23,12 @@ host = "localhost"
 port = 5432
 db = "postgres"
 url = 'postgresql://{}:{}@{}:{}/{}'
+
+# Select one of the db strings depending on which database you wish
+# use.  The first one is Postgresql the second is Sqlite3
 db_string = url.format(user, password, host, port, db)
+#db_string = 'sqlite:///movie_project.db'
+
 db = sqlalchemy.create_engine(db_string)
 base = sqlalchemy.ext.declarative.declarative_base()
 inspector = sqlalchemy.inspect(db)
@@ -82,7 +87,7 @@ class Movies(base):
     tagline = sqlalchemy.Column(sqlalchemy.String)
     status = sqlalchemy.Column(sqlalchemy.String)
 
-    release_date = sqlalchemy.Column(sqlalchemy.DateTime)
+    release_date = sqlalchemy.Column(sqlalchemy.Date)
 
 
 class Credits(base):
